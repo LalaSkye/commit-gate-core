@@ -1,12 +1,14 @@
 # commit-gate-core
 
-> Runtime governance only matters when it can block mutation at the commit boundary.
+`REFERENCE KERNEL v1 — spec, contract, gate kernel, and initial tests live`
 
-`commit-gate-core` is a minimal Python reference implementation of execution-bound governance.
+> **Core invariant:** No state mutation is permitted unless a signed, scoped, unexpired, and unreplayed `DecisionRecord` authorises the exact commit.
 
-**Core invariant:** No state mutation is permitted unless a signed, scoped, unexpired, and unreplayed `DecisionRecord` authorises the exact commit.
+## Why this exists
 
----
+Runtime governance only matters when it can block mutation at the commit boundary. Most AI and automation pipelines have no checkpoint between *the model decided* and *the action ran*. `commit-gate-core` is a small, deterministic, stdlib-only Python reference that closes that gap: a single, inspectable kernel that refuses to mutate state without a valid authorisation record.
+
+Fail-closed by default. Minimal surface. Running code over commentary.
 
 ## What this exposes
 
@@ -17,7 +19,6 @@
 | Nonce replay protection | One-use enforcement |
 | Audit trail | Immutable log of every decision |
 | Adversarial tests | Pre-registered failure modes |
-| Terminal demo | One-file walkthrough |
 
 ## What this does NOT expose
 
@@ -25,35 +26,13 @@
 - Multi-agent architecture
 - Private calculus or system map
 
-## Status
-
-`REFERENCE KERNEL v1 — spec, contract, gate kernel, and initial tests live`
-
-## Structure
+## Try it
 
 ```
-commit-gate-core/
-├── README.md
-├── docs/
-│   ├── invariant.md
-│   ├── decision-record.md
-│   ├── threat-model.md
-│   └── pre-registered-failures.md
-├── src/
-│   └── commit_gate_core/
-│       ├── decision_record.py
-│       ├── gate.py
-│       ├── nonce_ledger.py
-│       ├── audit.py
-│       └── state_store.py
-├── tests/
-│   ├── test_no_record_blocks.py
-│   ├── test_invalid_signature_blocks.py
-│   ├── test_replay_blocks.py
-│   ├── test_scope_mismatch_blocks.py
-│   └── test_params_tamper_blocks.py
-└── demo/
-    └── terminal_demo.py
+git clone https://github.com/LalaSkye/commit-gate-core.git
+cd commit-gate-core
+pip install pytest
+pytest -q
 ```
 
 ## Licence
