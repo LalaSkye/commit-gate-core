@@ -27,7 +27,7 @@
 
 ## Status
 
-`SPECIFICATION SHELL — code coming once shape is locked`
+`REFERENCE KERNEL v1 — spec, contract, gate kernel, and initial tests live`
 
 ## Structure
 
