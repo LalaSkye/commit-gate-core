@@ -1,5 +1,27 @@
 # Commit Gate Core
 
+## Try in 30 seconds
+
+```bash
+git clone [https://github.com/LalaSkye/commit-gate-core.git](https://github.com/LalaSkye/commit-gate-core.git)
+cd commit-gate-core
+python -m examples.unsafe_email_send
+```
+
+**Expected output:**
+
+```text
+Result: HOLD
+Email sent: false
+Receipt written: true
+```
+
+The gate refused the unsafe action and logged a receipt.  
+If the email actually sends, the gate is broken — file an issue.
+
+---
+
+
 Most governance systems review decisions after consequences happen.
 
 Commit Gate Core stops unauthorised consequences before execution.
