@@ -12,6 +12,28 @@ It holds.
 
 ---
 
+## Try in 30 seconds
+
+```bash
+git clone https://github.com/LalaSkye/commit-gate-core.git
+cd commit-gate-core
+python -m examples.unsafe_email_send
+```
+
+Expected:
+
+```
+Result: HOLD
+Email sent: false
+Receipt written: true
+```
+
+The gate refused the unsafe state change and wrote a receipt proving why.
+
+If the email sends, the gate is broken. File an issue.
+
+---
+
 ## The killer demo
 
 ```
