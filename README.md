@@ -16,8 +16,7 @@ Email sent: false
 Receipt written: true
 ```
 
-The gate refused the unsafe action and logged a receipt.  
-If the email actually sends, the gate is broken — file an issue.
+If the email actually sends, the gate is broken.
 
 ---
 
