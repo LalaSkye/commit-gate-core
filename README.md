@@ -3,7 +3,7 @@
 ## Try in 30 seconds
 
 ```bash
-git clone [https://github.com/LalaSkye/commit-gate-core.git](https://github.com/LalaSkye/commit-gate-core.git)
+git clone https://github.com/LalaSkye/commit-gate-core.git
 cd commit-gate-core
 python -m examples.unsafe_email_send
 ```
