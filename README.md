@@ -1,6 +1,21 @@
 # Commit Gate Core
 
-## Try in 30 seconds
+**Reference kernel for execution-boundary governance.**
+
+Commit Gate Core stops unauthorised consequences before execution.
+
+Most governance systems review decisions after consequences happen.  
+This repo demonstrates a smaller, harder control surface:
+
+> **No state mutation is allowed unless a signed, scoped, unexpired, unreplayed `DecisionRecord` authorises the exact commit.**
+
+If authority, scope, expiry, replay, or receipt checks fail, the action does not run.
+
+It holds.
+
+---
+
+## Try it in 30 seconds
 
 ```bash
 git clone https://github.com/LalaSkye/commit-gate-core.git
@@ -8,7 +23,7 @@ cd commit-gate-core
 python -m examples.unsafe_email_send
 ```
 
-**Expected output:**
+Expected output:
 
 ```text
 Result: HOLD
@@ -16,48 +31,13 @@ Email sent: false
 Receipt written: true
 ```
 
-If the email actually sends, the gate is broken.
+If the email sends, the gate is broken.
 
 ---
 
+## The demo
 
-Most governance systems review decisions after consequences happen.
-
-Commit Gate Core stops unauthorised consequences before execution.
-
-No state mutation is allowed unless a signed, scoped, unexpired, unreplayed DecisionRecord authorises the exact commit.
-
-If authority, scope, expiry, replay, or receipt checks fail, the system does not continue.
-
-It holds.
-
----
-
-## Try in 30 seconds
-
-```bash
-git clone https://github.com/LalaSkye/commit-gate-core.git
-cd commit-gate-core
-python -m examples.unsafe_email_send
-```
-
-Expected:
-
-```
-Result: HOLD
-Email sent: false
-Receipt written: true
-```
-
-The gate refused the unsafe state change and wrote a receipt proving why.
-
-If the email sends, the gate is broken. File an issue.
-
----
-
-## The killer demo
-
-```
+```text
 Attempt:        send external email
 DecisionRecord: missing authority
 Result:         HOLD
@@ -65,41 +45,78 @@ Email sent:     false
 Receipt written: true
 ```
 
-That is the shape. The system refuses the unsafe state change and writes a receipt proving why.
+That is the shape.
 
----
-
-## Status
-
-`v0.1` — one invariant, fully proven.
-
-Not a full system. Not a roadmap. One rule, hard-enforced:
-
-> This path cannot execute without a valid DecisionRecord.
-
----
-
-## Run it in under 60 seconds
-
-```bash
-git clone https://github.com/LalaSkye/commit-gate-core.git
-cd commit-gate-core
-python -m examples.unsafe_email_send
-```
-
-Expected output: `HOLD`. Email not sent. Receipt written to `./receipts/`.
-
-If it executes the email, the gate is broken. File an issue.
+The system refuses the unsafe state change before execution and writes a receipt proving why.
 
 ---
 
 ## What this repo proves
 
-- A system refusing unsafe state change.
-- Receipts proving why.
-- Tests proving bypass fails.
+- Unsafe consequence can be refused before execution.
+- Missing authority prevents mutation.
+- Refusal can produce an auditable receipt.
+- Bypass failure can be tested directly.
 
-Not code. Not docs. Not demos. **Enforcement.**
+This is not governance commentary.
+
+It is a small enforcement primitive.
+
+---
+
+## Boundary
+
+This repo does **not** claim to be a full AI governance system.
+
+It proves one narrow invariant:
+
+> This path cannot execute without a valid `DecisionRecord`.
+
+The invariant is deliberately small so it can be inspected, tested, and broken under hostile reading.
+
+---
+
+## Core rule
+
+A valid `DecisionRecord` must be:
+
+- signed
+- scoped to the exact commit
+- within its validity window
+- unreplayed
+- sufficient for the requested mutation
+
+Failure at any check produces `HOLD`.
+
+No silent continuation.
+
+---
+
+## Evidence shape
+
+A useful governance gate must show:
+
+1. what action was attempted
+2. what proof was required
+3. which check failed
+4. whether execution occurred
+5. what receipt was written
+
+For this demo, the answer is simple:
+
+```text
+Execution occurred: false
+Receipt written:    true
+Verdict:            HOLD
+```
+
+---
+
+## Status
+
+`v0.1` — one invariant, hard-enforced.
+
+Small surface. Clear failure mode. Receipts over reassurance.
 
 ---
 
