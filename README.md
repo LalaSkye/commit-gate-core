@@ -15,6 +15,24 @@ It holds.
 
 ---
 
+## Execution Boundary Test v1
+
+Use the test to check whether a system can physically stop consequence at the point an action would become real.
+
+See: [`docs/execution-boundary-test-v1.md`](docs/execution-boundary-test-v1.md)
+
+Core question:
+
+> Where does the system physically stop?
+
+PASS:
+The action cannot execute without valid proof.
+
+FAIL:
+The action still reaches consequence.
+
+---
+
 ## Try it in 30 seconds
 
 ```bash
