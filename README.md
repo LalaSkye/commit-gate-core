@@ -94,6 +94,10 @@ It proves one narrow invariant:
 
 The invariant is deliberately small so it can be inspected, tested, and broken under hostile reading.
 
+This repository does not prove adoption, certification, standardisation, or production readiness.
+
+It demonstrates a bounded execution-control surface that can be run, inspected, and tested.
+
 ---
 
 ## Core rule
