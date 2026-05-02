@@ -1,4 +1,6 @@
 # Commit Gate Core
+New to this work? Start here:
+[https://github.com/LalaSkye/start-here](https://github.com/LalaSkye/start-here)
 
 **Reference kernel for execution-boundary governance.**
 
