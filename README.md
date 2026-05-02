@@ -144,6 +144,20 @@ Small surface. Clear failure mode. Receipts over reassurance.
 
 ---
 
+## Working paper
+
+**From Policy to Commit: Execution-Boundary Control for Governed AI Systems**
+
+- DOI: https://doi.org/10.5281/zenodo.19980275
+- Zenodo record: https://zenodo.org/records/19980275
+- PDF (in this repo): [docs/papers/From_Policy_to_Commit_Ricky_Dean_Jones_AlvianTech_Working_Paper_v0.1.pdf](docs/papers/From_Policy_to_Commit_Ricky_Dean_Jones_AlvianTech_Working_Paper_v0.1.pdf)
+
+### Citation
+
+Jones, R. D. (2026). *From Policy to Commit: Execution-Boundary Control for Governed AI Systems* (v0.1). Zenodo. https://doi.org/10.5281/zenodo.19980275
+
+---
+
 ## License
 
 MIT. Use it. Break it. Tell me how.
