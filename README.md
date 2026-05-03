@@ -13,7 +13,7 @@ This repo demonstrates a smaller, harder control surface:
 
 If authority, scope, expiry, replay, or receipt checks fail, the action does not run.
 
-It holds.
+The proof is the failed execution path.
 
 ---
 
