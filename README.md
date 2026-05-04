@@ -21,14 +21,23 @@ The proof is the failed execution path.
 
 This repository demonstrates a **path-local commit gate**.
 
-It enforces a single invariant at the boundary it sits on:
+It enforces a single v1 invariant at the boundary it sits on:
 
 > No consequence at this commit boundary without a valid signed, scoped,
-> unexpired, unreplayed DecisionRecord — payload-bound, proof-bound,
-> atomic commit.
+> unexpired, unreplayed DecisionRecord.
 
 This is the **path-local invariant**. It is what the code in this
 repository implements and tests.
+
+### Current hardening gaps
+
+The stronger properties below are tracked as hardening work, not claimed as
+current v1 guarantees:
+
+- payload binding: see issue #8
+- atomic commit boundary: see issue #9
+- audit-failure control: see issue #10
+- frozen DecisionRecord snapshot for audit fidelity: see issue #11
 
 ### What this gate does not, by itself, prove
 
@@ -52,7 +61,7 @@ This repository does not make the path-universal claim.
 
 ### Reading guide
 
-- If you want to inspect the gate primitive: read `cmd/`, `internal/gate/`,
+- If you want to inspect the gate primitive: read `src/commit_gate_core/gate.py`
   and the test suite.
 - If you want to evaluate path-universal coverage in a real system: that
   is a deployment-architecture review, not a code review of this repo.
@@ -115,9 +124,9 @@ The system refuses the unsafe state change before execution and writes a receipt
 
 ## What this repo proves
 
-- Unsafe consequence can be refused before execution.
-- Missing authority prevents mutation.
-- Refusal can produce an auditable receipt.
+- Unsafe consequence can be refused before execution on the demonstrated path.
+- Missing authority prevents mutation on the demonstrated path.
+- Refusal can produce an auditable receipt when the audit sink accepts the event.
 - Bypass failure can be tested directly.
 
 This is not governance commentary.
@@ -136,7 +145,7 @@ It proves one narrow invariant:
 
 The invariant is deliberately small so it can be inspected, tested, and broken under hostile reading.
 
-This repository does not prove adoption, certification, standardisation, or production readiness.
+This repository does not prove adoption, certification, standardisation, production readiness, payload binding, atomic commit, or path-universal deployment coverage.
 
 It demonstrates a bounded execution-control surface that can be run, inspected, and tested.
 
@@ -150,7 +159,7 @@ A valid `DecisionRecord` must be:
 - scoped to the exact commit
 - within its validity window
 - unreplayed
-- sufficient for the requested mutation
+- sufficient for the requested mutation under the current v1 scope checks
 
 Failure at any check produces `HOLD`.
 
@@ -180,7 +189,7 @@ Verdict:            HOLD
 
 ## Status
 
-`v0.1` — one invariant, hard-enforced.
+`v0.1` — one narrow invariant, enforced on the demonstrated path.
 
 Small surface. Clear failure mode. Receipts over reassurance.
 
