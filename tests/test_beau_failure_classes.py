@@ -39,6 +39,18 @@ class FailingAudit:
         raise RuntimeError("audit unavailable")
 
 
+class FailOnceAudit:
+    def __init__(self):
+        self.calls = 0
+        self.events = []
+
+    def append(self, event):
+        self.calls += 1
+        if self.calls == 1:
+            raise RuntimeError("audit unavailable")
+        self.events.append(dict(event))
+
+
 class FixedClock:
     def now(self):
         return datetime(2026, 5, 4, 12, 0, 0, tzinfo=timezone.utc)
@@ -92,13 +104,13 @@ def test_proof_consequence_ordering_exposes_mutation_before_durable_audit():
     def mutate(record):
         effects.append(("sent", record["object_id"]))
 
-    gate = make_gate(audit=FailingAudit(), mutation_callback=mutate)
+    gate = make_gate(audit=FailOnceAudit(), mutation_callback=mutate)
 
     result = execute_valid(gate)
 
     assert effects == [("sent", "user@example.com")]
     assert result.allowed is False
-    assert result.code == "ERROR:UNEXPECTED:RuntimeError"
+    assert result.code == "ROLLBACK:UNEXPECTED:RuntimeError"
 
 
 def test_proof_payload_binding_gap_allows_callback_to_create_unbound_effect():
@@ -137,7 +149,7 @@ def test_atomic_commit_boundary_gap_when_audit_fails_after_nonce_and_mutation():
         effects.append("mutation-bound")
 
     gate = make_gate(
-        audit=FailingAudit(),
+        audit=FailOnceAudit(),
         mutation_callback=mutate,
         nonce_ledger=nonce_ledger,
     )
@@ -148,4 +160,41 @@ def test_atomic_commit_boundary_gap_when_audit_fails_after_nonce_and_mutation():
     assert nonce_ledger.consumed == set()
     assert nonce_ledger.rolled_back == [("nonce-1", "decision-1")]
     assert result.allowed is False
-    assert result.code == "ERROR:UNEXPECTED:RuntimeError"
+    assert result.code == "ROLLBACK:UNEXPECTED:RuntimeError"
+
+
+def test_audit_failure_on_deny_path_can_escape_without_gate_result():
+    gate = make_gate(audit=FailingAudit(), mutation_callback=lambda record: None)
+
+    try:
+        gate.execute(
+            record=None,
+            actor_id="actor-1",
+            action="email.send",
+            object_id="user@example.com",
+            environment="demo",
+            commit_hash="a" * 40,
+        )
+    except RuntimeError as exc:
+        assert str(exc) == "audit unavailable"
+    else:
+        raise AssertionError("audit failure on deny path should currently escape")
+
+
+def test_mutable_record_can_be_changed_after_validation_before_audit_receipt():
+    audit = MemoryAudit()
+    record = valid_record()
+    effects = []
+
+    def mutate(record):
+        effects.append(("sent", record["object_id"]))
+        record["object_id"] = "attacker@example.com"
+
+    gate = make_gate(audit=audit, mutation_callback=mutate)
+
+    result = execute_valid(gate, record=record)
+
+    assert result.allowed is True
+    assert effects == [("sent", "user@example.com")]
+    assert audit.events[0]["attempted"]["object_id"] == "user@example.com"
+    assert audit.events[0]["record_scope"]["object_id"] == "attacker@example.com"
