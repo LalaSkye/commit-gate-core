@@ -8,6 +8,11 @@
 
 - Condition Freshness Check v0.1 is recorded as a bounded DecisionRecord validation surface (no code yet) that fail-closes to HOLD when its authorising condition is stale, unevidenced, out-of-scope, or freshness is unknown.
 
+## Reusable tags
+
+- Freshness HOLD — preferred future issue-title phrase for test cases.
+- freshness-hold — primary internal slug / machine-findable key.
+
 ## Future work headings
 
 - Freshness Test Cases v0.1
