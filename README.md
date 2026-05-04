@@ -17,6 +17,48 @@ The proof is the failed execution path.
 
 ---
 
+## Scope and limitations
+
+This repository demonstrates a **path-local commit gate**.
+
+It enforces a single invariant at the boundary it sits on:
+
+> No consequence at this commit boundary without a valid signed, scoped,
+> unexpired, unreplayed DecisionRecord — payload-bound, proof-bound,
+> atomic commit.
+
+This is the **path-local invariant**. It is what the code in this
+repository implements and tests.
+
+### What this gate does not, by itself, prove
+
+The **path-universal invariant** is stronger:
+
+> No consequence is reachable without passing a proof-bound, payload-bound,
+> atomic commit boundary across all paths.
+
+Achieving the path-universal invariant is an **architectural placement
+question**, not a gate-implementation claim. It requires:
+
+- routing every reachable path to a consequence through a gate of this kind
+- exclusion or explicit out-of-scope marking of alternate routes, including:
+  - human review handoffs
+  - downstream agent execution
+  - asynchronous side channels
+  - bypass paths created by retries, rollbacks, or recovery flows
+- system-level evidence that the routing holds
+
+This repository does not make the path-universal claim.
+
+### Reading guide
+
+- If you want to inspect the gate primitive: read `cmd/`, `internal/gate/`,
+  and the test suite.
+- If you want to evaluate path-universal coverage in a real system: that
+  is a deployment-architecture review, not a code review of this repo.
+
+---
+
 ## Execution Boundary Test v1
 
 Use the test to check whether a system can physically stop consequence at the point an action would become real.
