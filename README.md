@@ -17,6 +17,12 @@ The proof is the failed execution path.
 
 ---
 
+## 1. Definition
+
+**Admissibility** is the pre-execution test that decides whether an action is allowed to enter an executable state.
+
+---
+
 ## Scope and limitations
 
 This repository demonstrates a **path-local commit gate**.
