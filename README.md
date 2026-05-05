@@ -19,7 +19,13 @@ The proof is the failed execution path.
 
 ## 1. Definition
 
-**Admissibility** is the pre-execution test that decides whether an action is allowed to enter an executable state.
+**Admissibility** is the pre-execution test that determines whether a requested action has a valid basis to enter an executable state.
+
+A requested action is admissible only when the required authority, scope, evidence, state, and time conditions are present and valid before execution is made available.
+
+If those conditions are missing, invalid, expired, or unresolved, the action is not admissible.
+
+In that case, the system should not create an executable state for the action.
 
 ---
 
