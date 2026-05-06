@@ -17,6 +17,8 @@ The proof is the failed execution path.
 
 Claim discipline for this repo is controlled in [`docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md`](docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md).
 
+Run the adversarial invariant verifier locally: `python scripts/verify_adversarial_invariants.py`
+
 ---
 
 ## 1. Definition
