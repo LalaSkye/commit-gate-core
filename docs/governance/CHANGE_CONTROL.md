@@ -20,6 +20,7 @@ A receipt entry **must** be added to `docs/governance/BUILD_RECEIPTS.md` when a 
 8. Adds, removes, or modifies a governance trigger class in `GOVERNANCE_CLASSES.md`
 9. Adds, removes, or modifies the governance violation intake template in `.github/ISSUE_TEMPLATE/governance_violation.md`
 10. Adds, removes, or modifies `GOVERNANCE_VIOLATION_REVIEW.md`
+11. Adds, removes, or modifies `GOVERNANCE_REVIEW_OUTCOMES.md`
 
 ---
 
@@ -34,6 +35,7 @@ The standing claim boundary **must** be re-stated (not silently widened) when a 
 5. Changes the permitted ontology of governance trigger classes
 6. Changes governance violation intake framing or evidence requirements
 7. Changes governance violation review classification or resolution framing
+8. Changes what governance review outcomes are allowed to determine
 
 ---
 
@@ -82,6 +84,28 @@ The following amendments require a Mechanism change trigger and a `BUILD_RECEIPT
 These are not editorial changes.
 
 The stage structure, classification mapping, and review framing are operative governance surfaces.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## Governance review outcomes
+
+File: `docs/governance/GOVERNANCE_REVIEW_OUTCOMES.md`  
+Trigger class: Mechanism change
+
+The following amendments require a Mechanism change trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Adding an outcome state
+- Removing an outcome state
+- Renaming an outcome state
+- Changing required records for an outcome
+- Changing forbidden outcomes
+- Changing what outcome classification is allowed to determine
+
+These are not editorial changes.
+
+The permitted outcome states and outcome boundaries are operative governance surfaces.
 
 Amendment by editorial discretion is a governance violation.
 
