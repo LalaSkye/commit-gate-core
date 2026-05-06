@@ -128,3 +128,107 @@ Do not use local verification receipts as evidence of production runtime enforce
 This ledger records verified state only.
 
 No claim is held until it is evidenced.
+
+---
+
+## Receipt: Jedi/Perplexity handoff issue
+
+Date: 2026-05-06
+Trigger class: Mechanism change
+Surface: governance handoff routing
+
+Authorised inside the issue:
+
+- local receipt generation
+- receipt verification
+- receipt commit
+- BUILD_RECEIPTS update
+
+Forbidden inside the issue:
+
+- CI green claims
+- runtime enforcement claims
+- production enforcement claims
+
+Boundary:
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+Jedi/Perplexity handoff is routed and bounded. Receipt mechanics authorised; claim closure not authorised.
+
+---
+
+## Receipt: CHANGE_CONTROL pin — Review resolution template
+
+Date: 2026-05-06
+Trigger class: Mechanism change
+Surface: docs/governance/CHANGE_CONTROL.md
+
+Action:
+Pinned the review resolution template under CHANGE_CONTROL.
+
+Boundary:
+No claim about CI, runtime, or production enforcement.
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+Review resolution template is now a governed surface under CHANGE_CONTROL.
+
+---
+
+## Receipt: CHANGE_CONTROL pin — REVIEW_RECORDS.md
+
+Date: 2026-05-06
+Trigger class: Mechanism change
+Surface: docs/governance/CHANGE_CONTROL.md
+
+Action:
+Pinned REVIEW_RECORDS.md under CHANGE_CONTROL.
+
+Boundary:
+No claim about CI, runtime, or production enforcement.
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+REVIEW_RECORDS.md is now a governed surface under CHANGE_CONTROL.
+
+---
+
+## Receipt: CHANGE_CONTROL pin — OPEN_CLAIMS_CLOSURE_CHECKLIST.md
+
+Date: 2026-05-06
+Trigger class: Claim-boundary change
+Surface: docs/governance/CHANGE_CONTROL.md
+
+Action:
+Pinned OPEN_CLAIMS_CLOSURE_CHECKLIST.md under CHANGE_CONTROL.
+
+Boundary:
+This pin governs how open claims may close.
+It does not close any claim.
+No claim about CI, runtime, or production enforcement.
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+Open-claim closure checklist is now a governed surface under CHANGE_CONTROL.
+
+---
+
+## Receipt: CHANGE_CONTROL pin — CI_GREEN_PROOF_REQUIREMENTS.md
+
+Date: 2026-05-06
+Trigger class: Claim-boundary change
+Surface: docs/governance/CHANGE_CONTROL.md
+
+Action:
+Pinned CI_GREEN_PROOF_REQUIREMENTS.md under CHANGE_CONTROL.
+
+Boundary:
+This pin governs how CI_GREEN_PROOF may close.
+It does not close CI_GREEN_PROOF.
+CI green proof proves only scoped CI success.
+It does not prove production runtime enforcement.
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+CI green proof closure requirements are now controlled as an operative claim-boundary surface.

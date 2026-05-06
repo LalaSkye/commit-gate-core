@@ -230,3 +230,86 @@ Each receipt entry in `BUILD_RECEIPTS.md` should record:
 ## Standing rule
 
 *No claim is upgraded without an evidenced trigger. No surface is widened without a receipt. The boundary is re-stated, never assumed.*
+
+---
+
+## Surface: Review resolution template
+
+Protected amendments:
+
+- changing the required fields of the resolution template
+- removing the trigger-class requirement
+- removing the receipt requirement
+- allowing resolution without a recorded outcome
+
+Trigger class: Mechanism change.
+
+Receipt: Add `BUILD_RECEIPTS.md` entry.
+
+Boundary:
+This surface governs how reviews resolve.
+It does not make any claim about CI, runtime, or production enforcement.
+
+---
+
+## Surface: REVIEW_RECORDS.md
+
+Protected amendments:
+
+- removing required columns from the register
+- deleting historical review records
+- backdating entries
+- recording a resolution without the corresponding template fields
+
+Trigger class: Mechanism change.
+
+Receipt: Add `BUILD_RECEIPTS.md` entry.
+
+Boundary:
+This surface records review outcomes only.
+It does not close any open claim by itself.
+It makes no claim about CI, runtime, or production enforcement.
+
+---
+
+## Surface: OPEN_CLAIMS_CLOSURE_CHECKLIST.md
+
+Protected amendments:
+
+- removing checklist items
+- weakening evidence requirements
+- allowing closure without all items satisfied
+- bypassing the checklist for any specific claim
+
+Trigger class: Claim-boundary change.
+
+Receipt: Add `BUILD_RECEIPTS.md` entry.
+
+Boundary:
+This surface governs how open claims may close.
+It does not close any claim.
+It makes no claim about CI, runtime, or production enforcement.
+
+---
+
+## Surface: CI_GREEN_PROOF_REQUIREMENTS.md
+
+Protected amendments:
+
+- changing required evidence
+- weakening what does not close the claim
+- expanding CI proof into runtime or production enforcement proof
+- closing CI_GREEN_PROOF without following `OPEN_CLAIMS_CLOSURE_CHECKLIST.md`
+
+Trigger class:
+
+- Claim-boundary change for creation or closure changes.
+- Mechanism change for procedural amendments.
+
+Receipt: Add `BUILD_RECEIPTS.md` entry.
+
+Boundary:
+This surface defines what evidence would be required to close CI_GREEN_PROOF.
+It does not close CI_GREEN_PROOF.
+CI_GREEN_PROOF remains explicitly unheld.
+This surface makes no claim about runtime or production enforcement.
