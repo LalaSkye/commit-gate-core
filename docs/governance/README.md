@@ -15,6 +15,7 @@ Each file has one job.
 | `CLAIM_CLOSURE_PROCEDURE.md` | The exact ordered procedure required to move a claim from UNHELD to CLOSED. |
 | `GOVERNANCE_VIOLATION_REVIEW.md` | The staged procedure for reviewing, classifying, and resolving suspected governance violations. |
 | `GOVERNANCE_REVIEW_OUTCOMES.md` | The permitted outcome states for governed review resolution. |
+| `GOVERNANCE_REVIEW_RESOLUTION_TEMPLATE.md` | The minimum constitutional record required to close a governed review. |
 | `VERIFICATION_RECEIPT_SCOPE.md` | What local verification receipts are allowed to prove. |
 | `CI_TRIGGER_RECEIPT.md` | Why the first CI trigger commit exists and what it does not prove. |
 
