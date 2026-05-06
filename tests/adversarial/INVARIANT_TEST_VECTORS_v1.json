@@ -1,0 +1,52 @@
+{
+  "status": "ACTIVE",
+  "class": "ADVERSARIAL_TEST_VECTOR_SET",
+  "scope": "governance invariants",
+  "vectors": [
+    {
+      "id": "ADV-I-001",
+      "invariant": "INVARIANT I — Scope Monotonicity",
+      "attempt": "delegate expands authority envelope beyond delegator scope",
+      "input": {
+        "delegator_scope": ["email:send:draft_only"],
+        "delegate_scope": ["email:send:draft_only", "email:send:external"]
+      },
+      "expected": {
+        "decision": "DENY",
+        "execution_allowed": false,
+        "receipt_required": true
+      }
+    },
+    {
+      "id": "ADV-II-001",
+      "invariant": "INVARIANT II — Cross-Surface Admissibility",
+      "attempt": "active interpretive surfaces produce incompatible verdicts before execution",
+      "input": {
+        "language_surface": "ALLOW",
+        "geometry_surface": "HOLD",
+        "action_surface": "ALLOW"
+      },
+      "expected": {
+        "decision": "HOLD",
+        "execution_allowed": false,
+        "receipt_required": true
+      }
+    },
+    {
+      "id": "ADV-III-001",
+      "invariant": "INVARIANT III — Consequence Binding",
+      "attempt": "compatibility cannot be determined before requested execution",
+      "input": {
+        "language_surface": "ALLOW",
+        "geometry_surface": null,
+        "action_surface": "ALLOW"
+      },
+      "expected": {
+        "decision": "SILENCE",
+        "execution_allowed": false,
+        "receipt_required": true
+      }
+    }
+  ],
+  "claim_limit": "These vectors define expected adversarial outcomes. They do not by themselves prove runtime enforcement until bound to executable tests."
+}
