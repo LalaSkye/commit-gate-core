@@ -22,6 +22,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `f56d9588` | Local verifier | `scripts/verify_adversarial_invariants.py` | Local adversarial invariant verification command added. |
 | `a624c970` | Entry discoverability | `README.md` | Local adversarial verifier command exposed from README. |
 | `dc4162c` | Change control | `docs/governance/CHANGE_CONTROL.md` | Receipt-update triggers and claim-boundary review triggers defined. |
+| `e13a2eee` | Governance index | `docs/governance/README.md` | Governance folder made navigable as a controlled surface. |
 
 ---
 
@@ -30,6 +31,8 @@ This ledger records structural commits and the claim boundary attached to each s
 The repo exposes both the execution demo and the adversarial verification path from its primary entry surface.
 
 `CHANGE_CONTROL.md` defines when future claim, invariant, proof-surface, CI, or PR-template changes require a receipt update.
+
+`docs/governance/README.md` routes readers through the governance control surface.
 
 ## Current unheld claim
 
