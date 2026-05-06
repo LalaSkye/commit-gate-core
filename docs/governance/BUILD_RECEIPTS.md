@@ -26,6 +26,8 @@ This ledger records structural commits and the claim boundary attached to each s
 | `3e3c7f43` | Governance map | `docs/governance/GOVERNANCE_MAP.md` | Governance loop mapped as a single-page control surface. |
 | `90cccbcd` | Durable verification receipts | `scripts/verify_adversarial_invariants.py` | Local verifier can emit machine-readable JSON verification receipts. |
 | `ebb59f64` | Receipt scope note | `docs/governance/VERIFICATION_RECEIPT_SCOPE.md` | Verification receipt proof limits formalised as a governance boundary. |
+| `68ac94c3` | Receipt-scope governance pinning | `docs/governance/CHANGE_CONTROL.md` | Receipt scope changes now trigger receipt updates and claim-boundary review. |
+| `5a2a8ca4` | Governance index update | `docs/governance/README.md` | Verification receipt scope note added to governance routing surface. |
 
 ---
 
@@ -40,6 +42,8 @@ The repo exposes both the execution demo and the adversarial verification path f
 `GOVERNANCE_MAP.md` maps the governance loop without widening the claim surface.
 
 Local adversarial vector evaluation can now produce durable machine-readable receipts.
+
+Verification receipt proof limits are now themselves governed by change-control triggers.
 
 ## Current unheld claim
 
