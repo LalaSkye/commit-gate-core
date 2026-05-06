@@ -24,6 +24,8 @@ This ledger records structural commits and the claim boundary attached to each s
 | `dc4162c` | Change control | `docs/governance/CHANGE_CONTROL.md` | Receipt-update triggers and claim-boundary review triggers defined. |
 | `e13a2eee` | Governance index | `docs/governance/README.md` | Governance folder made navigable as a controlled surface. |
 | `3e3c7f43` | Governance map | `docs/governance/GOVERNANCE_MAP.md` | Governance loop mapped as a single-page control surface. |
+| `90cccbcd` | Durable verification receipts | `scripts/verify_adversarial_invariants.py` | Local verifier can emit machine-readable JSON verification receipts. |
+| `ebb59f64` | Receipt scope note | `docs/governance/VERIFICATION_RECEIPT_SCOPE.md` | Verification receipt proof limits formalised as a governance boundary. |
 
 ---
 
@@ -37,11 +39,15 @@ The repo exposes both the execution demo and the adversarial verification path f
 
 `GOVERNANCE_MAP.md` maps the governance loop without widening the claim surface.
 
+Local adversarial vector evaluation can now produce durable machine-readable receipts.
+
 ## Current unheld claim
 
 CI green proof is not yet evidenced through the connector.
 
 Do not claim verified enforcement on every push until a successful workflow run is observed.
+
+Do not use local verification receipts as evidence of production runtime enforcement or CI success.
 
 ---
 
