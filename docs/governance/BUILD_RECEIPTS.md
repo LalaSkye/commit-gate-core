@@ -44,6 +44,8 @@ This ledger records structural commits and the claim boundary attached to each s
 | `54236eae` | Governance violation intake | `.github/ISSUE_TEMPLATE/governance_violation.md` | Structured constitutional intake surface for suspected governance violations formalised. |
 | `5457fb60` | Intake template governance controls | `docs/governance/CHANGE_CONTROL.md` | Governance violation intake amendments now require Mechanism change classification and receipt tracking. |
 | `1b0a0d62` | Governance violation review | `docs/governance/GOVERNANCE_VIOLATION_REVIEW.md` | Ordered constitutional review and classification procedure for governance violations formalised. |
+| `c2d5937c` | Review procedure routing | `docs/governance/README.md` | Governance violation review procedure exposed from governance routing surface. |
+| `3a88ac71` | Review procedure governance controls | `docs/governance/CHANGE_CONTROL.md` | Governance violation review amendments now require Mechanism change classification and receipt tracking. |
 
 ---
 
@@ -86,6 +88,8 @@ Structured intake for suspected governance violations now exists.
 Governance violation intake amendments are now controlled as operative governance surfaces.
 
 Structured governance violation review and resolution procedure now exists.
+
+Governance violation review amendments are now controlled as operative governance surfaces.
 
 ## Current unheld claim
 
