@@ -6,7 +6,18 @@ Scope: governance-surface changes in `commit-gate-core`
 
 ---
 
+## Entry rule
+
+Each changelog entry that records a governance-surface change must name the trigger class that fired.
+
+This keeps the appellate record readable under pressure.
+
+---
+
 ## 2026-05-06 — Receipt-scope trigger class added
+
+Trigger class:
+Receipt-scope semantics change.
 
 Commits:
 - `68ac94c3` — `CHANGE_CONTROL.md`
