@@ -12,10 +12,13 @@ Each file has one job.
 | `CHANGE_CONTROL.md` | When a change requires a receipt or claim-boundary review. |
 | `GOVERNANCE_CLASSES.md` | Which governance trigger classes are permitted. Changes without a Mechanism change trigger are governance violations. |
 | `OPEN_CLAIMS.md` | Which governance claims are explicitly unheld. Closing a claim without a BUILD_RECEIPTS entry is a governance violation. |
+| `OPEN_CLAIMS_CLOSURE_CHECKLIST.md` | Pre-flight checklist for moving a claim from UNHELD to CLOSED. |
 | `CLAIM_CLOSURE_PROCEDURE.md` | The exact ordered procedure required to move a claim from UNHELD to CLOSED. |
+| `REVIEW_RECORDS.md` | The durable register of completed governed review outcomes. |
 | `GOVERNANCE_VIOLATION_REVIEW.md` | The staged procedure for reviewing, classifying, and resolving suspected governance violations. |
 | `GOVERNANCE_REVIEW_OUTCOMES.md` | The permitted outcome states for governed review resolution. |
 | `GOVERNANCE_REVIEW_RESOLUTION_TEMPLATE.md` | The minimum constitutional record required to close a governed review. |
+| `CI_GREEN_PROOF_REQUIREMENTS.md` | Evidence required to close the CI_GREEN_PROOF open claim. |
 | `VERIFICATION_RECEIPT_SCOPE.md` | What local verification receipts are allowed to prove. |
 | `CI_TRIGGER_RECEIPT.md` | Why the first CI trigger commit exists and what it does not prove. |
 
