@@ -34,6 +34,13 @@ Examples:
 - configured surface promoted to evidenced surface
 - claim limit widened, narrowed, or restated
 
+Claim lifecycle:
+- opening a claim = governed incompleteness
+- correctly closing a claim = constitutional transition
+- silently closing a claim = governance violation
+
+Silent claim closure fires as a governance violation, not as a Mechanism change.
+
 ---
 
 ## Receipt-semantics change
