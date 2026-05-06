@@ -41,6 +41,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `c7764e8f` | Claim lifecycle state machine | `docs/governance/GOVERNANCE_CLASSES.md` | Claim lifecycle formally classified as open, correctly closed, or governance violation. |
 | `c84dfb35` | Claim closure procedure | `docs/governance/CLAIM_CLOSURE_PROCEDURE.md` | Ordered constitutional procedure for closing governance claims formalised. |
 | `d8ce5cfc` | Claim closure routing | `docs/governance/README.md` | Claim closure procedure exposed from governance routing surface. |
+| `54236eae` | Governance violation intake | `.github/ISSUE_TEMPLATE/governance_violation.md` | Structured constitutional intake surface for suspected governance violations formalised. |
 
 ---
 
@@ -77,6 +78,8 @@ Closing an open claim without a BUILD_RECEIPTS entry is explicitly classified as
 Claim lifecycle state transitions are now formally classified.
 
 Claim closure procedure is now formally defined as an ordered constitutional transition.
+
+Structured intake for suspected governance violations now exists.
 
 ## Current unheld claim
 
