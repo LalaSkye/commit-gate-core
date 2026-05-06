@@ -51,6 +51,11 @@ This ledger records structural commits and the claim boundary attached to each s
 | `7392f06b` | Review outcome governance controls | `docs/governance/CHANGE_CONTROL.md` | Governance review outcome amendments now require Mechanism change classification and receipt tracking. |
 | `fe2e7117` | Review resolution template | `docs/governance/GOVERNANCE_REVIEW_RESOLUTION_TEMPLATE.md` | Minimum constitutional closure record for governed reviews formalised. |
 | `d8e5bfb7` | Review resolution routing | `docs/governance/README.md` | Governance review resolution template exposed from governance routing surface. |
+| `2b392257` | Review records register | `docs/governance/REVIEW_RECORDS.md` | Durable register for governed review outcomes formalised. |
+| `9b0baf92` | Open claims closure checklist | `docs/governance/OPEN_CLAIMS_CLOSURE_CHECKLIST.md` | Pre-flight checklist for governed claim closure formalised. |
+| `b4bb2127` | CI green proof requirements | `docs/governance/CI_GREEN_PROOF_REQUIREMENTS.md` | Explicit closure requirements for CI_GREEN_PROOF formalised without closing the claim. |
+| `292a07de` | Governance routing expansion | `docs/governance/README.md` | Remaining governance surfaces exposed from governance routing surface. |
+| `00585e1b` | Final governance controls | `docs/governance/CHANGE_CONTROL.md` | Remaining governance surfaces now pinned as operative governance surfaces. |
 
 ---
 
@@ -101,6 +106,12 @@ Governed review outcome states are now formally defined.
 Governance review outcome amendments are now controlled as operative governance surfaces.
 
 Governed review closure records are now formally standardised.
+
+Governed review records now have a durable append-only register.
+
+Governed claim closure now has a formal pre-flight checklist.
+
+CI_GREEN_PROOF now has explicit closure requirements without closing the claim.
 
 ## Current unheld claim
 
