@@ -32,6 +32,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `e84f7e9f` | Changelog trigger-class rule | `docs/governance/CHANGELOG.md` | Governance changelog entries must now declare the trigger class that fired. |
 | `941a1521` | Governance class taxonomy | `docs/governance/GOVERNANCE_CLASSES.md` | Permitted governance trigger classes formally defined. |
 | `20223ea9` | Governance index taxonomy route | `docs/governance/README.md` | Governance class taxonomy exposed from the governance routing surface. |
+| `78e6a948` | Governance ontology amendment rule | `docs/governance/CHANGE_CONTROL.md` | Governance class ontology amendments must use the existing Mechanism change class. |
 
 ---
 
@@ -54,6 +55,8 @@ Receipt-scope trigger rules are now documented in the governance changelog.
 Governance changelog entries must now declare the trigger class that fired.
 
 Governance trigger classes are now formally defined and pinned.
+
+Governance class ontology amendments must use the existing Mechanism change class.
 
 ## Current unheld claim
 
