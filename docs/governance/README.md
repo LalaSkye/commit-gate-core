@@ -11,7 +11,7 @@ Each file has one job.
 | `BUILD_RECEIPTS.md` | What has changed and what claim boundary is held. |
 | `CHANGE_CONTROL.md` | When a change requires a receipt or claim-boundary review. |
 | `GOVERNANCE_CLASSES.md` | Which governance trigger classes are permitted. Changes without a Mechanism change trigger are governance violations. |
-| `OPEN_CLAIMS.md` | Which governance claims are explicitly unheld. |
+| `OPEN_CLAIMS.md` | Which governance claims are explicitly unheld. Closing a claim without a BUILD_RECEIPTS entry is a governance violation. |
 | `VERIFICATION_RECEIPT_SCOPE.md` | What local verification receipts are allowed to prove. |
 | `CI_TRIGGER_RECEIPT.md` | Why the first CI trigger commit exists and what it does not prove. |
 
