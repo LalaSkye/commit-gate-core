@@ -15,6 +15,8 @@ If authority, scope, expiry, replay, or receipt checks fail, the action does not
 
 The proof is the failed execution path.
 
+Claim discipline for this repo is controlled in [`docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md`](docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md).
+
 ---
 
 ## 1. Definition
