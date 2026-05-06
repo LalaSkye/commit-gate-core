@@ -21,6 +21,10 @@ A receipt entry **must** be added to `docs/governance/BUILD_RECEIPTS.md` when a 
 9. Adds, removes, or modifies the governance violation intake template in `.github/ISSUE_TEMPLATE/governance_violation.md`
 10. Adds, removes, or modifies `GOVERNANCE_VIOLATION_REVIEW.md`
 11. Adds, removes, or modifies `GOVERNANCE_REVIEW_OUTCOMES.md`
+12. Adds, removes, or modifies `GOVERNANCE_REVIEW_RESOLUTION_TEMPLATE.md`
+13. Adds, removes, or modifies `REVIEW_RECORDS.md`
+14. Adds, removes, or modifies `OPEN_CLAIMS_CLOSURE_CHECKLIST.md`
+15. Adds, removes, or modifies `CI_GREEN_PROOF_REQUIREMENTS.md`
 
 ---
 
@@ -36,6 +40,9 @@ The standing claim boundary **must** be re-stated (not silently widened) when a 
 6. Changes governance violation intake framing or evidence requirements
 7. Changes governance violation review classification or resolution framing
 8. Changes what governance review outcomes are allowed to determine
+9. Changes what CI_GREEN_PROOF requires for closure
+10. Changes what review records are allowed to determine
+11. Weakens the open-claim closure checklist
 
 ---
 
@@ -106,6 +113,91 @@ The following amendments require a Mechanism change trigger and a `BUILD_RECEIPT
 These are not editorial changes.
 
 The permitted outcome states and outcome boundaries are operative governance surfaces.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## Governance review resolution template
+
+File: `docs/governance/GOVERNANCE_REVIEW_RESOLUTION_TEMPLATE.md`  
+Trigger class: Mechanism change
+
+The following amendments require a Mechanism change trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Adding or removing required closure fields
+- Changing the boundary statement
+- Changing forbidden closures
+- Changing whether resolution erases or preserves review
+- Changing receipt or reference requirements
+
+These are not editorial changes.
+
+The closure record shape is an operative governance surface.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## Review records register
+
+File: `docs/governance/REVIEW_RECORDS.md`  
+Trigger class: Mechanism change
+
+The following amendments require a Mechanism change trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Deleting review records
+- Changing the append-only rule
+- Changing review outcome fields
+- Changing scope beyond local governance review outcomes
+- Changing the boundary against intent, blame, personnel, or access decisions
+
+These are not editorial changes.
+
+The review records register is an operative governance surface.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## Open claims closure checklist
+
+File: `docs/governance/OPEN_CLAIMS_CLOSURE_CHECKLIST.md`  
+Trigger class: Mechanism change
+
+The following amendments require a Mechanism change trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Removing the evidence requirement
+- Removing the receipt requirement
+- Removing the changelog requirement
+- Removing the section movement requirement
+- Weakening the local-receipt-alone prohibition
+- Weakening the social-consensus prohibition
+
+These are not editorial changes.
+
+The open-claim closure checklist is an operative governance surface.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## CI green proof requirements
+
+File: `docs/governance/CI_GREEN_PROOF_REQUIREMENTS.md`  
+Creation trigger class: Claim-boundary change  
+Amendment trigger class: Mechanism change
+
+The following amendments require a governance trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Changing required evidence
+- Weakening what does not close the claim
+- Expanding CI proof into runtime or production enforcement proof
+- Closing `CI_GREEN_PROOF` without following `CLAIM_CLOSURE_PROCEDURE.md`
+
+These are not editorial changes.
+
+The CI green proof requirements are an operative claim-boundary surface.
 
 Amendment by editorial discretion is a governance violation.
 
