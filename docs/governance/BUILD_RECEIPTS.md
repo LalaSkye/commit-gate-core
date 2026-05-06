@@ -232,3 +232,28 @@ CI_GREEN_PROOF remains explicitly unheld.
 
 Safe claim:
 CI green proof closure requirements are now controlled as an operative claim-boundary surface.
+
+---
+
+## Receipt: Local adversarial verification receipt
+
+Date: 2026-05-06
+Trigger class: Mechanism change
+Surface: tests/adversarial/latest_verification_receipt.json
+
+Action:
+Ran `scripts/verify_adversarial_invariants.py --receipt`.
+Generated `tests/adversarial/latest_verification_receipt.json`.
+Result: PASS across 3 declared adversarial invariant vectors
+(ADV-I-001, ADV-II-001, ADV-III-001).
+
+Boundary:
+This receipt proves only local evaluation of declared
+adversarial vectors under the governed receipt-scope boundary.
+It does not prove production runtime enforcement.
+It does not prove CI success.
+CI_GREEN_PROOF remains explicitly unheld.
+
+Safe claim:
+A local adversarial verification receipt has been generated
+under the governed receipt-scope boundary.

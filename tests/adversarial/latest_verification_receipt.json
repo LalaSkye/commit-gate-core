@@ -1,0 +1,56 @@
+{
+  "claim_limit": "This receipt proves only local evaluation of declared adversarial vectors. It does not prove production runtime enforcement or CI success.",
+  "failures": [],
+  "generated_at": "2026-05-06T02:42:54.869250+00:00",
+  "receipt_type": "ADVERSARIAL_INVARIANT_VERIFICATION",
+  "result": "PASS",
+  "results": [
+    {
+      "actual": {
+        "decision": "DENY",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "expected": {
+        "decision": "DENY",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "id": "ADV-I-001",
+      "invariant": "INVARIANT I \u2014 Scope Monotonicity",
+      "passed": true
+    },
+    {
+      "actual": {
+        "decision": "HOLD",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "expected": {
+        "decision": "HOLD",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "id": "ADV-II-001",
+      "invariant": "INVARIANT II \u2014 Cross-Surface Admissibility",
+      "passed": true
+    },
+    {
+      "actual": {
+        "decision": "SILENCE",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "expected": {
+        "decision": "SILENCE",
+        "execution_allowed": false,
+        "receipt_required": true
+      },
+      "id": "ADV-III-001",
+      "invariant": "INVARIANT III \u2014 Consequence Binding",
+      "passed": true
+    }
+  ],
+  "vector_file": "tests/adversarial/INVARIANT_TEST_VECTORS_v1.json",
+  "vectors_checked": 3
+}
