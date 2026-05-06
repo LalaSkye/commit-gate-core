@@ -30,6 +30,8 @@ This ledger records structural commits and the claim boundary attached to each s
 | `5a2a8ca4` | Governance index update | `docs/governance/README.md` | Verification receipt scope note added to governance routing surface. |
 | `fa0e7e76` | Governance changelog | `docs/governance/CHANGELOG.md` | Receipt-scope trigger class documented as a governance event. |
 | `e84f7e9f` | Changelog trigger-class rule | `docs/governance/CHANGELOG.md` | Governance changelog entries must now declare the trigger class that fired. |
+| `941a1521` | Governance class taxonomy | `docs/governance/GOVERNANCE_CLASSES.md` | Permitted governance trigger classes formally defined. |
+| `20223ea9` | Governance index taxonomy route | `docs/governance/README.md` | Governance class taxonomy exposed from the governance routing surface. |
 
 ---
 
@@ -50,6 +52,8 @@ Verification receipt proof limits are now themselves governed by change-control 
 Receipt-scope trigger rules are now documented in the governance changelog.
 
 Governance changelog entries must now declare the trigger class that fired.
+
+Governance trigger classes are now formally defined and pinned.
 
 ## Current unheld claim
 
