@@ -37,6 +37,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `de92d803` | Governance violation index note | `docs/governance/README.md` | Governance class amendments without a Mechanism change trigger are explicitly marked as violations. |
 | `18205739` | Open claims register | `docs/governance/OPEN_CLAIMS.md` | Explicitly unheld governance claims now tracked as a first-class surface. |
 | `7eddccc7` | Open claims routing | `docs/governance/README.md` | Open claims register exposed from the governance routing surface. |
+| `b9d9734e` | Open claims violation warning | `docs/governance/README.md` | Closing an open claim without a BUILD_RECEIPTS entry is explicitly classified as a governance violation. |
 
 ---
 
@@ -67,6 +68,8 @@ Governance class ontology cannot define a class for its own amendment.
 Governance class amendments without a Mechanism change trigger are explicitly classified as violations.
 
 Explicitly unheld governance claims are now tracked as a first-class governance surface.
+
+Closing an open claim without a BUILD_RECEIPTS entry is explicitly classified as a governance violation.
 
 ## Current unheld claim
 
