@@ -34,6 +34,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `20223ea9` | Governance index taxonomy route | `docs/governance/README.md` | Governance class taxonomy exposed from the governance routing surface. |
 | `78e6a948` | Governance ontology amendment rule | `docs/governance/CHANGE_CONTROL.md` | Governance class ontology amendments must use the existing Mechanism change class. |
 | `98f07f80` | Ontology self-amendment boundary | `docs/governance/GOVERNANCE_CLASSES.md` | Governance class ontology cannot define a class for its own amendment. |
+| `de92d803` | Governance violation index note | `docs/governance/README.md` | Governance class amendments without a Mechanism change trigger are explicitly marked as violations. |
 
 ---
 
@@ -60,6 +61,8 @@ Governance trigger classes are now formally defined and pinned.
 Governance class ontology amendments must use the existing Mechanism change class.
 
 Governance class ontology cannot define a class for its own amendment.
+
+Governance class amendments without a Mechanism change trigger are explicitly classified as violations.
 
 ## Current unheld claim
 
