@@ -1,53 +1,43 @@
 # BUILD RECEIPTS
 
-Ledger of verified commits and claim boundaries for commit-gate-core.
+Status: ACTIVE  
+Class: GOVERNANCE_RECEIPT_LEDGER  
+Scope: commit-gate-core governance build sequence
+
+This ledger records structural commits and the claim boundary attached to each step.
 
 ---
 
-## a624c970
+## Receipt ledger
 
-**Change:** README now exposes the local adversarial verifier command.
-
-**Held:**
-- Local proof path is discoverable from README
-- Adversarial verifier is present and runnable
-- Claim discipline is exposed from entry
-- CI workflow is committed
-
-**Not held:**
-- CI green proof
-- Connector-visible workflow success
-- Verified enforcement on every push
-
-**Safe claim:**
-The repo now exposes both the execution demo and the adversarial verification path from its primary entry surface.
+| Commit | Layer | File / Surface | Held receipt |
+| --- | --- | --- | --- |
+| `68f2d266` | Claim boundary | `docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md` | Claim discipline co-located with the code. |
+| `d96b7fc0` | Entry surface | `README.md` | README links to the claim register. |
+| `8a3c39ba` | Invariants | `docs/governance/INVARIANTS.md` | Three machine-testable invariants formalised. |
+| `901cef71` | Adversarial vectors | `tests/adversarial/INVARIANT_TEST_VECTORS_v1.json` | Failure shapes declared as proof obligations. |
+| `2192cd77` | Executable proof obligations | `tests/adversarial/test_invariants.py` | Adversarial vectors bound to executable tests. |
+| `ea6f58a6` | CI configuration | `.github/workflows/adversarial-invariants.yml` | CI workflow committed for push and pull request triggers. |
+| `5bd99556` | Trigger receipt | `docs/governance/CI_TRIGGER_RECEIPT.md` | Post-workflow push recorded; CI success not proven. |
+| `f56d9588` | Local verifier | `scripts/verify_adversarial_invariants.py` | Local adversarial invariant verification command added. |
+| `a624c970` | Entry discoverability | `README.md` | Local adversarial verifier command exposed from README. |
 
 ---
 
-## f56d9588
+## Current held claim
 
-**Change:** `scripts/verify_adversarial_invariants.py` added — local executable verifier for adversarial proof obligations.
+The repo exposes both the execution demo and the adversarial verification path from its primary entry surface.
 
-**Held:**
-- Local verification path exists
-- ADV-I / ADV-II / ADV-III evaluation present
-- PASS / FAIL receipts printed to stdout
-- Exits non-zero on invariant divergence
+## Current unheld claim
 
-**Not held:**
-- CI green proof
-- Connector-visible workflow success
+CI green proof is not yet evidenced through the connector.
 
-**Safe claim:**
-Local verification path exists. CI enforcement remains configured but not yet evidenced green.
+Do not claim verified enforcement on every push until a successful workflow run is observed.
 
 ---
 
-## Claim boundary (standing)
+## Standing boundary
 
-Local verification is present and discoverable.
-CI enforcement remains configured but not yet evidenced green.
+This ledger records verified state only.
 
----
-
-*This ledger records verified state only. No claim is held until it is evidenced.*
+No claim is held until it is evidenced.
