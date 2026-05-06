@@ -29,6 +29,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `68ac94c3` | Receipt-scope governance pinning | `docs/governance/CHANGE_CONTROL.md` | Receipt scope changes now trigger receipt updates and claim-boundary review. |
 | `5a2a8ca4` | Governance index update | `docs/governance/README.md` | Verification receipt scope note added to governance routing surface. |
 | `fa0e7e76` | Governance changelog | `docs/governance/CHANGELOG.md` | Receipt-scope trigger class documented as a governance event. |
+| `e84f7e9f` | Changelog trigger-class rule | `docs/governance/CHANGELOG.md` | Governance changelog entries must now declare the trigger class that fired. |
 
 ---
 
@@ -47,6 +48,8 @@ Local adversarial vector evaluation can now produce durable machine-readable rec
 Verification receipt proof limits are now themselves governed by change-control triggers.
 
 Receipt-scope trigger rules are now documented in the governance changelog.
+
+Governance changelog entries must now declare the trigger class that fired.
 
 ## Current unheld claim
 
