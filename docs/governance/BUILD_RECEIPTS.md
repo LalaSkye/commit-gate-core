@@ -23,6 +23,7 @@ This ledger records structural commits and the claim boundary attached to each s
 | `a624c970` | Entry discoverability | `README.md` | Local adversarial verifier command exposed from README. |
 | `dc4162c` | Change control | `docs/governance/CHANGE_CONTROL.md` | Receipt-update triggers and claim-boundary review triggers defined. |
 | `e13a2eee` | Governance index | `docs/governance/README.md` | Governance folder made navigable as a controlled surface. |
+| `3e3c7f43` | Governance map | `docs/governance/GOVERNANCE_MAP.md` | Governance loop mapped as a single-page control surface. |
 
 ---
 
@@ -33,6 +34,8 @@ The repo exposes both the execution demo and the adversarial verification path f
 `CHANGE_CONTROL.md` defines when future claim, invariant, proof-surface, CI, or PR-template changes require a receipt update.
 
 `docs/governance/README.md` routes readers through the governance control surface.
+
+`GOVERNANCE_MAP.md` maps the governance loop without widening the claim surface.
 
 ## Current unheld claim
 
