@@ -46,6 +46,8 @@ This ledger records structural commits and the claim boundary attached to each s
 | `1b0a0d62` | Governance violation review | `docs/governance/GOVERNANCE_VIOLATION_REVIEW.md` | Ordered constitutional review and classification procedure for governance violations formalised. |
 | `c2d5937c` | Review procedure routing | `docs/governance/README.md` | Governance violation review procedure exposed from governance routing surface. |
 | `3a88ac71` | Review procedure governance controls | `docs/governance/CHANGE_CONTROL.md` | Governance violation review amendments now require Mechanism change classification and receipt tracking. |
+| `a72dd1e8` | Governance review outcomes | `docs/governance/GOVERNANCE_REVIEW_OUTCOMES.md` | Permitted constitutional outcome states for governed review resolution formalised. |
+| `a1e9dc4d` | Review outcomes routing | `docs/governance/README.md` | Governance review outcomes exposed from governance routing surface. |
 
 ---
 
@@ -90,6 +92,8 @@ Governance violation intake amendments are now controlled as operative governanc
 Structured governance violation review and resolution procedure now exists.
 
 Governance violation review amendments are now controlled as operative governance surfaces.
+
+Governed review outcome states are now formally defined.
 
 ## Current unheld claim
 
