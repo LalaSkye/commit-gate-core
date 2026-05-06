@@ -19,6 +19,7 @@ A receipt entry **must** be added to `docs/governance/BUILD_RECEIPTS.md` when a 
 7. Adds, removes, or modifies a receipt scope boundary in `VERIFICATION_RECEIPT_SCOPE.md`
 8. Adds, removes, or modifies a governance trigger class in `GOVERNANCE_CLASSES.md`
 9. Adds, removes, or modifies the governance violation intake template in `.github/ISSUE_TEMPLATE/governance_violation.md`
+10. Adds, removes, or modifies `GOVERNANCE_VIOLATION_REVIEW.md`
 
 ---
 
@@ -32,6 +33,7 @@ The standing claim boundary **must** be re-stated (not silently widened) when a 
 4. Changes what a verification receipt is allowed to prove
 5. Changes the permitted ontology of governance trigger classes
 6. Changes governance violation intake framing or evidence requirements
+7. Changes governance violation review classification or resolution framing
 
 ---
 
@@ -59,6 +61,27 @@ The following amendments require a Mechanism change trigger and a `BUILD_RECEIPT
 These are not editorial changes.
 
 The selectable types and evidence standard are operative governance surfaces.
+
+Amendment by editorial discretion is a governance violation.
+
+---
+
+## Governance violation review procedure
+
+File: `docs/governance/GOVERNANCE_VIOLATION_REVIEW.md`  
+Trigger class: Mechanism change
+
+The following amendments require a Mechanism change trigger and a `BUILD_RECEIPTS.md` entry:
+
+- Adding or removing review stages
+- Changing classification table rows
+- Changing resolution requirements
+- Changing unfounded-review handling
+- Changing the framing that classification is routing rather than punishment
+
+These are not editorial changes.
+
+The stage structure, classification mapping, and review framing are operative governance surfaces.
 
 Amendment by editorial discretion is a governance violation.
 
