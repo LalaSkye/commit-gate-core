@@ -17,6 +17,7 @@ A receipt entry **must** be added to `docs/governance/BUILD_RECEIPTS.md` when a 
 5. Changes the CI workflow in a way that affects enforcement scope
 6. Changes the PR template in a way that affects contributor obligations
 7. Adds, removes, or modifies a receipt scope boundary in `VERIFICATION_RECEIPT_SCOPE.md`
+8. Adds, removes, or modifies a governance trigger class in `GOVERNANCE_CLASSES.md`
 
 ---
 
@@ -28,6 +29,15 @@ The standing claim boundary **must** be re-stated (not silently widened) when a 
 2. Adds a new proof surface visible from README or entry
 3. Removes or weakens an existing proof surface
 4. Changes what a verification receipt is allowed to prove
+5. Changes the permitted ontology of governance trigger classes
+
+---
+
+## Governance-class amendment rule
+
+Any amendment to `GOVERNANCE_CLASSES.md` must be classified under the existing **Mechanism change** class.
+
+The class ontology may not create an exception for its own amendment.
 
 ---
 
