@@ -16,6 +16,7 @@ A receipt entry **must** be added to `docs/governance/BUILD_RECEIPTS.md` when a 
 4. Adds, removes, or modifies a claim in `ADMISSIBLE_CLAIM_REGISTER_v1.md`
 5. Changes the CI workflow in a way that affects enforcement scope
 6. Changes the PR template in a way that affects contributor obligations
+7. Adds, removes, or modifies a receipt scope boundary in `VERIFICATION_RECEIPT_SCOPE.md`
 
 ---
 
@@ -26,6 +27,7 @@ The standing claim boundary **must** be re-stated (not silently widened) when a 
 1. Promotes a configured surface to an evidenced one (e.g. CI green proof)
 2. Adds a new proof surface visible from README or entry
 3. Removes or weakens an existing proof surface
+4. Changes what a verification receipt is allowed to prove
 
 ---
 
