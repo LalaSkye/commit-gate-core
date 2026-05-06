@@ -8,6 +8,8 @@ This file defines the permitted governance classes for changelog trigger declara
 
 No new class may be introduced without a `CHANGE_CONTROL.md` trigger and a `BUILD_RECEIPTS.md` entry.
 
+This document is amended under **Mechanism change** only. It may not define a class to govern its own amendment.
+
 ---
 
 ## Mechanism change
