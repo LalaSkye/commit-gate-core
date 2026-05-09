@@ -201,6 +201,20 @@ Receipt written:    true
 Verdict:            HOLD
 ```
 
+## Refusal receipt
+
+When the gate returns `DENY` or `HOLD`, it writes a refusal receipt.
+
+The receipt is not silence. It is a structured record of what was stopped, why, and whether state changed.
+
+`DENY` is a first-class outcome. It is not the absence of `ALLOW`.
+
+A valid payload does not authorise an action.
+
+See: [`docs/refusal-receipt-v0.1.md`](docs/refusal-receipt-v0.1.md)
+
+Example: [`examples/clean-payload-denied-action.json`](examples/clean-payload-denied-action.json)
+
 ---
 
 ## Status
