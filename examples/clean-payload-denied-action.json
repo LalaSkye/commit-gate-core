@@ -1,0 +1,17 @@
+{
+  "scenario": "clean-payload-unauthorised-action",
+  "payload_valid": true,
+  "payload_integrity": "verified",
+  "action_authorised": false,
+  "gate_result": "DENY",
+  "refusal_receipt": {
+    "receipt_id": "rr_20260509_001",
+    "attempted_action": "approve_payment",
+    "failed_condition": "missing_decision_record",
+    "authority_presented": null,
+    "decision_outcome": "DENY",
+    "state_changed": false,
+    "mutation_result": "blocked"
+  },
+  "note": "A valid payload does not make an action authorised. The gate refused because no valid DecisionRecord was presented. Refusal is inspectable."
+}
