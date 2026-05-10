@@ -30,6 +30,17 @@ REQUIRED_FIELDS: tuple[str, ...] = (
     "signature",
 )
 
+# Fields copied into the audit receipt snapshot before mutation_callback runs.
+# This is the authorised record shape: post-callback mutation cannot alter it.
+_SNAPSHOT_FIELDS: tuple[str, ...] = (
+    "actor_id",
+    "action",
+    "object_id",
+    "environment",
+    "commit_hash",
+    "policy_version",
+)
+
 
 @dataclass(frozen=True)
 class GateResult:
@@ -99,8 +110,8 @@ class CommitGate:
         4. verify exact scope
         5. verify nonce unused
         6. consume nonce
-        7. call mutation callback
-        8. append audit on every exit
+        7. call mutation callback (record snapshot taken before this step)
+        8. append audit on every exit (audit failure returns controlled GateResult)
     """
 
     def __init__(
@@ -138,6 +149,10 @@ class CommitGate:
         decision_id: Optional[str] = None
         nonce: Optional[str] = None
         nonce_consumed = False
+        # record_snapshot is set after all validation passes, before mutation.
+        # _finish() uses this snapshot so post-callback mutation cannot alter
+        # what the audit receipt says was authorised. (Issue #11)
+        record_snapshot: Optional[Mapping[str, Any]] = None
 
         try:
             now = self._clock.now()
@@ -157,7 +172,7 @@ class CommitGate:
                     code=f"DENY:{structural_error}",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             decision_id = str(record["decision_id"])
@@ -168,7 +183,7 @@ class CommitGate:
                     code=f"DENY:VERDICT_NOT_ALLOW:{record['verdict']}",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             if record["policy_version"] not in self._accepted_policy_versions:
@@ -176,7 +191,7 @@ class CommitGate:
                     code=f"DENY:POLICY_VERSION_REJECTED:{record['policy_version']}",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             # 2. verify signature
@@ -185,7 +200,7 @@ class CommitGate:
                     code="DENY:INVALID_SIGNATURE",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             # 3. verify timestamps
@@ -195,14 +210,14 @@ class CommitGate:
                     code="DENY:ISSUED_AT_IN_FUTURE",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
             if now > expires_at:
                 return self._deny(
                     code="DENY:DECISION_EXPIRED",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             # 4. verify exact scope
@@ -219,7 +234,7 @@ class CommitGate:
                     code=f"DENY:{scope_error}",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
 
             # 5. verify nonce unused
@@ -228,8 +243,12 @@ class CommitGate:
                     code="DENY:NONCE_REPLAYED",
                     decision_id=decision_id,
                     attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                    record=record,
+                    record_snapshot=self._snapshot(record),
                 )
+
+            # Issue #11: snapshot authorised record fields NOW — after all
+            # validation passes, before mutation_callback can alter the record.
+            record_snapshot = self._snapshot(record)
 
             # 6 + 7. consume nonce then mutate. Roll back nonce if mutation fails.
             self._nonce_ledger.consume(nonce, decision_id)
@@ -245,7 +264,7 @@ class CommitGate:
                         code=f"ROLLBACK:MUTATION_FAILED:{type(exc).__name__}",
                         decision_id=decision_id,
                         attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                        record=record,
+                        record_snapshot=record_snapshot,
                     )
                 except Exception as rollback_exc:
                     return self._error(
@@ -255,13 +274,13 @@ class CommitGate:
                         ),
                         decision_id=decision_id,
                         attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                        record=record,
+                        record_snapshot=record_snapshot,
                     )
 
             return self._allow(
                 decision_id=decision_id,
                 attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                record=record,
+                record_snapshot=record_snapshot,
             )
 
         except ValueError as exc:
@@ -269,7 +288,7 @@ class CommitGate:
                 code=f"DENY:{str(exc)}",
                 decision_id=decision_id,
                 attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                record=record,
+                record_snapshot=record_snapshot,
             )
         except Exception as exc:
             # Last-resort fail-closed path. Try to roll back a consumed nonce.
@@ -280,7 +299,7 @@ class CommitGate:
                         code=f"ROLLBACK:UNEXPECTED:{type(exc).__name__}",
                         decision_id=decision_id,
                         attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                        record=record,
+                        record_snapshot=record_snapshot,
                     )
                 except Exception as rollback_exc:
                     return self._error(
@@ -290,14 +309,24 @@ class CommitGate:
                         ),
                         decision_id=decision_id,
                         attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                        record=record,
+                        record_snapshot=record_snapshot,
                     )
             return self._error(
                 code=f"ERROR:UNEXPECTED:{type(exc).__name__}",
                 decision_id=decision_id,
                 attempted=self._attempt(actor_id, action, object_id, environment, commit_hash),
-                record=record,
+                record_snapshot=record_snapshot,
             )
+
+    def _snapshot(self, record: Mapping[str, Any]) -> Mapping[str, Any]:
+        """Return an immutable copy of authorised record fields.
+
+        Called after all validation passes, before mutation_callback runs.
+        _finish() uses this snapshot for record_scope so the audit receipt
+        reflects the authorised record, not whatever the callback may have
+        mutated. (Issue #11)
+        """
+        return {field: record.get(field) for field in _SNAPSHOT_FIELDS}
 
     def _structural_error(self, record: Mapping[str, Any]) -> Optional[str]:
         missing = [field for field in REQUIRED_FIELDS if field not in record]
@@ -352,14 +381,14 @@ class CommitGate:
         *,
         decision_id: str,
         attempted: Mapping[str, Any],
-        record: Mapping[str, Any],
+        record_snapshot: Optional[Mapping[str, Any]],
     ) -> GateResult:
         return self._finish(
             allowed=True,
             code="ALLOW",
             decision_id=decision_id,
             attempted=attempted,
-            record=record,
+            record_snapshot=record_snapshot,
         )
 
     def _deny(
@@ -368,14 +397,14 @@ class CommitGate:
         code: str,
         decision_id: Optional[str],
         attempted: Mapping[str, Any],
-        record: Optional[Mapping[str, Any]] = None,
+        record_snapshot: Optional[Mapping[str, Any]] = None,
     ) -> GateResult:
         return self._finish(
             allowed=False,
             code=code,
             decision_id=decision_id,
             attempted=attempted,
-            record=record,
+            record_snapshot=record_snapshot,
         )
 
     def _error(
@@ -384,14 +413,14 @@ class CommitGate:
         code: str,
         decision_id: Optional[str],
         attempted: Mapping[str, Any],
-        record: Optional[Mapping[str, Any]] = None,
+        record_snapshot: Optional[Mapping[str, Any]] = None,
     ) -> GateResult:
         return self._finish(
             allowed=False,
             code=code,
             decision_id=decision_id,
             attempted=attempted,
-            record=record,
+            record_snapshot=record_snapshot,
         )
 
     def _finish(
@@ -401,8 +430,16 @@ class CommitGate:
         code: str,
         decision_id: Optional[str],
         attempted: Mapping[str, Any],
-        record: Optional[Mapping[str, Any]],
+        record_snapshot: Optional[Mapping[str, Any]],
     ) -> GateResult:
+        """Build GateResult and attempt to append audit event.
+
+        Issue #10: audit.append is wrapped so that a failing audit sink
+        never escapes _finish() as an unhandled exception. If append raises,
+        _finish() returns a controlled GateResult with
+        ERROR:AUDIT_APPEND_FAILED:<ExceptionType>. The original result is
+        discarded so the caller is never misled about receipt status.
+        """
         timestamp = self._clock.now().astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
         result = GateResult(
             allowed=allowed,
@@ -410,7 +447,7 @@ class CommitGate:
             decision_id=decision_id,
             timestamp=timestamp,
         )
-        audit_event = {
+        audit_event: dict[str, Any] = {
             "event_type": "GATE_EVALUATION",
             "allowed": result.allowed,
             "code": result.code,
@@ -418,16 +455,27 @@ class CommitGate:
             "timestamp": result.timestamp,
             "attempted": dict(attempted),
         }
-        if record is not None:
-            audit_event["record_scope"] = {
-                "actor_id": record.get("actor_id"),
-                "action": record.get("action"),
-                "object_id": record.get("object_id"),
-                "environment": record.get("environment"),
-                "commit_hash": record.get("commit_hash"),
-                "policy_version": record.get("policy_version"),
-            }
-        self._audit.append(audit_event)
+        # Issue #11: record_scope is built from the pre-mutation snapshot,
+        # not the live record. The callback cannot alter what is logged here.
+        if record_snapshot is not None:
+            audit_event["record_scope"] = dict(record_snapshot)
+
+        try:
+            self._audit.append(audit_event)
+        except Exception as audit_exc:
+            # Issue #10: controlled audit failure — never raise out of _finish().
+            # Return a new GateResult that honestly reports the audit failure.
+            # allowed is always False: we cannot confirm the receipt was written.
+            audit_fail_timestamp = (
+                self._clock.now().astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+            )
+            return GateResult(
+                allowed=False,
+                code=f"ERROR:AUDIT_APPEND_FAILED:{type(audit_exc).__name__}",
+                decision_id=decision_id,
+                timestamp=audit_fail_timestamp,
+            )
+
         return result
 
     def _attempt(
