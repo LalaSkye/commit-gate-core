@@ -98,7 +98,12 @@ def execute_valid(gate, record=None):
     )
 
 
+# ---------------------------------------------------------------------------
+# Existing regression proofs (issues #7, #8, #9 — still open gaps)
+# ---------------------------------------------------------------------------
+
 def test_proof_consequence_ordering_exposes_mutation_before_durable_audit():
+    """Issue #7 regression: mutation can occur before durable audit. Still open."""
     effects = []
 
     def mutate(record):
@@ -110,10 +115,12 @@ def test_proof_consequence_ordering_exposes_mutation_before_durable_audit():
 
     assert effects == [("sent", "user@example.com")]
     assert result.allowed is False
-    assert result.code == "ROLLBACK:UNEXPECTED:RuntimeError"
+    # Now returns controlled audit failure code instead of ROLLBACK:UNEXPECTED
+    assert result.code == "ERROR:AUDIT_APPEND_FAILED:RuntimeError"
 
 
 def test_proof_payload_binding_gap_allows_callback_to_create_unbound_effect():
+    """Issue #8 regression: proof not bound to mutation payload. Still open."""
     audit = MemoryAudit()
     effects = []
 
@@ -138,10 +145,13 @@ def test_proof_payload_binding_gap_allows_callback_to_create_unbound_effect():
             "body": "unbound payload",
         }
     ]
+    # Issue #11 fixed: audit receipt uses the pre-mutation snapshot.
+    # The snapshot was taken before the callback ran, so object_id is correct.
     assert audit.events[0]["record_scope"]["object_id"] == "user@example.com"
 
 
 def test_atomic_commit_boundary_gap_when_audit_fails_after_nonce_and_mutation():
+    """Issue #9 regression: no atomic commit boundary. Still open."""
     nonce_ledger = MemoryNonceLedger()
     effects = []
 
@@ -157,38 +167,86 @@ def test_atomic_commit_boundary_gap_when_audit_fails_after_nonce_and_mutation():
     result = execute_valid(gate)
 
     assert effects == ["mutation-bound"]
-    assert nonce_ledger.consumed == set()
-    assert nonce_ledger.rolled_back == [("nonce-1", "decision-1")]
+    # Issue #10 fixed: audit failure returns controlled result, not exception.
+    # Nonce rollback no longer occurs on the audit-failure path because
+    # _finish() catches the audit exception directly.
+    # The nonce was consumed; mutation happened; audit failed.
+    # This is the documented open gap for #9 (atomic commit boundary).
     assert result.allowed is False
-    assert result.code == "ROLLBACK:UNEXPECTED:RuntimeError"
+    assert result.code == "ERROR:AUDIT_APPEND_FAILED:RuntimeError"
 
 
-def test_audit_failure_on_deny_path_can_escape_without_gate_result():
+# ---------------------------------------------------------------------------
+# Issue #10 hardening proofs: controlled audit failure on every exit path
+# ---------------------------------------------------------------------------
+
+def test_audit_failure_on_deny_path_returns_controlled_gate_result():
+    """Issue #10 fix: audit failure on deny path returns GateResult, never raises."""
     gate = make_gate(audit=FailingAudit(), mutation_callback=lambda record: None)
 
-    try:
-        gate.execute(
-            record=None,
-            actor_id="actor-1",
-            action="email.send",
-            object_id="user@example.com",
-            environment="demo",
-            commit_hash="a" * 40,
-        )
-    except RuntimeError as exc:
-        assert str(exc) == "audit unavailable"
-    else:
-        raise AssertionError("audit failure on deny path should currently escape")
+    result = gate.execute(
+        record=None,
+        actor_id="actor-1",
+        action="email.send",
+        object_id="user@example.com",
+        environment="demo",
+        commit_hash="a" * 40,
+    )
+
+    assert isinstance(result.allowed, bool)
+    assert result.allowed is False
+    assert result.code == "ERROR:AUDIT_APPEND_FAILED:RuntimeError"
+    assert result.decision_id is None
+    assert result.timestamp is not None
 
 
-def test_mutable_record_can_be_changed_after_validation_before_audit_receipt():
+def test_audit_failure_on_scope_deny_returns_controlled_gate_result():
+    """Issue #10 fix: audit failure on scope mismatch deny returns GateResult."""
+    gate = make_gate(audit=FailingAudit(), mutation_callback=lambda record: None)
+
+    result = gate.execute(
+        record=valid_record(),
+        actor_id="wrong-actor",
+        action="email.send",
+        object_id="user@example.com",
+        environment="demo",
+        commit_hash="a" * 40,
+    )
+
+    assert result.allowed is False
+    assert result.code == "ERROR:AUDIT_APPEND_FAILED:RuntimeError"
+
+
+def test_audit_failure_on_allow_path_returns_controlled_gate_result():
+    """Issue #10 fix: audit failure on allow path returns GateResult, not True.
+
+    allowed must be False: the receipt was not written.
+    """
+    gate = make_gate(audit=FailingAudit(), mutation_callback=lambda record: None)
+
+    result = execute_valid(gate)
+
+    assert result.allowed is False
+    assert result.code == "ERROR:AUDIT_APPEND_FAILED:RuntimeError"
+
+
+# ---------------------------------------------------------------------------
+# Issue #11 hardening proofs: pre-mutation snapshot protects audit receipt
+# ---------------------------------------------------------------------------
+
+def test_pre_mutation_snapshot_protects_audit_receipt():
+    """Issue #11 fix: callback mutation of record does not alter audit receipt."""
     audit = MemoryAudit()
     record = valid_record()
     effects = []
 
-    def mutate(record):
-        effects.append(("sent", record["object_id"]))
-        record["object_id"] = "attacker@example.com"
+    def mutate(rec):
+        effects.append(("sent", rec["object_id"]))
+        # Attempt to mutate the record passed to the callback.
+        # Before fix: this would alter what _finish() logged.
+        # After fix: _finish() uses the pre-mutation snapshot, so this has
+        # no effect on the audit receipt.
+        rec["object_id"] = "attacker@example.com"
 
     gate = make_gate(audit=audit, mutation_callback=mutate)
 
@@ -196,5 +254,26 @@ def test_mutable_record_can_be_changed_after_validation_before_audit_receipt():
 
     assert result.allowed is True
     assert effects == [("sent", "user@example.com")]
-    assert audit.events[0]["attempted"]["object_id"] == "user@example.com"
-    assert audit.events[0]["record_scope"]["object_id"] == "attacker@example.com"
+    # Audit receipt must reflect the authorised record, not the callback drift.
+    assert audit.events[0]["record_scope"]["object_id"] == "user@example.com"
+
+
+def test_pre_mutation_snapshot_is_independent_of_original_dict():
+    """Issue #11 fix: snapshot is a copy; original dict changes do not affect receipt."""
+    audit = MemoryAudit()
+    record = dict(valid_record())
+
+    def mutate(rec):
+        rec["actor_id"] = "mutated-actor"
+        rec["action"] = "mutated-action"
+        rec["policy_version"] = "mutated-version"
+
+    gate = make_gate(audit=audit, mutation_callback=mutate)
+
+    result = execute_valid(gate, record=record)
+
+    assert result.allowed is True
+    scope = audit.events[0]["record_scope"]
+    assert scope["actor_id"] == "actor-1"
+    assert scope["action"] == "email.send"
+    assert scope["policy_version"] == "v1"
