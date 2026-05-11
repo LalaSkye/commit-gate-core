@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "receipt_id": "rir_state_conflict_001",
+  "timestamp": "2026-05-11T16:40:00Z",
+  "attempted_action": "change_patient_status_to_discharged",
+  "actor": "ai_assistant",
+  "authority": {
+    "present": true,
+    "source": "demo_clinician_review_required_policy",
+    "valid": true
+  },
+  "scope": {
+    "allowed_action_class": "clinical_note_draft",
+    "requested_action_class": "change_patient_status_to_discharged",
+    "scope_match": false
+  },
+  "freshness": {
+    "checked": true,
+    "valid_until": "2026-05-11T17:00:00Z",
+    "fresh": true
+  },
+  "replay": {
+    "nonce": "demo_nonce_state_conflict_001",
+    "replay_detected": false
+  },
+  "state": {
+    "current_state": "clinician_review_not_completed",
+    "execution_permitted": false
+  },
+  "verdict": "STATE_CONFLICT",
+  "reason": "The requested status change conflicted with the current system state because required clinician review had not been completed.",
+  "downstream_effect_prevented": "The patient status was not changed to discharged.",
+  "human_review_required": true,
+  "receipt_hash": null,
+  "previous_receipt_hash": null,
+  "claim_boundary": "Synthetic example for receipt structure only. Not diagnosis, clinical advice, medical safety evidence, production evidence, or compliance evidence."
+}
