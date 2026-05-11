@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """
-Validate the synthetic Runtime Impossibility Receipt example against the v0.1 schema.
+Validate all synthetic Runtime Impossibility Receipt examples against the v0.1 schema.
 
 Claim boundary:
-This script validates schema conformance for a synthetic path-local receipt.
-It does not prove production readiness, compliance, medical safety, adoption, or path-universal coverage.
+This script validates schema conformance for synthetic path-local receipts.
+It does not prove production readiness, compliance, medical safety, adoption, financial safety,
+or path-universal coverage.
 """
 
 from __future__ import annotations
 
 import json
 from pathlib import Path
-from urllib.parse import urlparse
 
 try:
     import jsonschema
@@ -24,7 +24,7 @@ except ImportError as exc:  # pragma: no cover
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "docs" / "schemas" / "Runtime_Impossibility_Receipt_Schema_v0.1.json"
-RECEIPT_PATH = ROOT / "docs" / "schemas" / "examples" / "runtime_impossibility_receipt_email_refusal_v0.1.json"
+EXAMPLES_DIR = ROOT / "docs" / "schemas" / "examples"
 
 
 def _strip_unsupported_format_on_nullable_datetime(schema: object) -> object:
@@ -50,20 +50,35 @@ def load_json(path: Path) -> dict:
         return json.load(handle)
 
 
+def validate_receipt(schema: dict, path: Path) -> dict:
+    receipt = load_json(path)
+    jsonschema.validate(instance=receipt, schema=schema)
+    return receipt
+
+
 def main() -> int:
     schema = load_json(SCHEMA_PATH)
-    receipt = load_json(RECEIPT_PATH)
-
     validator_schema = _strip_unsupported_format_on_nullable_datetime(schema)
-    jsonschema.validate(instance=receipt, schema=validator_schema)
+    example_paths = sorted(EXAMPLES_DIR.glob("runtime_impossibility_receipt_*_v0.1.json"))
 
-    print("Runtime Impossibility Receipt: VALID")
-    print(f"Verdict: {receipt['verdict']}")
-    print(f"Attempted action: {receipt['attempted_action']}")
-    print(f"Downstream effect prevented: {receipt['downstream_effect_prevented']}")
-    print(f"Human review required: {str(receipt['human_review_required']).lower()}")
-    print(f"Claim boundary: {receipt['claim_boundary']}")
+    if not example_paths:
+        raise SystemExit("No runtime impossibility receipt examples found.")
 
+    print("Runtime Impossibility Receipt Examples: VALID")
+    print(f"Examples checked: {len(example_paths)}")
+    print("")
+
+    for path in example_paths:
+        receipt = validate_receipt(validator_schema, path)
+        print(f"- {path.name}")
+        print(f"  Receipt: {receipt['receipt_id']}")
+        print(f"  Verdict: {receipt['verdict']}")
+        print(f"  Attempted action: {receipt['attempted_action']}")
+        print(f"  Downstream effect prevented: {receipt['downstream_effect_prevented']}")
+        print(f"  Human review required: {str(receipt['human_review_required']).lower()}")
+        print("")
+
+    print("Claim boundary: synthetic path-local examples only; not production, compliance, medical, financial, or field evidence.")
     return 0
 
 
