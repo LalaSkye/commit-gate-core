@@ -63,6 +63,8 @@ The minimum acceptable test is:
 
 `mutation_committed: false` is only accepted when paired with a `state_snapshot_hash` taken after refusal and verified against the expected unchanged state for the tested path.
 
+The `state_snapshot_hash` proves only that the tested path's expected post-refusal state remained unchanged on this synthetic run.
+
 The snapshot is path-local. It does not prove that every downstream or external mutation route was blocked.
 
 ## Verification procedure
