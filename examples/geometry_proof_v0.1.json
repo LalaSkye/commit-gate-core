@@ -1,0 +1,100 @@
+{
+  "artefact": "geometry_proof_v0.1",
+  "status": "experimental_example_fixture_only",
+  "claim_boundary": "Experimental path-local proof structure for testing scoped admissibility objects at an execution boundary. Does not claim production readiness, non-bypassability, compliance, external trust guarantees, or full-path governance.",
+  "hash_algorithm": "sha256",
+  "notes": [
+    "This fixture demonstrates bounded validation examples only.",
+    "The examples are synthetic and path-local.",
+    "Signature verification is represented symbolically in v0.1 and is not a production cryptographic implementation."
+  ],
+  "valid_example": {
+    "expected_result": "ALLOW",
+    "geometry_proof": {
+      "proof_id": "geom_0001",
+      "issued_at_utc": "2026-05-12T10:00:00Z",
+      "expires_at_utc": "2026-05-12T10:15:00Z",
+      "actor": "service_account_demo",
+      "action_class": "send_notification",
+      "payload_hash": "sha256:6af0d3e7c2bca4b6f6f0c1c69fd4f8a6d7f79cb4dc6f3d7f6c4a8d2b7fcb9001",
+      "scope": {
+        "resource": "notification_queue",
+        "tenant": "demo_tenant",
+        "workflow": "notification_dispatch",
+        "effect": "send"
+      },
+      "signature": "demo_signature_only",
+      "key_id": "geom_key_demo_v1"
+    },
+    "requested_transition": {
+      "action_class": "send_notification",
+      "payload_hash": "sha256:6af0d3e7c2bca4b6f6f0c1c69fd4f8a6d7f79cb4dc6f3d7f6c4a8d2b7fcb9001"
+    },
+    "expected_checks": [
+      "proof present",
+      "proof not expired",
+      "action_class matches",
+      "payload_hash matches",
+      "scope compatible with requested transition"
+    ]
+  },
+  "expired_proof_example": {
+    "expected_result": "HARD_BLOCK",
+    "reason": "proof expired before transition",
+    "geometry_proof": {
+      "proof_id": "geom_0002_expired",
+      "issued_at_utc": "2026-05-12T09:00:00Z",
+      "expires_at_utc": "2026-05-12T09:01:00Z",
+      "actor": "service_account_demo",
+      "action_class": "send_notification",
+      "payload_hash": "sha256:6af0d3e7c2bca4b6f6f0c1c69fd4f8a6d7f79cb4dc6f3d7f6c4a8d2b7fcb9001",
+      "scope": {
+        "resource": "notification_queue",
+        "tenant": "demo_tenant",
+        "workflow": "notification_dispatch",
+        "effect": "send"
+      },
+      "signature": "demo_signature_only",
+      "key_id": "geom_key_demo_v1"
+    }
+  },
+  "mismatched_payload_example": {
+    "expected_result": "HARD_BLOCK",
+    "reason": "payload hash mismatch",
+    "geometry_proof": {
+      "proof_id": "geom_0003_payload_mismatch",
+      "issued_at_utc": "2026-05-12T10:00:00Z",
+      "expires_at_utc": "2026-05-12T10:15:00Z",
+      "actor": "service_account_demo",
+      "action_class": "send_notification",
+      "payload_hash": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "scope": {
+        "resource": "notification_queue",
+        "tenant": "demo_tenant",
+        "workflow": "notification_dispatch",
+        "effect": "send"
+      },
+      "signature": "demo_signature_only",
+      "key_id": "geom_key_demo_v1"
+    },
+    "requested_transition": {
+      "action_class": "send_notification",
+      "payload_hash": "sha256:6af0d3e7c2bca4b6f6f0c1c69fd4f8a6d7f79cb4dc6f3d7f6c4a8d2b7fcb9001"
+    }
+  },
+  "minimum_verification_rules": [
+    "proof object present",
+    "current time before expires_at_utc",
+    "action_class compatible with requested transition",
+    "payload_hash matches requested payload",
+    "scope compatible with requested effect"
+  ],
+  "what_this_does_not_prove": [
+    "production cryptographic enforcement",
+    "non-bypassability",
+    "enterprise deployment readiness",
+    "externally anchored trust",
+    "full runtime governance coverage",
+    "tamper-proof audit guarantees"
+  ]
+}
