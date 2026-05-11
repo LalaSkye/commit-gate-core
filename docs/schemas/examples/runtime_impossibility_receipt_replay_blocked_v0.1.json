@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "receipt_id": "rir_replay_blocked_001",
+  "timestamp": "2026-05-11T16:35:00Z",
+  "attempted_action": "approve_payment_release",
+  "actor": "ai_assistant",
+  "authority": {
+    "present": true,
+    "source": "demo_authority_token_payment_001",
+    "valid": false
+  },
+  "scope": {
+    "allowed_action_class": "approve_payment_release",
+    "requested_action_class": "approve_payment_release",
+    "scope_match": true
+  },
+  "freshness": {
+    "checked": true,
+    "valid_until": "2026-05-11T16:00:00Z",
+    "fresh": false
+  },
+  "replay": {
+    "nonce": "demo_nonce_payment_001",
+    "replay_detected": true
+  },
+  "state": {
+    "current_state": "authority_expired_nonce_seen",
+    "execution_permitted": false
+  },
+  "verdict": "REPLAY_BLOCKED",
+  "reason": "The approval token was expired and the nonce had already been used.",
+  "downstream_effect_prevented": "The payment release was not approved.",
+  "human_review_required": true,
+  "receipt_hash": null,
+  "previous_receipt_hash": null,
+  "claim_boundary": "Synthetic example. Path-local demonstration. Not production, compliance, financial, medical, or field evidence."
+}
