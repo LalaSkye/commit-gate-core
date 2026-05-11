@@ -52,8 +52,16 @@ current v1 guarantees:
 
 - payload binding: see issue #8
 - atomic commit boundary: see issue #9
-- audit-failure control: see issue #10
-- frozen DecisionRecord snapshot for audit fidelity: see issue #11
+
+### Recently hardened
+
+The following v1 hardening gaps have been addressed on the demonstrated path:
+
+- audit-failure control: see PR #18 / issues #10 and #11
+- frozen DecisionRecord snapshot for audit fidelity: see PR #18 / issues #10 and #11
+
+These fixes do not create a path-universal guarantee, production-readiness claim,
+compliance claim, or certification claim.
 
 ### What this gate does not, by itself, prove
 
