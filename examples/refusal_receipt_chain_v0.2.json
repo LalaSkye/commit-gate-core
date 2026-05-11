@@ -1,0 +1,119 @@
+{
+  "artefact": "refusal_receipt_chain_v0.2",
+  "status": "example_test_fixture_only",
+  "claim_boundary": "Path-local replay fixture for refusal receipt-chain inspection. Does not claim production readiness, compliance, tamper-proofing, signatures, or path-universal governance.",
+  "canonicalisation_rule": "Hash the deterministic JSON body with keys sorted and compact separators. receipt_hash excludes receipt_hash and signature.",
+  "hash_algorithm": "sha256",
+  "genesis_previous_receipt_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+  "attempted_payloads": {
+    "payload_0001": {
+      "action_type": "send_external_email",
+      "scope": "vendor_contact",
+      "target": "external.example",
+      "body": "Request account access change."
+    },
+    "payload_0002": {
+      "action_type": "update_access_record",
+      "scope": "user_access",
+      "target": "user:example",
+      "requested_role": "admin"
+    }
+  },
+  "decision_records": {
+    "dec_0001": {
+      "decision_id": "dec_0001",
+      "gate": "CommitGate",
+      "decision": "REFUSE",
+      "reason": "missing_valid_authority",
+      "authority_token": null,
+      "scope": "vendor_contact",
+      "nonce": "nonce_0001",
+      "expires_at_utc": null
+    },
+    "dec_0002": {
+      "decision_id": "dec_0002",
+      "gate": "CommitGate",
+      "decision": "REFUSE",
+      "reason": "scope_not_authorised",
+      "authority_token": "auth_demo_expired",
+      "scope": "user_access",
+      "nonce": "nonce_0002",
+      "expires_at_utc": "2026-05-11T23:59:00Z"
+    }
+  },
+  "post_refusal_state_snapshots": {
+    "state_after_rcpt_0001": {
+      "path": "send_external_email",
+      "external_email_sent": false,
+      "access_change_created": false,
+      "notification_emitted": false
+    },
+    "state_after_rcpt_0002": {
+      "path": "update_access_record",
+      "access_record_updated": false,
+      "role_change_committed": false,
+      "notification_emitted": false
+    }
+  },
+  "valid_chain": [
+    {
+      "receipt_id": "rcpt_0001",
+      "previous_receipt_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+      "payload_hash": "sha256:a7083e23969091ddaa0376b4f1ce990cf8399ff18340cfb74454f1d705aa249e",
+      "decision_record_hash": "sha256:67df1b9f792a108eb3e4f9aa4a67f559cdd782c7ff5c9bf519bec061f8ba217d",
+      "decision": "REFUSE",
+      "refusal_reason": "missing_valid_authority",
+      "mutation_committed": false,
+      "state_snapshot_hash": "sha256:a9834adf5a78bbef89bc2df723fcfaa3f4a71d0da728fd855ac779630400aa2b",
+      "timestamp_utc": "2026-05-12T09:00:00Z",
+      "receipt_hash": "sha256:b2a2c455a2ab4def9c3028992dfc2844560fee910755b56cd145f22c8deba9fb",
+      "signature": null
+    },
+    {
+      "receipt_id": "rcpt_0002",
+      "previous_receipt_hash": "sha256:b2a2c455a2ab4def9c3028992dfc2844560fee910755b56cd145f22c8deba9fb",
+      "payload_hash": "sha256:b91f0faecbc74b7682b0cd3b7a5813cdedc63826f16ff0d3db36d0451c4c0cb4",
+      "decision_record_hash": "sha256:4339709b0ad790fb723928024b70c532f2354b65577a795162260e5a28fee0c9",
+      "decision": "REFUSE",
+      "refusal_reason": "scope_not_authorised",
+      "mutation_committed": false,
+      "state_snapshot_hash": "sha256:562fd64219ffb41d8bb2cb7c828af075e80124c004823549898f9459517292a5",
+      "timestamp_utc": "2026-05-12T09:01:00Z",
+      "receipt_hash": "sha256:ac36b739bf676d8c9a20ca3c7199cc228d15f9f88b04ab1a61fb1da35dacd520",
+      "signature": null
+    }
+  ],
+  "broken_chain_examples": [
+    {
+      "case": "broken_previous_receipt_hash",
+      "expected_result": "FAIL",
+      "reason": "previous_receipt_hash does not match the prior receipt_hash",
+      "receipt": {
+        "receipt_id": "rcpt_0002_broken_previous_hash",
+        "previous_receipt_hash": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "payload_hash": "sha256:b91f0faecbc74b7682b0cd3b7a5813cdedc63826f16ff0d3db36d0451c4c0cb4",
+        "decision_record_hash": "sha256:4339709b0ad790fb723928024b70c532f2354b65577a795162260e5a28fee0c9",
+        "decision": "REFUSE",
+        "refusal_reason": "scope_not_authorised",
+        "mutation_committed": false,
+        "state_snapshot_hash": "sha256:562fd64219ffb41d8bb2cb7c828af075e80124c004823549898f9459517292a5",
+        "timestamp_utc": "2026-05-12T09:01:00Z",
+        "receipt_hash": "sha256:ac36b739bf676d8c9a20ca3c7199cc228d15f9f88b04ab1a61fb1da35dacd520",
+        "signature": null
+      }
+    }
+  ],
+  "expected_verification": {
+    "valid_chain": "PASS",
+    "broken_chain_examples": "FAIL",
+    "required_checks": [
+      "decision is REFUSE",
+      "mutation_committed is false",
+      "payload_hash matches attempted payload",
+      "decision_record_hash matches DecisionRecord",
+      "state_snapshot_hash matches post-refusal state snapshot",
+      "previous_receipt_hash links to prior receipt_hash",
+      "receipt_hash recomputes from canonical receipt body excluding receipt_hash and signature"
+    ]
+  }
+}
