@@ -4,6 +4,7 @@
   "claim_boundary": "Path-local replay fixture for refusal receipt-chain inspection. Does not claim production readiness, compliance, tamper-proofing, signatures, or path-universal governance.",
   "canonicalisation_rule": "Hash the deterministic JSON body with keys sorted and compact separators. receipt_hash excludes receipt_hash and signature.",
   "hash_algorithm": "sha256",
+  "fixture_note": "Fixture hashes are intended to recompute under the stated canonicalisation rule. Verification is performed by the accompanying integrity test.",
   "genesis_previous_receipt_hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
   "attempted_payloads": {
     "payload_0001": {
