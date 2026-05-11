@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LalaSkye/commit-gate-core/docs/schemas/Runtime_Refusal_Receipt_Schema_v0.2.json",
+  "title": "Runtime Refusal Receipt Schema v0.2",
+  "description": "Path-local synthetic schema for recording a claimed runtime refusal and attached evidence references. It does not prove downstream non-execution or production enforcement.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "issued_at", "refused_at", "verdict", "action_class", "payload_hash", "receipt_hash", "authority", "scope", "freshness", "replay", "state", "evidence", "claimed_downstream_effect_status", "claim_boundary"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.2" },
+    "id": { "type": "string", "format": "uuid" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "refused_at": { "type": "string", "format": "date-time" },
+    "verdict": { "type": "string", "enum": ["REFUSE", "HOLD", "BLOCKED", "OUT_OF_SCOPE", "REPLAY_BLOCKED", "STATE_CONFLICT", "RECEIPT_FAILURE", "ESCALATE_TO_HUMAN", "DOWNGRADE_TO_ADVISORY"] },
+    "action_class": { "type": "string", "minLength": 1 },
+    "payload_hash": { "type": "string", "minLength": 1 },
+    "receipt_hash": { "type": "string", "minLength": 1 },
+    "previous_receipt_hash": { "type": ["string", "null"] },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present", "source", "valid"],
+      "properties": {
+        "present": { "type": "boolean" },
+        "source": { "type": "string", "minLength": 1 },
+        "valid": { "type": "boolean" },
+        "issuer": { "type": ["string", "null"] },
+        "signature": { "type": ["string", "null"] },
+        "verification_method": { "type": ["string", "null"] }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["scope_match", "requested_action_class", "allowed_action_class"],
+      "properties": {
+        "scope_match": { "type": "boolean" },
+        "requested_action_class": { "type": "string", "minLength": 1 },
+        "allowed_action_class": { "type": ["string", "null"] }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fresh", "checked_at", "clock_source"],
+      "properties": {
+        "fresh": { "type": "boolean" },
+        "checked_at": { "type": "string", "format": "date-time" },
+        "clock_source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nonce", "replay_detected"],
+      "properties": {
+        "nonce": { "type": "string", "minLength": 1 },
+        "replay_detected": { "type": "boolean" },
+        "nonce_registry_reference": { "type": ["string", "null"] },
+        "idempotency_key": { "type": ["string", "null"] }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["execution_permitted", "current_state", "observed_at", "state_snapshot_hash"],
+      "properties": {
+        "execution_permitted": { "type": "boolean" },
+        "current_state": { "type": "string", "minLength": 1 },
+        "observed_at": { "type": "string", "format": "date-time" },
+        "state_snapshot_hash": { "type": "string", "minLength": 1 }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "hash"],
+        "properties": {
+          "type": { "type": "string", "enum": ["LOG", "AUDIT_ENTRY", "STATE_SNAPSHOT", "TOOL_RESPONSE", "EXTERNAL_VERIFICATION", "CODE_EXECUTION", "OTHER"] },
+          "uri": { "type": ["string", "null"], "format": "uri" },
+          "hash": { "type": "string", "minLength": 1 },
+          "verifier": { "type": ["string", "null"] },
+          "verification_method": { "type": ["string", "null"] },
+          "verified_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      }
+    },
+    "claimed_downstream_effect_status": { "type": "string", "enum": ["NOT_CHECKED", "CLAIMED_NOT_COMMITTED", "VERIFIED_NOT_COMMITTED", "UNKNOWN", "COMMITTED_DESPITE_REFUSAL"] },
+    "reason": { "type": ["string", "null"] },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  }
+}
