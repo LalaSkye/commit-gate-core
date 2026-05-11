@@ -6,7 +6,8 @@
   "notes": [
     "This fixture demonstrates bounded validation examples only.",
     "The examples are synthetic and path-local.",
-    "Signature verification is represented symbolically in v0.1 and is not a production cryptographic implementation."
+    "Signature verification is represented symbolically in v0.1 and is not a production cryptographic implementation.",
+    "The signature field is symbolic only. No cryptographic enforcement or verification is implemented or claimed in v0.1."
   ],
   "valid_example": {
     "expected_result": "ALLOW",
