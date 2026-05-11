@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "receipt_id": "rir_out_of_scope_001",
+  "timestamp": "2026-05-11T16:45:00Z",
+  "attempted_action": "publish_public_statement",
+  "actor": "ai_assistant",
+  "authority": {
+    "present": true,
+    "source": "demo_internal_draft_authority",
+    "valid": true
+  },
+  "scope": {
+    "allowed_action_class": "draft_internal_note",
+    "requested_action_class": "publish_public_statement",
+    "scope_match": false
+  },
+  "freshness": {
+    "checked": true,
+    "valid_until": "2026-05-11T18:00:00Z",
+    "fresh": true
+  },
+  "replay": {
+    "nonce": "demo_nonce_out_of_scope_001",
+    "replay_detected": false
+  },
+  "state": {
+    "current_state": "public_approval_missing",
+    "execution_permitted": false
+  },
+  "verdict": "OUT_OF_SCOPE",
+  "reason": "The authority permitted internal drafting only and did not cover public publication.",
+  "downstream_effect_prevented": "The public statement was not published.",
+  "human_review_required": true,
+  "receipt_hash": null,
+  "previous_receipt_hash": null,
+  "claim_boundary": "Synthetic example. Path-local demonstration. Not production, compliance, legal, or field evidence."
+}
