@@ -59,17 +59,24 @@ The minimum acceptable test is:
 4. Any receipt body change changes `receipt_hash`.
 5. Any broken `previous_receipt_hash` breaks chain verification.
 
+## State snapshot rule
+
+`mutation_committed: false` is only accepted when paired with a `state_snapshot_hash` taken after refusal and verified against the expected unchanged state for the tested path.
+
+The snapshot is path-local. It does not prove that every downstream or external mutation route was blocked.
+
 ## Verification procedure
 
 A verifier should check:
 
 1. `decision` is `REFUSE`.
 2. `mutation_committed` is `false`.
-3. `payload_hash` matches the attempted payload.
-4. `decision_record_hash` matches the DecisionRecord used by the gate.
-5. `previous_receipt_hash` matches the prior receipt in the chain.
-6. `receipt_hash` recomputes correctly from the canonical receipt body.
-7. Optional signature verifies against the declared signing key, if signatures are enabled.
+3. `state_snapshot_hash` matches the expected unchanged post-refusal state for the tested path.
+4. `payload_hash` matches the attempted payload.
+5. `decision_record_hash` matches the DecisionRecord used by the gate.
+6. `previous_receipt_hash` matches the prior receipt in the chain.
+7. `receipt_hash` recomputes correctly from the canonical receipt body.
+8. Optional signature verifies against the declared signing key, if signatures are enabled.
 
 ## Signature status
 
