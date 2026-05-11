@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LalaSkye/commit-gate-core/docs/schemas/Runtime_Impossibility_Receipt_Schema_v0.1.json",
+  "title": "Runtime Impossibility Receipt Schema v0.1",
+  "description": "Path-local schema for recording why a consequence-producing action could not validly proceed at runtime. Synthetic demonstration only; not production, compliance, medical, or field evidence.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "timestamp",
+    "attempted_action",
+    "actor",
+    "authority",
+    "scope",
+    "freshness",
+    "replay",
+    "state",
+    "verdict",
+    "reason",
+    "downstream_effect_prevented",
+    "human_review_required",
+    "claim_boundary"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "0.1" },
+    "receipt_id": { "type": "string", "minLength": 1 },
+    "timestamp": { "type": "string", "format": "date-time" },
+    "attempted_action": { "type": "string", "minLength": 1 },
+    "actor": { "type": "string", "minLength": 1 },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["present", "source", "valid"],
+      "properties": {
+        "present": { "type": "boolean" },
+        "source": { "type": ["string", "null"] },
+        "valid": { "type": "boolean" }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_action_class", "requested_action_class", "scope_match"],
+      "properties": {
+        "allowed_action_class": { "type": ["string", "null"] },
+        "requested_action_class": { "type": "string", "minLength": 1 },
+        "scope_match": { "type": "boolean" }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checked", "valid_until", "fresh"],
+      "properties": {
+        "checked": { "type": "boolean" },
+        "valid_until": { "type": ["string", "null"], "format": "date-time" },
+        "fresh": { "type": "boolean" }
+      }
+    },
+    "replay": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nonce", "replay_detected"],
+      "properties": {
+        "nonce": { "type": "string", "minLength": 1 },
+        "replay_detected": { "type": "boolean" }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["current_state", "execution_permitted"],
+      "properties": {
+        "current_state": { "type": "string", "minLength": 1 },
+        "execution_permitted": { "type": "boolean" }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": [
+        "ALLOW",
+        "PAUSE",
+        "REFUSE",
+        "ESCALATE_TO_HUMAN",
+        "DOWNGRADE_TO_ADVISORY",
+        "HOLD_FOR_EVIDENCE",
+        "INVALID_INPUT",
+        "REPLAY_BLOCKED",
+        "OUT_OF_SCOPE",
+        "STATE_CONFLICT",
+        "RECEIPT_FAILURE"
+      ]
+    },
+    "reason": { "type": "string", "minLength": 1 },
+    "downstream_effect_prevented": { "type": "string", "minLength": 1 },
+    "human_review_required": { "type": "boolean" },
+    "receipt_hash": { "type": ["string", "null"] },
+    "previous_receipt_hash": { "type": ["string", "null"] },
+    "claim_boundary": { "type": "string", "minLength": 1 }
+  }
+}
