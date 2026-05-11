@@ -1,0 +1,37 @@
+{
+  "schema_version": "0.1",
+  "receipt_id": "rir_email_refusal_001",
+  "timestamp": "2026-05-11T16:20:00Z",
+  "attempted_action": "send_external_email",
+  "actor": "ai_assistant",
+  "authority": {
+    "present": false,
+    "source": null,
+    "valid": false
+  },
+  "scope": {
+    "allowed_action_class": "draft_only",
+    "requested_action_class": "send_external_email",
+    "scope_match": false
+  },
+  "freshness": {
+    "checked": true,
+    "valid_until": null,
+    "fresh": false
+  },
+  "replay": {
+    "nonce": "demo_nonce_email_refusal_001",
+    "replay_detected": false
+  },
+  "state": {
+    "current_state": "draft_unapproved",
+    "execution_permitted": false
+  },
+  "verdict": "REFUSE",
+  "reason": "No valid authority was present for the requested consequence-producing action.",
+  "downstream_effect_prevented": "The external email was not sent.",
+  "human_review_required": true,
+  "receipt_hash": null,
+  "previous_receipt_hash": null,
+  "claim_boundary": "Synthetic example. Path-local demonstration. Not production, compliance, medical, or field evidence."
+}
