@@ -1,0 +1,54 @@
+{
+  "schema_version": "0.2",
+  "id": "dbac37d4-2e3b-428b-9885-7154704a6907",
+  "issued_at": "2026-05-11T16:56:00Z",
+  "refused_at": "2026-05-11T16:56:02Z",
+  "verdict": "OUT_OF_SCOPE",
+  "action_class": "publish_public_statement",
+  "payload_hash": "sha256:3c60bbeb91c5af53f3891221a5411f1a4500949524ccba89b12dafe5647b0f88",
+  "receipt_hash": "sha256:5ad57a914a828058cc8a064f74dca8851920ebc676d55988e7170509c6bfdada",
+  "previous_receipt_hash": null,
+  "authority": {
+    "present": true,
+    "source": "demo_internal_draft_authority",
+    "valid": true,
+    "issuer": "synthetic_policy_engine",
+    "signature": null,
+    "verification_method": "synthetic_local_policy_check"
+  },
+  "scope": {
+    "scope_match": false,
+    "requested_action_class": "publish_public_statement",
+    "allowed_action_class": "draft_internal_note"
+  },
+  "freshness": {
+    "fresh": true,
+    "checked_at": "2026-05-11T16:56:01Z",
+    "clock_source": "synthetic_utc_clock"
+  },
+  "replay": {
+    "nonce": "demo_nonce_runtime_refusal_v0_2_001",
+    "replay_detected": false,
+    "nonce_registry_reference": "synthetic_nonce_registry:demo",
+    "idempotency_key": "synthetic_idempotency_key_001"
+  },
+  "state": {
+    "execution_permitted": false,
+    "current_state": "public_approval_missing",
+    "observed_at": "2026-05-11T16:55:00Z",
+    "state_snapshot_hash": "sha256:5766d8e56bfea503e44b0c5ba452d84ab7d914c7d43fb0653e43fb98bae85070"
+  },
+  "evidence": [
+    {
+      "type": "AUDIT_ENTRY",
+      "uri": "https://github.com/LalaSkye/commit-gate-core/tree/main/docs/schemas/examples",
+      "hash": "sha256:6542940d4776a65b311475a2b36da657dd31ecbcf80f025768507198dc2d983f",
+      "verifier": "synthetic_validator",
+      "verification_method": "local_schema_and_semantic_check",
+      "verified_at": "2026-05-11T16:56:03Z"
+    }
+  ],
+  "claimed_downstream_effect_status": "CLAIMED_NOT_COMMITTED",
+  "reason": "The authority permitted internal drafting only and did not cover public publication.",
+  "claim_boundary": "Synthetic example. Path-local receipt demonstration only. Records claimed refusal and attached evidence references; does not prove downstream non-execution, production enforcement, compliance, or field evidence."
+}
