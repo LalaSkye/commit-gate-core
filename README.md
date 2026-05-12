@@ -130,6 +130,30 @@ If the email sends, the gate is broken.
 
 ---
 
+## Enterprise-shaped scenario pack
+
+A bounded synthetic scenario pack has been added under:
+
+[`docs/enterprise-shaped-scenarios/`](docs/enterprise-shaped-scenarios/)
+
+Current scenario:
+
+```text
+ESP-001 — AI-generated external email attempted without authority_token
+Expected result: DENY before send, downstream_send=false, receipt_written=true
+Replay: same refusal class, same missing_field
+```
+
+Run it from the repository root:
+
+```bash
+python docs/enterprise-shaped-scenarios/run_scenario_001.py
+```
+
+This scenario is **not** an enterprise-readiness, deployment, compliance, certification, or production-enforcement claim. It is a bounded synthetic refusal path.
+
+---
+
 ## The demo
 
 ```text
