@@ -130,6 +130,37 @@ If the email sends, the gate is broken.
 
 ---
 
+## Enterprise execution readiness packet
+
+A buyer-readable enterprise evidence packet has been added under:
+
+[`enterprise-execution-readiness/`](enterprise-execution-readiness/)
+
+It translates the execution-boundary primitive into an enterprise-readable chain:
+
+```text
+policy rule
+  -> control requirement
+  -> runtime gate
+  -> refusal condition
+  -> refusal receipt
+  -> audit evidence
+```
+
+Current packet:
+
+```text
+ESP-001 — AI-generated external email attempted without authority_token
+Expected result: DENY before send, downstream_send=false, receipt_written=true
+Compression: No authority token. No external send. Receipt written.
+```
+
+This packet is **not** an enterprise-deployment, certification, compliance, production-readiness, legal-advice, adoption, or path-universal governance claim.
+
+It is a bounded buyer-readable proof surface for one demonstrated scenario.
+
+---
+
 ## Enterprise-shaped scenario pack
 
 A bounded synthetic scenario pack has been added under:
