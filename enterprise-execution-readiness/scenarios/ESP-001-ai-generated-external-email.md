@@ -1,10 +1,12 @@
 # ESP-001 — AI-Generated External Email
 
+> This is a synthetic, path-local demonstration. It does not prove runtime enforcement or downstream non-execution.
+
 ## Status
 
-**Artefact class:** Enterprise scenario packet  
-**Scope:** NON_EXEC / REVIEW_ONLY  
-**Claim:** Path-local refusal evidence only  
+**Artefact class:** Enterprise-shaped scenario packet  
+**Scope:** SYNTHETIC / NON_EXEC / REVIEW_ONLY  
+**Claim:** Path-local synthetic refusal evidence only  
 
 ## Risk statement
 
@@ -28,11 +30,11 @@ Require a valid `DecisionRecord` before send execution is permitted.
 
 No `DecisionRecord` = no send.
 
-No exception path exists at this gate.
+No exception path exists at this synthetic gate.
 
 ## Runtime gate
 
-The `CommitGate` validates the following fields before any send is executed:
+The synthetic `CommitGate` validates the following fields before any send is marked executable:
 
 | Field | Purpose |
 |---|---|
@@ -66,17 +68,17 @@ The gate stops at the `authority_token` check.
 
 No further evaluation is required.
 
-Send is not executed.
+Send is not marked executable in the synthetic trace.
 
 ## Expected result
 
 **REFUSED before send.**
 
-No email leaves the system.
+No email leaves the synthetic system.
 
-No downstream action is triggered.
+No downstream action is triggered in the synthetic trace.
 
-A refusal receipt is generated and written to the audit log.
+A refusal receipt is generated and written to the synthetic audit log.
 
 ## Evidence produced
 
@@ -84,6 +86,25 @@ See:
 
 - `../receipts/ESP-001-refusal-receipt.json`
 - `../schemas/refusal-receipt.schema.json`
+- `../run_scenario_001.py`
+
+## Trace expectation
+
+The harness should output:
+
+- `before_state`
+- `refusal_event`
+- `after_state`
+- `receipt`
+
+The required assertion is:
+
+```text
+before_state == after_state
+and downstream_send == false
+and decision == DENY
+and receipt_written == true
+```
 
 ## What this proves
 
@@ -91,10 +112,11 @@ This scenario demonstrates:
 
 - policy bound to a specific action type
 - control requirement via `DecisionRecord`
-- runtime gate validation
+- synthetic gate validation
 - refusal when authority is absent
 - structured receipt evidence
 - audit-readable reason for the stop
+- an inspectable synthetic before/after state trace
 
 ## What this does not prove
 
@@ -104,10 +126,12 @@ This scenario does not prove:
 - compliance
 - certification
 - live deployment
+- runtime enforcement in a real execution layer
+- downstream non-execution outside the synthetic trace
 - bypass closure across all paths
 - prevention of all unauthorised sends
 - suitability for any specific regulated organisation
 
 ## Compression line
 
-No authority token. No external send. Receipt written.
+No authority token. No external send in the synthetic trace. Receipt written.
