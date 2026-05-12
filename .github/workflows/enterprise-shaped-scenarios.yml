@@ -1,0 +1,32 @@
+name: enterprise-shaped-scenarios
+
+on:
+  push:
+    paths:
+      - 'enterprise-execution-readiness/**'
+      - '.github/workflows/enterprise-shaped-scenarios.yml'
+  pull_request:
+    paths:
+      - 'enterprise-execution-readiness/**'
+      - '.github/workflows/enterprise-shaped-scenarios.yml'
+
+jobs:
+  esp-001:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pytest
+        run: python -m pip install pytest
+
+      - name: Run ESP-001 downstream non-call test
+        run: python -m pytest enterprise-execution-readiness/tests -v
+
+      - name: Run ESP-001 synthetic trace harness
+        run: python enterprise-execution-readiness/run_scenario_001.py
