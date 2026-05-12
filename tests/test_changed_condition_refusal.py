@@ -13,6 +13,10 @@ SCOPE: NON_EXEC / REVIEW_ONLY
 BOUNDARY: Synthetic proof surface only.
 Not production deployment. Not enterprise adoption.
 Not compliance certification. Not production enforcement.
+
+This is a synthetic, path-local adversarial test surface.
+It proves deterministic refusal under changed conditions on the demonstrated path only.
+It does not prove production enforcement, persistence safety, or path-universal coverage.
 """
 
 import copy
