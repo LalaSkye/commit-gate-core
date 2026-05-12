@@ -1,11 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/LalaSkye/commit-gate-core/enterprise-execution-readiness/schemas/refusal-receipt.schema.json",
-  "title": "Enterprise Execution Readiness Refusal Receipt",
+  "title": "Enterprise-Shaped Scenario Refusal Receipt",
   "type": "object",
   "required": [
     "receipt_id",
     "scenario_id",
+    "gate_version",
+    "policy_reference",
+    "execution_layer_event",
     "attempted_action",
     "actor",
     "action_type",
@@ -15,6 +18,8 @@
     "refusal_reason",
     "timestamp",
     "downstream_send",
+    "downstream_effect_claimed_status",
+    "evidence",
     "claim_boundary"
   ],
   "properties": {
@@ -24,7 +29,29 @@
     },
     "scenario_id": {
       "type": "string",
-      "description": "Scenario identifier tied to the enterprise scenario packet."
+      "description": "Scenario identifier tied to the enterprise-shaped scenario packet."
+    },
+    "gate_version": {
+      "type": "string",
+      "description": "Version of the synthetic gate or gate primitive used for the refusal event."
+    },
+    "policy_reference": {
+      "type": "string",
+      "description": "Policy or scenario rule used to evaluate the attempted action."
+    },
+    "execution_layer_event": {
+      "type": "object",
+      "required": ["event_type", "environment", "synthetic", "state_before_hash", "state_after_hash", "mutation_observed"],
+      "properties": {
+        "event_type": { "type": "string" },
+        "environment": { "type": "string" },
+        "synthetic": { "type": "boolean" },
+        "state_before_hash": { "type": "string" },
+        "state_after_hash": { "type": "string" },
+        "mutation_observed": { "type": "boolean" }
+      },
+      "additionalProperties": false,
+      "description": "Execution-layer trace event. In v0.1 this is synthetic/in-memory only."
     },
     "attempted_action": {
       "type": "string",
@@ -68,6 +95,26 @@
     "downstream_send": {
       "type": "boolean",
       "description": "Whether the outbound send occurred after gate evaluation."
+    },
+    "downstream_effect_claimed_status": {
+      "type": "string",
+      "enum": ["synthetic_no_effect_observed", "not_verified", "verified_external", "unknown"],
+      "description": "Status of the downstream effect claim. v0.1 uses synthetic_no_effect_observed only."
+    },
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type", "description"],
+        "properties": {
+          "type": { "type": "string" },
+          "description": { "type": "string" },
+          "hash": { "type": "string" }
+        },
+        "additionalProperties": false
+      },
+      "description": "Evidence items supporting the refusal claim."
     },
     "claim_boundary": {
       "type": "string",
