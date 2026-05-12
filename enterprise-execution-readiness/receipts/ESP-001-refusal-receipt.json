@@ -1,0 +1,15 @@
+{
+  "receipt_id": "RCP-2026-0512-001",
+  "scenario_id": "ESP-001",
+  "attempted_action": "SEND_EXTERNAL_EMAIL",
+  "actor": "agent://morpheus-draft-bot-v1",
+  "action_type": "SEND_EXTERNAL_EMAIL",
+  "recipient_scope": "external:partner-domain.com",
+  "payload_hash": "sha256:a3f8c2d1e7b904561ac38fd2e190bba47c2d3f8a1e056b7c9d4e2f1a8b3c7d90",
+  "missing_field": "authority_token",
+  "decision": "DENY",
+  "refusal_reason": "authority_token absent — no valid DecisionRecord for this actor, action_type, recipient_scope, and payload at gate time",
+  "timestamp": "2026-05-12T10:01:00Z",
+  "downstream_send": false,
+  "claim_boundary": "path-local refusal evidence only; no enterprise deployment, certification, compliance, production readiness, or path-universal governance claim"
+}
