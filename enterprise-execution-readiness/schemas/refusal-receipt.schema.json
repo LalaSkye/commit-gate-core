@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/LalaSkye/commit-gate-core/enterprise-execution-readiness/schemas/refusal-receipt.schema.json",
+  "title": "Enterprise Execution Readiness Refusal Receipt",
+  "type": "object",
+  "required": [
+    "receipt_id",
+    "scenario_id",
+    "attempted_action",
+    "actor",
+    "action_type",
+    "recipient_scope",
+    "payload_hash",
+    "decision",
+    "refusal_reason",
+    "timestamp",
+    "downstream_send",
+    "claim_boundary"
+  ],
+  "properties": {
+    "receipt_id": {
+      "type": "string",
+      "description": "Unique identifier for the refusal event."
+    },
+    "scenario_id": {
+      "type": "string",
+      "description": "Scenario identifier tied to the enterprise scenario packet."
+    },
+    "attempted_action": {
+      "type": "string",
+      "description": "The consequence-binding action that attempted to execute."
+    },
+    "actor": {
+      "type": "string",
+      "description": "The AI agent, system, or service requesting execution."
+    },
+    "action_type": {
+      "type": "string",
+      "description": "The governed action class being evaluated."
+    },
+    "recipient_scope": {
+      "type": "string",
+      "description": "The recipient or domain scope for the attempted action."
+    },
+    "payload_hash": {
+      "type": "string",
+      "pattern": "^sha256:[a-fA-F0-9]{64}$",
+      "description": "Hash of the payload that would have been sent or executed."
+    },
+    "missing_field": {
+      "type": "string",
+      "description": "The required field that caused refusal, if applicable."
+    },
+    "decision": {
+      "type": "string",
+      "enum": ["DENY", "HOLD", "ALLOW"],
+      "description": "Gate verdict. Refusal receipts normally record DENY or HOLD."
+    },
+    "refusal_reason": {
+      "type": "string",
+      "description": "Human-readable explanation of why the action was refused."
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Time the gate produced the refusal event."
+    },
+    "downstream_send": {
+      "type": "boolean",
+      "description": "Whether the outbound send occurred after gate evaluation."
+    },
+    "claim_boundary": {
+      "type": "string",
+      "description": "Explicit statement of what the receipt does and does not prove."
+    }
+  },
+  "additionalProperties": false
+}
