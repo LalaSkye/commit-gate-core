@@ -60,7 +60,11 @@ policy rule
 |---|---|
 | `CLAIM_BOUNDARY.md` | States safe and forbidden claims |
 | `docs/runtime-governance-evidence-packet-v1.md` | Buyer-readable evidence packet format |
+| `docs/enterprise-readiness-test-harness.md` | Defines the safe test-harness claim and hard limits |
+| `docs/evidence-matrix.md` | Maps claims to current proof, missing proof, and next tests |
 | `scenarios/ESP-001-ai-generated-external-email.md` | First enterprise-shaped scenario |
+| `adapters/mock_email_adapter.py` | Mock downstream email connector |
+| `tests/test_esp_001_email_no_send.py` | Pytest proving DENY does not call the mock adapter |
 | `receipts/ESP-001-refusal-receipt.json` | Example refusal receipt |
 | `schemas/refusal-receipt.schema.json` | Minimal schema for receipt inspection |
 | `run_scenario_001.py` | Synthetic trace harness for ESP-001 |
@@ -74,8 +78,11 @@ This package currently shows:
 - a required authority condition
 - a missing-authority invalid condition
 - a synthetic refusal before send
+- a mocked downstream email adapter
+- a pytest assertion that the adapter is not called when authority is missing
 - an example receipt recording what stopped and why
 - an execution trace shape: before_state, refusal_event, after_state, receipt
+- a GitHub Actions replay surface for the scenario tests
 - a claim boundary
 
 ## Current hard limit
@@ -90,6 +97,29 @@ This package does not yet show:
 - live execution-layer enforcement
 - independent downstream-send verification
 - certification or audit approval
+
+## Current safe label
+
+```text
+enterprise-readiness test harness
+```
+
+Unsafe labels:
+
+```text
+enterprise-ready system
+enterprise deployment evidence
+production enforcement proof
+certified control
+compliance-ready system
+```
+
+## Run locally
+
+```bash
+python -m pytest enterprise-execution-readiness/tests -v
+python enterprise-execution-readiness/run_scenario_001.py
+```
 
 ## Clean line
 
