@@ -1,0 +1,14 @@
+{
+  "decision_id": "dr_valid_001",
+  "actor_id": "agent_17",
+  "action": "approve_invoice",
+  "object_id": "invoice_778",
+  "environment": "prod",
+  "commit_hash": "sha256:abc123",
+  "verdict": "ALLOW",
+  "policy_version": "2026-04-27.1",
+  "issued_at": "2026-04-27T05:00:00Z",
+  "expires_at": "2026-04-27T05:05:00Z",
+  "nonce": "nonce_valid_001",
+  "signature": "sig_valid"
+}
