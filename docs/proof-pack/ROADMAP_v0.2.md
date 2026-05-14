@@ -51,6 +51,8 @@ inspectable without expanding the public claim:
   that at most one mutation occurs per nonce
 - malformed-JSON and parser-boundary fixtures (truncated input, wrong
   types, extra fields) with matching DENY receipts
+- clock skew and expiry edge tests covering `issued_at` in the future,
+  just-past-expiry, and timestamps without timezone information
 
 ## 5. Claim boundary
 
