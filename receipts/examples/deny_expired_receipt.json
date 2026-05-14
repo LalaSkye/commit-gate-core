@@ -1,0 +1,37 @@
+{
+  "actual_result": "DENY",
+  "case_name": "expired_authority",
+  "claim_boundary": "bounded proof surface for authority-before-mutation on the demonstrated CommitGate path; not production, not certification, not universal runtime governance",
+  "decision_id": "dr_expired_001",
+  "expected_result": "DENY_EXPIRED",
+  "gate_audit_event": {
+    "allowed": false,
+    "attempted": {
+      "action": "approve_invoice",
+      "actor_id": "agent_17",
+      "commit_hash": "sha256:abc123",
+      "environment": "prod",
+      "object_id": "invoice_778"
+    },
+    "code": "DENY:DECISION_EXPIRED",
+    "decision_id": "dr_expired_001",
+    "event_type": "GATE_EVALUATION",
+    "record_scope": {
+      "action": "approve_invoice",
+      "actor_id": "agent_17",
+      "commit_hash": "sha256:abc123",
+      "environment": "prod",
+      "object_id": "invoice_778",
+      "policy_version": "2026-04-27.1"
+    },
+    "timestamp": "2026-04-27T05:01:00Z"
+  },
+  "input_hash": "sha256:d7cbe91680199adbee2f80c3a8a1f444c4f0062f1ac602d31f74ef3d78fcec1c",
+  "mutation_occurred": false,
+  "no_execution_marker": true,
+  "receipt_hash": "sha256:d2aeafaeb1c19747b26535226fdff51a655b9cec1e651f452ad5569e53b922b8",
+  "receipt_id": "RCP-PP-expired_authority",
+  "refusal_reason": "DENY:DECISION_EXPIRED",
+  "schema_version": "proof-pack-v0.1",
+  "timestamp": "2026-04-27T05:01:00Z"
+}

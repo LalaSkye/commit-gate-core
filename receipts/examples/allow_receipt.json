@@ -1,0 +1,37 @@
+{
+  "actual_result": "ALLOW",
+  "case_name": "valid_decision_record",
+  "claim_boundary": "bounded proof surface for authority-before-mutation on the demonstrated CommitGate path; not production, not certification, not universal runtime governance",
+  "decision_id": "dr_valid_001",
+  "expected_result": "ALLOW",
+  "gate_audit_event": {
+    "allowed": true,
+    "attempted": {
+      "action": "approve_invoice",
+      "actor_id": "agent_17",
+      "commit_hash": "sha256:abc123",
+      "environment": "prod",
+      "object_id": "invoice_778"
+    },
+    "code": "ALLOW",
+    "decision_id": "dr_valid_001",
+    "event_type": "GATE_EVALUATION",
+    "record_scope": {
+      "action": "approve_invoice",
+      "actor_id": "agent_17",
+      "commit_hash": "sha256:abc123",
+      "environment": "prod",
+      "object_id": "invoice_778",
+      "policy_version": "2026-04-27.1"
+    },
+    "timestamp": "2026-04-27T05:01:00Z"
+  },
+  "input_hash": "sha256:d2d4ced3301d5710dbc556a3288b4291a385667cdb2c1242f37f21617d5d30d8",
+  "mutation_occurred": true,
+  "no_execution_marker": false,
+  "receipt_hash": "sha256:62bcaa6694c5b622c96005567d9f498e6307347caeb11533c88d71be20011a01",
+  "receipt_id": "RCP-PP-valid_decision_record",
+  "refusal_reason": null,
+  "schema_version": "proof-pack-v0.1",
+  "timestamp": "2026-04-27T05:01:00Z"
+}
