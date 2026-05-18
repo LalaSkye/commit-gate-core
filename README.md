@@ -1,5 +1,8 @@
 # Commit Gate Core
 
+**Research Surface Map:** [lalaSkye.github.io/inspection-surface](https://lalaskye.github.io/inspection-surface/) — full index, provenance, and cross-links
+
+
 New to this work? Start here: https://github.com/LalaSkye/start-here
 
 ## Public disclosure boundary
