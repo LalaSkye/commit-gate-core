@@ -1,14 +1,11 @@
 name: enterprise-shaped-scenarios
 
+# QUARANTINED 2026-05-24 — see issue #22
+# enterprise-execution-readiness/ is not part of the v0.1.0 proof surface.
+# This workflow is restricted to manual dispatch pending the dataclass
+# collection fix in enterprise-execution-readiness/adapters/replay_ledger.py.
 on:
-  push:
-    paths:
-      - 'enterprise-execution-readiness/**'
-      - '.github/workflows/enterprise-shaped-scenarios.yml'
-  pull_request:
-    paths:
-      - 'enterprise-execution-readiness/**'
-      - '.github/workflows/enterprise-shaped-scenarios.yml'
+  workflow_dispatch:
 
 jobs:
   esp-001:
