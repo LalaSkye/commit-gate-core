@@ -1,0 +1,7 @@
+# Runtime dependencies for commit-gate-core.
+#
+# The gate kernel is intentionally dependency-free: it uses the Python
+# standard library only. This file exists so the install path is explicit
+# and inspectable rather than implied.
+#
+# Development and test dependencies live in requirements-dev.txt.

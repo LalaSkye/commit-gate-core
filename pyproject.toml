@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "commit-gate-core"
+version = "0.1.0"
+description = "Runtime commit gate: no state mutation on the demonstrated path without a valid DecisionRecord."
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Ricky Dean Jones" }]
+keywords = [
+  "ai-governance",
+  "execution-boundary",
+  "admissibility",
+  "fail-closed",
+  "refusal-receipt",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.urls]
+Homepage = "https://github.com/LalaSkye/commit-gate-core"
+"Research Surface Map" = "https://lalaskye.github.io/inspection-surface/"
+"Start Here" = "https://github.com/LalaSkye/start-here"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

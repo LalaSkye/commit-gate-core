@@ -53,6 +53,73 @@ Email sent: false
 Receipt written: true
 ```
 
+No install step is required for the demonstration. The gate kernel uses the
+Python standard library only.
+
+## Install
+
+Requires Python 3.11 or later.
+
+```bash
+git clone https://github.com/LalaSkye/commit-gate-core.git
+cd commit-gate-core
+python -m pip install -e .
+```
+
+With test dependencies:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Or using the Makefile:
+
+```bash
+make install-dev   # editable install plus pytest
+make demo          # 30-second refusal demonstration
+make test          # full test suite
+make adversarial   # adversarial invariant verifier
+```
+
+Run `make help` to list all targets.
+
+After install, the kernel imports as:
+
+```python
+from commit_gate_core import gate
+```
+
+Packaging files:
+
+- [`pyproject.toml`](pyproject.toml) — package metadata and build configuration
+- [`requirements.txt`](requirements.txt) — runtime dependencies (none; standard library only)
+- [`requirements-dev.txt`](requirements-dev.txt) — test dependencies
+- [`Makefile`](Makefile) — inspection and verification entry points
+
+Claim boundary: these files provide an install path. They do not add capability,
+and they do not extend any claim made elsewhere in this repository.
+
+## Known test status
+
+Dated snapshot, 5 August 2026. Recorded here so the state is inspectable rather
+than implied.
+
+| Surface | Result |
+|---|---|
+| `make demo` | passes |
+| `make adversarial` | passes — all three invariant vectors |
+| CI workflows (adversarial invariants, ESP-001, enterprise-shaped scenarios) | passing |
+| `make test` — full suite | **36 passed, 4 failed** |
+
+The four failures are all in `tests/test_changed_condition_refusal.py` and are a
+refusal-code naming mismatch between test expectation and kernel output, for
+example `REFUSE_PAYLOAD_HASH_MISMATCH` expected against `REFUSE_PAYLOAD_HASH_MALFORMED`
+returned. In each case the gate still refuses; the disagreement is over which
+refusal code is emitted, not over whether the action was blocked.
+
+This is unresolved. It is recorded, not fixed, and no claim of a fully green
+suite is made. No version tag or release is published while it stands.
+
 ## Inspection path
 
 Run the demo and adversarial invariant verifier:
