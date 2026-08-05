@@ -9,6 +9,7 @@ It does not prove live SMTP/API non-execution or enterprise readiness.
 from __future__ import annotations
 
 import importlib.util
+import sys
 from pathlib import Path
 from typing import Any, Dict
 
@@ -19,6 +20,12 @@ ADAPTER_PATH = ROOT / "adapters" / "mock_email_adapter.py"
 spec = importlib.util.spec_from_file_location("mock_email_adapter", ADAPTER_PATH)
 mock_email_adapter = importlib.util.module_from_spec(spec)
 assert spec.loader is not None
+# Register the module in sys.modules before executing it.
+# Without this, any @dataclass in the loaded module fails at import time:
+# dataclasses resolves sys.modules[cls.__module__].__dict__, which is None
+# for a module built by module_from_spec but never registered.
+# Recorded 2026-08-05.
+sys.modules[spec.name] = mock_email_adapter
 spec.loader.exec_module(mock_email_adapter)
 MockEmailAdapter = mock_email_adapter.MockEmailAdapter
 
