@@ -146,7 +146,17 @@ def changed_condition_gate(attempt: dict) -> dict:
     return {"decision": "ALLOW", "refusal_reason": None, "receipt": r, "mutation_committed": False}
 
 
-PAYLOAD_CHANGED = {**BASELINE, "payload_hash": "sha256:zzxxzz999", "nonce": "nonce-cc-002"}
+# Changed-condition fixtures must be WELL-FORMED and DIFFERENT.
+# A malformed value is refused earlier, at the wellformedness stage, and never
+# reaches the changed-condition comparison. Malformed inputs are covered
+# separately by test_malformed_payload_hashes_fail_closed.
+#
+# 2026-08-05: this fixture previously used "sha256:zzxxzz999", which fails
+# PAYLOAD_RE (^sha256:[a-f0-9]{9}$) because z and x are not hex. The gate
+# therefore emitted REFUSE_PAYLOAD_HASH_MALFORMED, not the intended
+# REFUSE_PAYLOAD_HASH_MISMATCH. The gate was refusing correctly throughout;
+# the fixture did not express the condition the test names.
+PAYLOAD_CHANGED = {**BASELINE, "payload_hash": "sha256:ddeeff002", "nonce": "nonce-cc-002"}
 SCOPE_CHANGED = {**BASELINE, "recipient_scope": "external:unauthorised-domain.com", "nonce": "nonce-cc-003"}
 STATE_CHANGED = {**BASELINE, "state_version": "v2.0.0", "nonce": "nonce-cc-004"}
 EXPIRED = {**BASELINE, "expiry": "2020-01-01T00:00:00Z", "nonce": "nonce-cc-005"}
@@ -230,7 +240,12 @@ def test_scope_tricks_fail_closed_or_refuse():
         "external:PARTNER-DOMAIN.COM": "REFUSE_SCOPE_MALFORMED",
         "external:partner-domain.com.evil.com": "REFUSE_SCOPE_MISMATCH",
         "external:partner-domain%2ecom": "REFUSE_SCOPE_MISMATCH",
-        "external:partner-domain.com,external:evil.com": "REFUSE_SCOPE_MISMATCH",
+        # 2026-08-05: expectation corrected from REFUSE_SCOPE_MISMATCH.
+        # A comma-injected multi-scope string carries two colons and fails the
+        # single-scope wellformedness check, so it is refused before the
+        # comparison stage. Refusing earlier is the stricter outcome. The
+        # attempt is blocked either way; only the emitted code differs.
+        "external:partner-domain.com,external:evil.com": "REFUSE_SCOPE_MALFORMED",
     }
     for scope, expected in cases.items():
         fixture = {**BASELINE, "recipient_scope": scope, "nonce": f"nonce-scope-{repr(scope)}"}
