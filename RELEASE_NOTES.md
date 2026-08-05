@@ -1,20 +1,19 @@
-# commit-gate-core v0.1.0
+# commit-gate-core v0.1.1
 
-First packaged release of the bounded, path-local commit-gate proof surface.
+Patch release widening default test discovery to the complete verified suite.
 
 ## Included
 
-- standards-based Python packaging
-- stable public imports from `commit_gate_core`
-- bundled ESP-001 synthetic refusal fixture
-- wheel and source-distribution build checks
-- automated GitHub release assets for tagged versions
-- explicit MIT licence file
+- bare `pytest` now discovers both the root and enterprise-shaped test surfaces
+- complete-suite result: 49 passed, 0 failed
+- package and tagged-release workflows run the same complete suite
+- package version and public `__version__` advanced to `0.1.1`
+- no change to `src/commit_gate_core/gate.py`
 
 ## Install
 
 ```bash
-python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.0"
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.1"
 ```
 
 ## Verify
@@ -23,7 +22,7 @@ python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit
 python -c "from commit_gate_core import CommitGate, __version__; print(__version__)"
 ```
 
-Expected output: `0.1.0`.
+Expected output: `0.1.1`.
 
 ## Claim boundary
 
