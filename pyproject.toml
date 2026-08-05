@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "commit-gate-core"
-version = "0.1.0"
+version = "0.1.1"
 description = "Runtime commit gate: no state mutation on the demonstrated path without a valid DecisionRecord."
 readme = "README.md"
 requires-python = ">=3.11"
@@ -44,5 +44,5 @@ where = ["src"]
 commit_gate_core = ["data/*.json"]
 
 [tool.pytest.ini_options]
-testpaths = ["tests"]
+testpaths = ["tests", "enterprise-execution-readiness/tests"]
 pythonpath = ["src"]

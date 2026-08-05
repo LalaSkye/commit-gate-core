@@ -63,7 +63,7 @@ Requires Python 3.11 or later.
 Install the tagged release from GitHub:
 
 ```bash
-python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.0"
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.1"
 ```
 
 Or install a local clone:
@@ -119,7 +119,7 @@ than implied.
 | `make demo` | passes |
 | `make adversarial` | passes — all three invariant vectors |
 | Existing CI workflows (adversarial invariants and ESP-001) | passing |
-| `python -m pytest tests` | **42 passed, 0 failed** |
+| `python -m pytest` | **49 passed, 0 failed** |
 | Package workflow | builds and installs the wheel, then checks it outside the checkout |
 
 The four earlier changed-condition failures were corrected in PR #25 by fixing
@@ -127,9 +127,9 @@ malformed test data and one weaker expectation. `src/commit_gate_core/gate.py`
 was not changed. This packaging patch adds two installed-package checks, taking
 the root suite from 40 to 42 tests.
 
-The separate `enterprise-execution-readiness/tests/` collection issue is not part
-of this package release check and remains unresolved. No enterprise-readiness
-claim is made.
+PR #26 repaired the enterprise test loaders without changing the gate. Those
+seven tests now run under bare `pytest` alongside the 42 root tests. This is a
+test-discovery and harness result; no enterprise-readiness claim is made.
 
 ## Inspection path
 
@@ -193,7 +193,8 @@ Working paper:
 
 ## Status
 
-`v0.1.0` — installable bounded public proof surface.
+`v0.1.1` — installable bounded public proof surface with complete default test
+discovery.
 
 Small surface. Clear failure mode. Receipts over reassurance.
 

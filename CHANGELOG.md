@@ -6,6 +6,31 @@ Git history remains the source of commit-level truth. This file provides a court
 
 ## 2026-08-05
 
+### v0.1.1 — complete-suite verification
+
+- Widened bare `pytest` discovery to include both `tests/` and
+  `enterprise-execution-readiness/tests/`.
+- Verified the complete discovered suite on a fresh clone: 49 passed, 0 failed.
+- Verified `pip install -e ".[dev]"` in a clean Python 3.12 environment.
+- Verified the public package import and `make verify` path.
+- Recorded all required CI checks green on `main` after the enterprise test
+  loader fix.
+
+Evidence effect:
+
+- A bare `pytest` run now exercises all 49 tests rather than only the 42 root
+  tests.
+- The default local test command, package workflow, and tagged-release workflow
+  now share the same complete discovery boundary.
+
+Claim boundary:
+
+- This is a test-discovery, verification, and patch-release change only.
+- It does not add gate capability or establish production readiness,
+  enterprise deployment, compliance, adoption, or independent validation.
+
+### v0.1.0 — first packaged release
+
 - Added `pyproject.toml`, `requirements.txt`, `requirements-dev.txt`, and `Makefile` to give the repository an explicit, inspectable install path.
 - Added an `Install` section to `README.md` covering editable install, test-dependency install, Makefile targets, and the import path.
 - Added a stable public import surface, explicit MIT licence, and bundled synthetic scenario fixture.
