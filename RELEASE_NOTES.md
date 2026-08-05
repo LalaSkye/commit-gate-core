@@ -1,22 +1,33 @@
-# Release Notes
+# commit-gate-core v0.1.0
 
-## Governance notes
+First packaged release of the bounded, path-local commit-gate proof surface.
 
-- 2026-05-04 — Issue #6 opened: Condition Freshness Check v0.1, a bounded DecisionRecord validation surface that resolves to HOLD when the supporting condition is stale, unevidenced, out-of-scope, or freshness is unknown.
+## Included
 
-## Room state sketch
+- standards-based Python packaging
+- stable public imports from `commit_gate_core`
+- bundled ESP-001 synthetic refusal fixture
+- wheel and source-distribution build checks
+- automated GitHub release assets for tagged versions
+- explicit MIT licence file
 
-- Condition Freshness Check v0.1 is recorded as a bounded DecisionRecord validation surface (no code yet) that fail-closes to HOLD when its authorising condition is stale, unevidenced, out-of-scope, or freshness is unknown.
+## Install
 
-## Reusable tags
+```bash
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.0"
+```
 
-- Freshness HOLD — preferred future issue-title phrase for test cases.
-- freshness-hold — primary internal slug / machine-findable key.
+## Verify
 
-## Future work headings
+```bash
+python -c "from commit_gate_core import CommitGate, __version__; print(__version__)"
+```
 
-- Freshness Test Cases v0.1
-- Receipt Visibility (Read-Only) v0.1
-- Condition Typing & Limits v0.1
-- Operational Telemetry v0.1
-- Human Override Patterns v0.1
+Expected output: `0.1.0`.
+
+## Claim boundary
+
+This release makes the existing bounded code easier to install and inspect.
+It does not establish production readiness, enterprise deployment, compliance,
+certification, path-universal governance, external validation, or a managed
+commercial deliverable.

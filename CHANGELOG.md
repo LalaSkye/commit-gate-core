@@ -8,20 +8,22 @@ Git history remains the source of commit-level truth. This file provides a court
 
 - Added `pyproject.toml`, `requirements.txt`, `requirements-dev.txt`, and `Makefile` to give the repository an explicit, inspectable install path.
 - Added an `Install` section to `README.md` covering editable install, test-dependency install, Makefile targets, and the import path.
-- Added a dated `Known test status` section to `README.md` recording that the full suite currently reports 36 passed and 4 failed, all four in `tests/test_changed_condition_refusal.py`, all four a refusal-code naming mismatch (expected code vs emitted code) where the gate still refuses.
-- No release tagged. Versioning deferred until the four recorded test failures are resolved.
+- Added a stable public import surface, explicit MIT licence, and bundled synthetic scenario fixture.
+- Added CI that builds and installs the wheel, then checks it outside the repository checkout.
+- Added a tag-triggered workflow that publishes wheel and source archives as a GitHub release.
+- Recorded the corrected root-suite result: 42 passed, 0 failed after PR #25 fixed test data without changing the gate and this patch added two package checks.
 
 Evidence effect:
 
-- The repository can now be installed by a third party without reading the source layout first.
-- The current test state is disclosed rather than implied.
+- The repository can now be installed from a tagged version or a local clone.
+- The built wheel contains the public package and the bundled ESP-001 fixture.
+- The current root-suite and package-check boundaries are disclosed.
 
 Claim boundary:
 
 - This records packaging and disclosure only.
-- It does not claim new technical capability, a fully green test suite, adoption, validation, compliance, or production readiness.
-- The four failing tests are recorded, not resolved.
-- No version tag is claimed by this entry.
+- It does not claim new gate capability, adoption, validation, compliance, or production readiness.
+- The separate `enterprise-execution-readiness/tests/` collection issue remains outside this package release check.
 
 ## 2026-05-11
 

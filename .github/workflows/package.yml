@@ -1,0 +1,53 @@
+name: Package
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build tools
+        run: python -m pip install --upgrade build pytest
+
+      - name: Run repository tests
+        run: python -m pytest tests -q
+
+      - name: Build wheel and source archive
+        run: python -m build
+
+      - name: Install built wheel
+        run: python -m pip install --force-reinstall dist/*.whl
+
+      - name: Verify installed package outside the checkout
+        working-directory: ${{ runner.temp }}
+        run: |
+          python - <<'PY'
+          from commit_gate_core import CommitGate, GateResult, __version__
+          from commit_gate_core.scenario_runner import run_scenario_001
+
+          assert CommitGate.__name__ == "CommitGate"
+          assert GateResult.__name__ == "GateResult"
+          assert __version__ == "0.1.0"
+          assert run_scenario_001()["downstream_send"] is False
+          print("Installed package: PASS")
+          PY
+
+      - name: Upload distribution artefacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: commit-gate-core-dist
+          path: dist/*

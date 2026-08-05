@@ -60,10 +60,18 @@ Python standard library only.
 
 Requires Python 3.11 or later.
 
+Install the tagged release from GitHub:
+
+```bash
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.0"
+```
+
+Or install a local clone:
+
 ```bash
 git clone https://github.com/LalaSkye/commit-gate-core.git
 cd commit-gate-core
-python -m pip install -e .
+python -m pip install .
 ```
 
 With test dependencies:
@@ -83,10 +91,12 @@ make adversarial   # adversarial invariant verifier
 
 Run `make help` to list all targets.
 
-After install, the kernel imports as:
+After installation, verify the public package surface:
 
 ```python
-from commit_gate_core import gate
+from commit_gate_core import CommitGate, __version__
+
+print(__version__)
 ```
 
 Packaging files:
@@ -108,17 +118,18 @@ than implied.
 |---|---|
 | `make demo` | passes |
 | `make adversarial` | passes — all three invariant vectors |
-| CI workflows (adversarial invariants, ESP-001, enterprise-shaped scenarios) | passing |
-| `make test` — full suite | **36 passed, 4 failed** |
+| Existing CI workflows (adversarial invariants and ESP-001) | passing |
+| `python -m pytest tests` | **42 passed, 0 failed** |
+| Package workflow | builds and installs the wheel, then checks it outside the checkout |
 
-The four failures are all in `tests/test_changed_condition_refusal.py` and are a
-refusal-code naming mismatch between test expectation and kernel output, for
-example `REFUSE_PAYLOAD_HASH_MISMATCH` expected against `REFUSE_PAYLOAD_HASH_MALFORMED`
-returned. In each case the gate still refuses; the disagreement is over which
-refusal code is emitted, not over whether the action was blocked.
+The four earlier changed-condition failures were corrected in PR #25 by fixing
+malformed test data and one weaker expectation. `src/commit_gate_core/gate.py`
+was not changed. This packaging patch adds two installed-package checks, taking
+the root suite from 40 to 42 tests.
 
-This is unresolved. It is recorded, not fixed, and no claim of a fully green
-suite is made. No version tag or release is published while it stands.
+The separate `enterprise-execution-readiness/tests/` collection issue is not part
+of this package release check and remains unresolved. No enterprise-readiness
+claim is made.
 
 ## Inspection path
 
@@ -182,7 +193,7 @@ Working paper:
 
 ## Status
 
-`v0.1` — bounded public proof surface.
+`v0.1.0` — installable bounded public proof surface.
 
 Small surface. Clear failure mode. Receipts over reassurance.
 
