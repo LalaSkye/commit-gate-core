@@ -1,0 +1,2 @@
+# Development and test dependencies for commit-gate-core.
+pytest>=8.0

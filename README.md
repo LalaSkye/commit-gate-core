@@ -53,6 +53,84 @@ Email sent: false
 Receipt written: true
 ```
 
+No install step is required for the demonstration. The gate kernel uses the
+Python standard library only.
+
+## Install
+
+Requires Python 3.11 or later.
+
+Install the tagged release from GitHub:
+
+```bash
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.0"
+```
+
+Or install a local clone:
+
+```bash
+git clone https://github.com/LalaSkye/commit-gate-core.git
+cd commit-gate-core
+python -m pip install .
+```
+
+With test dependencies:
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+Or using the Makefile:
+
+```bash
+make install-dev   # editable install plus pytest
+make demo          # 30-second refusal demonstration
+make test          # full test suite
+make adversarial   # adversarial invariant verifier
+```
+
+Run `make help` to list all targets.
+
+After installation, verify the public package surface:
+
+```python
+from commit_gate_core import CommitGate, __version__
+
+print(__version__)
+```
+
+Packaging files:
+
+- [`pyproject.toml`](pyproject.toml) — package metadata and build configuration
+- [`requirements.txt`](requirements.txt) — runtime dependencies (none; standard library only)
+- [`requirements-dev.txt`](requirements-dev.txt) — test dependencies
+- [`Makefile`](Makefile) — inspection and verification entry points
+
+Claim boundary: these files provide an install path. They do not add capability,
+and they do not extend any claim made elsewhere in this repository.
+
+## Known test status
+
+Dated snapshot, 5 August 2026. Recorded here so the state is inspectable rather
+than implied.
+
+| Surface | Result |
+|---|---|
+| `make demo` | passes |
+| `make adversarial` | passes — all three invariant vectors |
+| Existing CI workflows (adversarial invariants and ESP-001) | passing |
+| `python -m pytest tests` | **42 passed, 0 failed** |
+| Package workflow | builds and installs the wheel, then checks it outside the checkout |
+
+The four earlier changed-condition failures were corrected in PR #25 by fixing
+malformed test data and one weaker expectation. `src/commit_gate_core/gate.py`
+was not changed. This packaging patch adds two installed-package checks, taking
+the root suite from 40 to 42 tests.
+
+The separate `enterprise-execution-readiness/tests/` collection issue is not part
+of this package release check and remains unresolved. No enterprise-readiness
+claim is made.
+
 ## Inspection path
 
 Run the demo and adversarial invariant verifier:
@@ -115,7 +193,7 @@ Working paper:
 
 ## Status
 
-`v0.1` — bounded public proof surface.
+`v0.1.0` — installable bounded public proof surface.
 
 Small surface. Clear failure mode. Receipts over reassurance.
 

@@ -31,9 +31,8 @@ REQUIRED_FIELDS = [
 
 SCENARIO_ID = "ESP-001"
 FIXTURE_PATH = (
-    Path(__file__).resolve().parents[2]
-    / "docs"
-    / "enterprise-shaped-scenarios"
+    Path(__file__).resolve().parent
+    / "data"
     / "invalid_attempt_missing_authority.json"
 )
 
