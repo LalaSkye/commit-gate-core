@@ -105,15 +105,11 @@ def test_authorize_does_not_invoke_callback():
     assert "nonce_001" in ledger.used
 
 
-def test_execute_does_not_invoke_callback():
+def test_execute_is_authorize_wrapper():
     gate, ledger, audit, mutated, verifier = make_gate()
-    record = signed_record(verifier)
-    result = gate.execute(
-        record=record,
-        commit_hash=record["commit_hash"],
-        **SCOPE,
-    )
+    result = gate.execute(record=signed_record(verifier), payload_bytes=PAYLOAD, **SCOPE)
     assert result.allowed is True
+    assert result.code == "AUTHORIZED"
     assert mutated == []
 
 
