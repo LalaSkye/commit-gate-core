@@ -24,6 +24,7 @@ bridge_spec = importlib.util.spec_from_file_location("commit_gate_bridge", BRIDG
 commit_gate_bridge = importlib.util.module_from_spec(bridge_spec)
 assert bridge_spec.loader is not None
 sys.modules[bridge_spec.name] = commit_gate_bridge
+bridge_spec.loader.exec_module(commit_gate_bridge)
 dispatch_esp001_through_real_gate = commit_gate_bridge.dispatch_esp001_through_real_gate
 
 
