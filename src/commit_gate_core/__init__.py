@@ -12,9 +12,9 @@ from .gate import (
 )
 from .hmac_mac import HmacSha256Verifier
 from .two_phase import PhaseResult, TwoPhaseCommit
-from .canonical import canonical_bytes, SIGNED_FIELDS
+from .canonical import SIGNED_FIELDS, canonical_bytes
 
-__version__ = "0.2.0-dev"
+__version__ = "0.1.1"
 
 __all__ = [
     "AuditSink",
