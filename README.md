@@ -1,8 +1,8 @@
 # Commit Gate Core
 
-**PR #31 (`feat/authorize-only`) is open and unmerged. Version `0.2.0a1` is
-unreleased.** Default branch `main` is still `v0.1.1`. This README describes
-the authorize-only kernel on that PR, not the published tag.
+This README describes the authorize-only kernel on `main`, introduced by
+PR #31. Published tags are separate release objects; inspect the exact tag
+before relying on it.
 
 Research map: https://lalaskye.github.io/inspection-surface/
 
@@ -18,9 +18,9 @@ deny/error code.
 It checks the configured verifier. The demonstrated tests use an HMAC-SHA256
 lab MAC.
 
-It does not apply the payload. `mutation_callback` is never invoked.
-`execute` is a deprecated wrapper: it requires `payload_bytes` and only
-calls `authorize`. A `commit_hash` with no payload is refused
+It does not apply the payload. `execute` is a deprecated wrapper: it requires
+`payload_bytes`, only calls `authorize`, and runs no application hook. A
+`commit_hash` with no payload is refused
 (`DENY:COMMIT_HASH_ONLY_FORBIDDEN`).
 
 Ed25519 is specified for a later extra. It is not implemented in this tree.
@@ -46,7 +46,8 @@ Two-phase apply lives under `experimental/` and is not a public export.
 
 ## 3. One local command
 
-From a clone of `feat/authorize-only`:
+At the Shape A merge receipt
+`c0fbc5fb425291a48bc2aed590dfbb66f0c77785`:
 
 ```bash
 PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q

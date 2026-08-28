@@ -4,6 +4,36 @@ This changelog records human-readable evidence changes for `LalaSkye/commit-gate
 
 Git history remains the source of commit-level truth. This file provides a court-readable / buyer-readable summary layer.
 
+## 2026-08-28
+
+### v0.2.0a1 — authorize-only Shape A
+
+- Replaced the public mutation-facing kernel with an authorize-only surface.
+- Added `authorize(record, payload_bytes, ...)`, which binds the payload hash
+  inside the gate and never applies the payload.
+- Kept `execute(...)` as a deprecated compatibility wrapper that delegates to
+  authorisation; no application hook runs.
+- Refused hash-only calls with `DENY:COMMIT_HASH_ONLY_FORBIDDEN`.
+- Kept HMAC-SHA256 explicitly bounded as a lab MAC, not a signature.
+- Specified canonical bytes and PureEdDSA Ed25519 without implementing an
+  Ed25519 verifier.
+- Moved two-phase application outside the installed package and added negative
+  import coverage.
+- Aligned the README, DecisionRecord contract, invariant, examples, scenario
+  runner, package workflow, and release workflow with Shape A.
+
+Evidence effect:
+
+- The demonstrated package decides whether one exact payload is authorised.
+- The package does not execute or report downstream application.
+- The public package does not export the experimental two-phase executor.
+
+Claim boundary:
+
+- This is an alpha authorisation kernel, not a production execution system.
+- It does not claim Ed25519 implementation, durable nonces, atomic persistence,
+  compliance, certification, deployment, adoption, or path-universal control.
+
 ## 2026-08-05
 
 ### v0.1.1 — complete-suite verification

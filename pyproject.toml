@@ -32,7 +32,6 @@ dev = ["pytest>=8.0"]
 [project.urls]
 Homepage = "https://github.com/LalaSkye/commit-gate-core"
 "Research Surface Map" = "https://lalaskye.github.io/inspection-surface/"
-"Start Here" = "https://github.com/LalaSkye/start-here"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

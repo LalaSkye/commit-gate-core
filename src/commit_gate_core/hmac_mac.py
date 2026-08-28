@@ -2,8 +2,8 @@
 
 This is a *symmetric* authenticator for tests and local labs.
 It is not Ed25519. Do not call it a public-key signature in READMEs.
-Swap the verifier for a real asymmetric implementation without
-changing TwoPhaseCommit.
+The authorize-only kernel accepts a verifier by dependency injection;
+this helper does not apply payloads or provide production key management.
 """
 
 from __future__ import annotations
