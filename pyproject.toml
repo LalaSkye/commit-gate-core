@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "commit-gate-core"
-version = "0.1.1"
-description = "Runtime commit gate: no state mutation on the demonstrated path without a valid DecisionRecord."
+version = "0.2.0a1"
+description = "Authorisation gate: no world mutation. Payload hash bound at authorize time."
 readme = "README.md"
 requires-python = ">=3.11"
 license = "MIT"
