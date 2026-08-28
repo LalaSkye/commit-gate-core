@@ -1,13 +1,14 @@
 from __future__ import annotations
 
-from commit_gate_core import CommitGate, GateResult, __version__
+from commit_gate_core import Authorizer, CommitGate, GateResult, __version__
 from commit_gate_core.scenario_runner import run_scenario_001
 
 
 def test_public_package_exports_core_types() -> None:
     assert CommitGate.__name__ == "CommitGate"
+    assert Authorizer.__name__ == "Authorizer"
     assert GateResult.__name__ == "GateResult"
-    assert __version__ == "0.1.1"
+    assert __version__ == "0.2.0a1"
 
 
 def test_installed_scenario_fixture_is_available() -> None:
