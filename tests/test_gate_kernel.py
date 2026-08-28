@@ -74,7 +74,7 @@ def signed_record(verifier: HmacSha256Verifier, **overrides: str) -> dict[str, s
     return record
 
 
-def make_gate(*):
+def make_gate():
     verifier = HmacSha256Verifier(KEY)
     audit = RecordingAuditSink()
     ledger = InMemoryNonceLedger()
@@ -120,7 +120,6 @@ def test_bad_mac_blocks():
 def test_expired_blocks():
     gate, ledger, audit, mutation_calls, verifier = make_gate()
     record = signed_record(verifier, expires_at="2026-04-27T05:00:30Z")
-    # clock is 05:01, expires 05:00:30
     result = gate.execute(record=record, payload_bytes=PAYLOAD, **SCOPE)
     assert result.allowed is False
     assert result.code == "DENY:DECISION_EXPIRED"
