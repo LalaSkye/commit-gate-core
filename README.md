@@ -1,202 +1,77 @@
 # Commit Gate Core
 
-**Research Surface Map:** [lalaSkye.github.io/inspection-surface](https://lalaskye.github.io/inspection-surface/) — full index, provenance, and cross-links
+**PR #31 (`feat/authorize-only`) is open and unmerged. Version `0.2.0a1` is
+unreleased.** Default branch `main` is still `v0.1.1`. This README describes
+the authorize-only kernel on that PR, not the published tag.
 
+Research map: https://lalaskye.github.io/inspection-surface/
 
-New to this work? Start here: https://github.com/LalaSkye/start-here
+Canonical message format: [`docs/governance/CANONICAL_BYTES_AND_ED25519_V1.md`](docs/governance/CANONICAL_BYTES_AND_ED25519_V1.md)
 
-## Public disclosure boundary
+## 1. What the authorize-only kernel is
 
-This repository is a public inspection surface, not full architecture disclosure.
+A small Python gate that **authorises** a DecisionRecord against a payload.
+It hashes the caller-supplied `payload_bytes` inside the gate, checks scope,
+time window, policy version, and nonce, then returns `AUTHORIZED` or a
+deny/error code.
 
-It shows a bounded claim, a runnable evidence object, an inspection path, and the claim limit.
+It checks the configured verifier. The demonstrated tests use an HMAC-SHA256
+lab MAC.
 
-See [`PUBLIC_DISCLOSURE_BOUNDARY.md`](PUBLIC_DISCLOSURE_BOUNDARY.md).
+It does not apply the payload. `mutation_callback` is never invoked.
+`execute` is a deprecated wrapper: it requires `payload_bytes` and only
+calls `authorize`. A `commit_hash` with no payload is refused
+(`DENY:COMMIT_HASH_ONLY_FORBIDDEN`).
 
-## What this repo is
+Ed25519 is specified for a later extra. It is not implemented in this tree.
 
-Commit Gate Core is a small public proof surface for one execution-boundary claim.
+## 2. What it refuses
 
-It demonstrates a path-local control condition:
+On the demonstrated path the gate refuses when:
 
-> No state mutation on the demonstrated path without a valid, scoped, unexpired, unreplayed `DecisionRecord`.
+- there is no record
+- required fields are missing or empty
+- verdict is not `ALLOW`
+- policy version is not accepted
+- the configured verifier does not accept the record
+- the record is not yet valid or has expired
+- actor, action, object, environment, or payload hash do not match
+- the nonce was already consumed
+- `payload_bytes` is omitted
+- only a caller-supplied `commit_hash` is offered
+- the authorised audit event cannot be written; authorisation is refused and
+  nonce rollback is attempted. Rollback failure has a separate error code.
 
-If the required condition fails, the demonstrated action does not run.
+Two-phase apply lives under `experimental/` and is not a public export.
 
-## Scope and limitations
+## 3. One local command
 
-This repository demonstrates one bounded path-local commit-gate behaviour.
-
-It does not claim:
-
-- production readiness
-- enterprise deployment
-- compliance or certification
-- path-universal governance
-- payload binding across all systems
-- atomic commit across all routes
-- non-bypassability outside the demonstrated path
-
-## Try it in 30 seconds
-
-```bash
-git clone https://github.com/LalaSkye/commit-gate-core.git
-cd commit-gate-core
-python -m examples.unsafe_email_send
-```
-
-Expected output:
-
-```text
-Result: HOLD
-Email sent: false
-Receipt written: true
-```
-
-No install step is required for the demonstration. The gate kernel uses the
-Python standard library only.
-
-## Install
-
-Requires Python 3.11 or later.
-
-Install the tagged release from GitHub:
+From a clone of `feat/authorize-only`:
 
 ```bash
-python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.1"
+PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
 ```
 
-Or install a local clone:
+Expected: those files pass. They prove authorise-without-mutate, hash-only
+refusal, payload binding inside `authorize`, and audit-failure rollback with
+the in-memory test ledger.
 
-```bash
-git clone https://github.com/LalaSkye/commit-gate-core.git
-cd commit-gate-core
-python -m pip install .
-```
+Do not use `pip install …@v0.1.1` as evidence of this kernel.
 
-With test dependencies:
+## 4. What it does not claim
 
-```bash
-python -m pip install -e ".[dev]"
-```
+This object does not claim production readiness, enterprise deployment,
+compliance, certification, path-universal enforcement, crash-safe durable
+nonces, atomic PREPARED+nonce persistence, or that consequence cannot occur
+outside this process.
 
-Or using the Makefile:
+It does not claim that Ed25519 is implemented.
+It does not claim certificates or algorithm agility.
+It does not claim that the lab MAC is a signature.
+It does not claim that `start-here` is this kernel.
 
-```bash
-make install-dev   # editable install plus pytest
-make demo          # 30-second refusal demonstration
-make test          # full test suite
-make adversarial   # adversarial invariant verifier
-```
-
-Run `make help` to list all targets.
-
-After installation, verify the public package surface:
-
-```python
-from commit_gate_core import CommitGate, __version__
-
-print(__version__)
-```
-
-Packaging files:
-
-- [`pyproject.toml`](pyproject.toml) — package metadata and build configuration
-- [`requirements.txt`](requirements.txt) — runtime dependencies (none; standard library only)
-- [`requirements-dev.txt`](requirements-dev.txt) — test dependencies
-- [`Makefile`](Makefile) — inspection and verification entry points
-
-Claim boundary: these files provide an install path. They do not add capability,
-and they do not extend any claim made elsewhere in this repository.
-
-## Known test status
-
-Dated snapshot, 5 August 2026. Recorded here so the state is inspectable rather
-than implied.
-
-| Surface | Result |
-|---|---|
-| `make demo` | passes |
-| `make adversarial` | passes — all three invariant vectors |
-| Existing CI workflows (adversarial invariants and ESP-001) | passing |
-| `python -m pytest` | **49 passed, 0 failed** |
-| Package workflow | builds and installs the wheel, then checks it outside the checkout |
-
-The four earlier changed-condition failures were corrected in PR #25 by fixing
-malformed test data and one weaker expectation. `src/commit_gate_core/gate.py`
-was not changed. This packaging patch adds two installed-package checks, taking
-the root suite from 40 to 42 tests.
-
-PR #26 repaired the enterprise test loaders without changing the gate. Those
-seven tests now run under bare `pytest` alongside the 42 root tests. This is a
-test-discovery and harness result; no enterprise-readiness claim is made.
-
-## Inspection path
-
-Run the demo and adversarial invariant verifier:
-
-```bash
-python -m examples.unsafe_email_send
-python scripts/verify_adversarial_invariants.py
-```
-
-The narrow question this repo answers is:
-
-**Can the demonstrated action reach consequence without a valid DecisionRecord?**
-
-Expected answer:
-
-**No.**
-
-## What this proves
-
-On the demonstrated path:
-
-- unsafe consequence can be refused before execution
-- missing authority prevents mutation
-- failed checks produce HOLD / DENY behaviour
-- refusal can produce an auditable receipt when the audit sink accepts the event
-- bypass failure can be tested directly
-
-## What this does not prove
-
-This repository does not prove adoption, certification, standardisation, production readiness, compliance, or path-universal deployment coverage.
-
-It does not prove the wider governance architecture.
-
-It proves only the bounded claim attached to this public proof object.
-
-## Evidence shape
-
-For the demonstrated scenario:
-
-```text
-Execution occurred: false
-Receipt written:    true
-Verdict:            HOLD
-```
-
-## Claim discipline
-
-Claim discipline for this repo is controlled in:
-
-[`docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md`](docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md)
-
-## Related public artefact
-
-Working paper:
-
-**From Policy to Commit: Execution-Boundary Control for Governed AI Systems**
-
-- DOI: https://doi.org/10.5281/zenodo.19980275
-- Zenodo record: https://zenodo.org/records/19980275
-
-## Status
-
-`v0.1.1` — installable bounded public proof surface with complete default test
-discovery.
-
-Small surface. Clear failure mode. Receipts over reassurance.
+Working paper (broader than this package):
+https://doi.org/10.5281/zenodo.19980275
 
 ## License
 
