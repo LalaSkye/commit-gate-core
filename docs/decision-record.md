@@ -1,31 +1,35 @@
-# DecisionRecord Contract
+# DecisionRecord Contract (Shape A)
 
 ## Purpose
 
 A `DecisionRecord` is the smallest authority artefact the commit gate will accept.
 
-It does not describe intent in general. It authorises one exact commit attempt under one exact scope.
+It does not describe intent in general. It authorises one exact payload under one exact scope.
 
-If the record is missing, malformed, expired, replayed, unsigned, incorrectly signed, or scoped to another commit, the gate returns `DENY` and no state mutation occurs.
+The public kernel **authorises**. It does not apply the payload. Authorisation is not execution.
+
+If the record is missing, malformed, expired, replayed, rejected by the configured verifier, or scoped to another payload, the gate refuses. The world is not applied-to by this kernel.
 
 ---
 
 ## Required fields
 
+Field names are schema v1 (`SIGNED_FIELDS`). This document does not add or remove fields.
+
 | Field | Type | Required | Purpose |
 |---|---:|---:|---|
 | `decision_id` | string | yes | Unique identifier for the authority decision |
-| `actor_id` | string | yes | Actor attempting the commit |
+| `actor_id` | string | yes | Actor requesting authorisation |
 | `action` | string | yes | Operation being authorised |
-| `object_id` | string | yes | Target object of the commit |
+| `object_id` | string | yes | Target object |
 | `environment` | string | yes | Execution environment, e.g. `dev`, `staging`, `prod` |
-| `commit_hash` | string | yes | Hash of the exact commit payload being authorised |
-| `verdict` | string | yes | Must be `ALLOW` for execution to proceed |
+| `commit_hash` | string | yes | Hash of the exact payload being authorised (bound inside the gate from `payload_bytes`) |
+| `verdict` | string | yes | Must be `ALLOW` for authorisation to proceed |
 | `policy_version` | string | yes | Policy version under which the decision was issued |
 | `issued_at` | RFC3339 timestamp | yes | Time the decision was issued |
 | `expires_at` | RFC3339 timestamp | yes | Time after which the decision is invalid |
 | `nonce` | string | yes | One-use replay prevention value |
-| `signature` | string | yes | Cryptographic signature over the canonical record payload |
+| `signature` | string | yes | Authenticator slot over the canonical record bytes. Schema v1 keeps this name. The demonstrated verifier is an HMAC-SHA256 lab MAC, not a public-key signature. Ed25519 is specified and not implemented. |
 
 ---
 
@@ -48,6 +52,8 @@ If the record is missing, malformed, expired, replayed, unsigned, incorrectly si
 }
 ```
 
+The `hmac-sha256:` example is a lab MAC encoding, not a signature algorithm claim.
+
 ---
 
 ## Binding rule
@@ -58,51 +64,36 @@ A `DecisionRecord` is valid only for the exact tuple:
 actor_id + action + object_id + environment + commit_hash + policy_version + time_window + nonce
 ```
 
-The gate must not generalise from one valid record to another attempted commit.
-
-Examples:
+`commit_hash` must equal the hash the gate computes from `payload_bytes`.
+The gate must not generalise from one valid record to another attempted payload.
 
 | Scenario | Result |
 |---|---|
-| Same record, same commit hash, unused nonce, valid time window | `ALLOW` |
-| Same record, altered commit payload | `DENY` |
-| Same record, different object | `DENY` |
-| Same record, expired time window | `DENY` |
-| Same record, reused nonce | `DENY` |
-| Same record, different environment | `DENY` |
+| Matching record, matching payload bytes, unused nonce, valid time window | `AUTHORIZED` |
+| Matching record, different payload bytes | `DENY` |
+| Matching record, different object | `DENY` |
+| Matching record, expired time window | `DENY` |
+| Matching record, reused nonce | `DENY` |
+| Matching record, different environment | `DENY` |
+| `commit_hash` without `payload_bytes` | `DENY:COMMIT_HASH_ONLY_FORBIDDEN` |
 
 ---
 
-## Signature payload
+## Authenticator payload
 
-The signature is calculated over the canonical record payload excluding the `signature` field itself.
-
-Canonicalisation rules:
-
-1. Include every required field except `signature`.
-2. Sort keys lexicographically.
-3. Use compact JSON separators.
-4. Do not infer missing fields.
-5. Do not coerce types silently.
+The authenticator is calculated over `canonical_bytes(record)`: required fields except `signature`, keys sorted, compact JSON separators.
 
 A missing field is a structural failure, not a defaultable value.
+
+The configured verifier decides accept/refuse. Tests use HMAC-SHA256. That is a lab MAC. Ed25519 is not implemented.
 
 ---
 
 ## Verdict rule
 
-Only `ALLOW` can authorise mutation.
+Only record verdict `ALLOW` can continue evaluation toward `AUTHORIZED`.
 
-All other verdicts are non-authorising:
-
-| Verdict | Gate result |
-|---|---|
-| `ALLOW` | Continue evaluation |
-| `HOLD` | `DENY` |
-| `DENY` | `DENY` |
-| Unknown verdict | `DENY` |
-
-The gate may expose `HOLD` or `DENY` as reason codes, but the execution outcome remains blocked.
+All other verdicts are non-authorising. The kernel still does not apply a payload.
 
 ---
 
@@ -114,9 +105,7 @@ The gate accepts a record only when:
 issued_at <= now <= expires_at
 ```
 
-If `issued_at` is in the future, the record is invalid.
-
-If `expires_at` has passed, the record is invalid.
+relative to the **injected** clock. That does not protect against a compromised clock.
 
 Invalid timestamp format is a structural failure.
 
@@ -124,28 +113,21 @@ Invalid timestamp format is a structural failure.
 
 ## Replay rule
 
-The nonce is consumed only after all validation checks pass and immediately before mutation is attempted.
+The nonce is consumed only after validation passes, on the authorise path.
+Consumption is not permission to apply a payload.
 
-A consumed nonce cannot authorise another mutation.
+If the authorised audit append fails, authorisation is refused and nonce rollback is attempted. Rollback failure has a separate error code.
 
-If the mutation fails after nonce consumption, the caller must obtain a new `DecisionRecord`.
+A consumed nonce cannot authorise again on this in-memory ledger. The ledger is not durable.
 
 ---
 
 ## Out of scope
 
-This contract does not define:
-
-- key issuance
-- human approval workflow
-- upstream policy reasoning
-- multi-agent orchestration
-- transport security
-
-Those belong outside the core gate.
+This contract does not define key issuance, human approval, upstream policy, orchestration, transport security, world application, or crash-safe persistence.
 
 ---
 
 ## Contract status
 
-`LOCK CANDIDATE` — this document defines the first public contract shape for `commit-gate-core`.
+Shape A alignment of the public contract text. Schema field names remain v1.

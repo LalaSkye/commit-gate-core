@@ -1,13 +1,9 @@
-"""
-Scenario runners for bounded, synthetic execution-boundary evidence.
+"""Refusal-only synthetic scenario runner.
 
-Scope:
 NON_EXEC / REVIEW_ONLY.
 
-Claim boundary:
-These runners demonstrate synthetic refusal behaviour on demonstrated paths only.
-They do not prove production enforcement, external system control, compliance,
-certification, deployment, adoption, or path-universal coverage.
+Every path leaves caller-supplied state unchanged and reports
+downstream_send=False. There is no ALLOW / send branch.
 """
 
 from __future__ import annotations
@@ -70,8 +66,7 @@ def write_receipt(attempt: Dict[str, Any], missing_field: str, state_hash: str) 
         "decision": "DENY",
         "verdict": "DENY",
         "refusal_reason": (
-            f"{missing_field} absent — no valid DecisionRecord for this actor, "
-            "action_type, recipient_scope, and payload at gate time"
+            f"{missing_field} — this runner never applies payloads"
         ),
         "issued_at": issued_at,
         "refused_at": issued_at,
@@ -81,53 +76,41 @@ def write_receipt(attempt: Dict[str, Any], missing_field: str, state_hash: str) 
         "before_state_hash": state_hash,
         "after_state_hash": state_hash,
         "evidence": [
-            "missing authority_token",
+            "refusal-only runner",
             "downstream_send=false",
-            "before_state_hash == after_state_hash",
+            "caller state unchanged",
         ],
     }
-    receipt["receipt_hash"] = stable_hash(receipt)
+    receipt["receipt_hash"] = stable_hash({k: v for k, v in receipt.items() if k != "receipt_hash"})
     return receipt
 
 
 def commit_gate(attempt: Dict[str, Any], state: Dict[str, Any]) -> Dict[str, Any]:
-    """STRUCTURE_FIRST, FIRST_FAIL synthetic CommitGate."""
+    """STRUCTURE_FIRST refusal runner. Never sends. Never writes caller state."""
     state_before = copy.deepcopy(state)
     before_state_hash = stable_hash(state_before)
 
+    missing = None
     for field in REQUIRED_FIELDS:
         if field not in attempt or attempt[field] in (None, ""):
-            receipt = write_receipt(attempt, field, before_state_hash)
-            state["audit_receipts"].append(receipt)
-            return {
-                "decision": "DENY",
-                "verdict": "DENY",
-                "missing_field": field,
-                "downstream_send": False,
-                "receipt_written": True,
-                "receipt": receipt,
-                "receipt_hash": receipt["receipt_hash"],
-                "sent_messages": list(state["sent_messages"]),
-                "before_state_hash": before_state_hash,
-                "after_state_hash": before_state_hash,
-                "state_mutated": False,
-            }
+            missing = field
+            break
+    if missing is None:
+        missing = "executor_removed"
 
-    # ALLOW branch is intentionally not reached by ESP-001.
-    state["sent_messages"].append(copy.deepcopy(attempt.get("payload")))
-    after_state_hash = stable_hash(state)
+    receipt = write_receipt(attempt, missing, before_state_hash)
     return {
-        "decision": "ALLOW",
-        "verdict": "ALLOW",
-        "missing_field": None,
-        "downstream_send": True,
-        "receipt_written": False,
-        "receipt": None,
-        "receipt_hash": None,
-        "sent_messages": list(state["sent_messages"]),
+        "decision": "DENY",
+        "verdict": "DENY",
+        "missing_field": missing,
+        "downstream_send": False,
+        "receipt_written": True,
+        "receipt": receipt,
+        "receipt_hash": receipt["receipt_hash"],
+        "sent_messages": list(state_before["sent_messages"]),
         "before_state_hash": before_state_hash,
-        "after_state_hash": after_state_hash,
-        "state_mutated": before_state_hash != after_state_hash,
+        "after_state_hash": before_state_hash,
+        "state_mutated": False,
     }
 
 
