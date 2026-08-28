@@ -1,7 +1,7 @@
 """Public package surface for commit-gate-core.
 
 Promoted path: CommitGate.authorize / Authorizer.authorize
-TwoPhaseCommit.apply is experimental and is not exported.
+TwoPhaseCommit lives under experimental/ and is not a package module.
 """
 
 from .authorize import AuthorizationResult, Authorizer, payload_hash
