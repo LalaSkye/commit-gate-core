@@ -1,8 +1,6 @@
 # Commit Gate Core
 
-**PR #31 (`feat/authorize-only`) is open and unmerged. Version `0.2.0a1` is
-unreleased.** Default branch `main` is still `v0.1.1`. This README describes
-the authorize-only kernel on that PR, not the published tag.
+`commit-gate-core` 0.2.0a1 is an unreleased authorize-only kernel on `main`. It hashes caller-supplied `payload_bytes` inside the gate and checks the bound DecisionRecord for verdict, scope, policy version, time window, verifier result and nonce freshness. It returns authorisation or refusal; it does not apply the payload or invoke `mutation_callback`.
 
 Research map: https://lalaskye.github.io/inspection-surface/
 
@@ -46,7 +44,7 @@ Two-phase apply lives under `experimental/` and is not a public export.
 
 ## 3. One local command
 
-From a clone of `feat/authorize-only`:
+From a clone of `main`:
 
 ```bash
 PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
