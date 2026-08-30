@@ -1,66 +1,50 @@
 # Repository Receipt
 
-Date: 2026-05-11
+Date: 2026-08-30
+
 Repository: `LalaSkye/commit-gate-core`
-Evidence class: path-local demonstration / bounded artefact / working paper support surface
 
-## Object
+Object: unreleased `0.2.0a1` authorize-only successor on `main`
 
-`commit-gate-core` is a reference kernel for execution-boundary governance.
+Evidence class: bounded in-process reference kernel
 
-It demonstrates a path-local commit gate where a consequence-producing action must present a valid signed, scoped, unexpired, unreplayed `DecisionRecord` before mutation is allowed.
+## Observed function
 
-## What this repository does
+The current public kernel accepts a DecisionRecord, caller-supplied
+`payload_bytes` and exact scope fields. It hashes the payload inside the gate,
+evaluates the configured checks and returns an authorisation or refusal
+result. It does not apply the payload.
 
-- Enforces a fail-closed check at a demonstrated commit boundary.
-- Blocks execution when authority, scope, expiry, replay, or admissibility checks fail.
-- Emits refusal / denial evidence for blocked paths where the audit sink accepts the event.
-- Provides a runnable inspection surface for the demonstrated path.
-- Supports the working paper: *From Policy to Commit: Execution-Boundary Control for Governed AI Systems*.
+## Runnable inspection
 
-## What this repository does not do
+```bash
+PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
+```
 
-This repository does not claim:
+The inspected tests cover authorize-without-mutate, payload/hash binding,
+hash-only refusal, typed failure paths and audit-failure nonce rollback using
+in-memory test objects.
 
-- adoption
-- certification
-- compliance
-- endorsement
-- production readiness
-- field validation
-- standardisation
-- path-universal coverage
-- tamper-proof audit evidence
-- that all possible downstream or side-channel routes are controlled
+## Exact limits
 
-## Proof surface
-
-Useful inspection questions:
-
-1. Was an action attempted?
-2. Was a valid `DecisionRecord` present?
-3. Was the action within authorised scope?
-4. Was the authority fresh and unreplayed?
-5. Was the state transition permitted before mutation?
-6. Was a refusal receipt produced when the action was blocked?
+- `v0.1.1` remains the latest tagged release and contains the historical
+  mutation-callback object. It is not this successor.
+- The demonstrated verifier is an HMAC-SHA256 lab MAC, not Ed25519.
+- Nonce and audit durability are not established.
+- An external caller can ignore the verdict and invoke another consequence
+  path. This repository does not prevent that.
+- The repository does not establish production readiness, deployment,
+  compliance, certification, adoption, safety or path-universal enforcement.
 
 ## Related evidence
 
-- README: `README.md`
-- Claim register: `docs/governance/ADMISSIBLE_CLAIM_REGISTER_v1.md`
-- Refusal receipt note: `docs/refusal-receipt-v0.1.md`
-- Working paper DOI: https://doi.org/10.5281/zenodo.19980275
-
-## Claim boundary
-
-Allowed claim:
-
-> This repository demonstrates a bounded, path-local execution-control surface that can refuse a consequence-producing action before mutation when required authority conditions are not met.
-
-Not allowed:
-
-> This repository proves adoption, compliance, certification, production readiness, or universal runtime governance coverage.
+- Current object and command: `README.md`
+- Claim ceiling: `CLAIM_BOUNDARY.md`
+- Current invariant: `docs/invariant.md`
+- Authorize-only cut: `docs/governance/SHAPE_A_AUTHORIZE.md`
+- Historical tagged-release notes: `RELEASE_NOTES.md`
 
 ## Receipt line
 
-No receipt, no proof. No scope, no build. No overclaim, no wobble.
+Payload-bound authorisation is evidenced. Payload application and external
+enforcement are not claimed.

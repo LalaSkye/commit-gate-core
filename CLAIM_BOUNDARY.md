@@ -1,73 +1,56 @@
 # Claim Boundary
 
-Date: 2026-05-11
+Date: 2026-08-30
+
 Repository: `LalaSkye/commit-gate-core`
 
-## Purpose
+Current object: unreleased `0.2.0a1` authorize-only successor on `main`
 
-This file keeps the repository's public claim surface bounded, inspectable, and evidence-led.
+## One admissible sentence
 
-The repository is a bounded artefact. It is not a universal governance claim.
+> `commit-gate-core` binds caller-supplied payload bytes to a DecisionRecord,
+> evaluates the configured checks, and returns authorisation or refusal. It
+> does not apply the payload.
 
-## Allowed claims
+## What the demonstrated tests establish
 
-This repository may be described as:
+On the tested in-process path:
 
-- a bounded artefact
-- a path-local demonstration
-- an execution-boundary control surface
-- a working paper support surface
-- a runnable inspection surface
-- a refusal-receipt demonstration
-- a testable commit-gate primitive
+- the payload hash is computed inside `authorize`;
+- a caller-supplied hash without payload bytes is refused;
+- scope, verdict, policy version, time window, verifier result and nonce state
+  are checked;
+- the demonstrated verifier is an HMAC-SHA256 lab MAC;
+- an accepted record returns an authorisation ticket;
+- neither `authorize` nor the deprecated `execute` wrapper invokes
+  `mutation_callback`;
+- the tested nonce and audit objects are in-memory implementations.
 
-## Mechanism claim
+## Release inheritance
 
-Safe wording:
-
-> `commit-gate-core` demonstrates a path-local commit gate: a consequence-producing action cannot execute on the demonstrated path unless a valid signed, scoped, unexpired, unreplayed `DecisionRecord` authorises the exact commit.
-
-## Evidence claim
-
-Safe wording:
-
-> The repository provides code, examples, tests, and receipt-shaped evidence for the demonstrated path.
+`v0.1.1` is the latest tagged release and is a different object: its
+`CommitGate.execute` path can invoke a mutation callback. The authorize-only
+successor is unreleased. Claims and test receipts from either object must not
+be inherited by the other.
 
 ## Forbidden claims
 
-Do not claim:
+Do not claim that this repository:
 
-- adoption
-- validation
-- endorsement
-- certification
-- compliance
-- production readiness
-- field impact
-- proven market demand
-- path-universal coverage
-- standardisation
-- first / category-defining status
-- tamper-proof audit custody
-- control over all possible routes to consequence
+- applies payloads or physically prevents an external caller from bypassing it;
+- is a production gate or a non-bypassable enforcement boundary;
+- implements Ed25519, durable nonce storage or atomic cross-system commit;
+- proves safety, deployment, adoption, compliance, certification or
+  path-universal coverage;
+- establishes category priority, copying or superiority over another project.
 
 ## Comparison boundary
 
-Do not use this repository to attack, rank, or collapse other projects.
-
-If another project is relevant, treat it as:
-
-- a neighbour
-- a research lead
-- a separate artefact lane
-- an external comparison subject requiring direct inspection
-
-No competitor commentary belongs in this repo unless it is part of a bounded, evidence-led comparison document.
-
-## Public sentence
-
-> This is a small enforcement primitive for inspecting where consequence is allowed or refused before mutation.
+Another project requires its own directly inspected artefact and dated
+side-by-side evidence. Shared vocabulary or later publication dates do not
+establish copying.
 
 ## Stop line
 
-If the evidence is not in the repo, paper, release, test, or receipt, do not claim it.
+Authorisation is the end of this kernel's claim. Application and external
+enforcement belong to a separately evidenced object.

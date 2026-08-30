@@ -2,6 +2,18 @@
 
 `commit-gate-core` 0.2.0a1 is an unreleased authorize-only kernel on `main`. It hashes caller-supplied `payload_bytes` inside the gate and checks the bound DecisionRecord for verdict, scope, policy version, time window, verifier result and nonce freshness. It returns authorisation or refusal; it does not apply the payload or invoke `mutation_callback`.
 
+## Release boundary
+
+| Object | Status | Behaviour |
+| --- | --- | --- |
+| `v0.1.1` | Latest tagged release | Historical predecessor. `CommitGate.execute` can invoke a caller-supplied mutation callback. It is not the authorize-only kernel described below. |
+| `main` / `0.2.0a1` | Unreleased successor | Binds exact payload bytes and returns authorisation or refusal. It never applies the payload. |
+
+The authorize-only successor entered `main` in merge commit
+[`c0fbc5f`](https://github.com/LalaSkye/commit-gate-core/commit/c0fbc5fb425291a48bc2aed590dfbb66f0c77785).
+GitHub's **Latest** badge therefore identifies the latest release, not the
+function currently present on `main`.
+
 Research map: https://lalaskye.github.io/inspection-surface/
 
 Canonical message format: [`docs/governance/CANONICAL_BYTES_AND_ED25519_V1.md`](docs/governance/CANONICAL_BYTES_AND_ED25519_V1.md)
@@ -54,7 +66,7 @@ Expected: those files pass. They prove authorise-without-mutate, hash-only
 refusal, payload binding inside `authorize`, and audit-failure rollback with
 the in-memory test ledger.
 
-Do not use `pip install …@v0.1.1` as evidence of this kernel.
+Do not install or cite `v0.1.1` as evidence of the authorize-only kernel.
 
 ## 4. What it does not claim
 

@@ -4,6 +4,30 @@ This changelog records human-readable evidence changes for `LalaSkye/commit-gate
 
 Git history remains the source of commit-level truth. This file provides a court-readable / buyer-readable summary layer.
 
+## 2026-08-28
+
+### 0.2.0a1 — unreleased authorize-only successor on `main`
+
+- Added `authorize(record, payload_bytes, ...)` as the promoted public path.
+- Bound exact payload bytes by hashing them inside the authorisation call.
+- Changed deprecated `execute` into an authorize-only wrapper.
+- Stopped both public paths from invoking `mutation_callback`.
+- Refused hash-only calls without the payload bytes.
+- Kept the two-phase apply experiment outside the installable package and
+  outside the public export surface.
+
+Release boundary:
+
+- `v0.1.1` remains the latest tagged release and contains the earlier
+  mutation-callback object.
+- `0.2.0a1` is unreleased. Installing `v0.1.1` does not install this successor.
+
+Claim boundary:
+
+- This establishes payload-bound authorisation on the tested in-process path.
+- It does not establish payload application, downstream non-bypassability,
+  durable persistence, Ed25519, production readiness or external enforcement.
+
 ## 2026-08-05
 
 ### v0.1.1 — complete-suite verification

@@ -1,13 +1,22 @@
 # Governance Surface
 
+## Current inheritance boundary
+
+The root `README.md`, `CLAIM_BOUNDARY.md`, `RECEIPT.md`,
+`docs/invariant.md`, and `SHAPE_A_AUTHORIZE.md` describe the current
+authorize-only object. Older governance files are preserved records and may
+contain architecture proposals or release-era language. They do not inherit
+standing into `0.2.0a1` unless the current claim boundary explicitly admits
+them.
+
 This folder contains the governance control surface for `commit-gate-core`.
 
 Each file has one job.
 
 | File | Governs |
 | --- | --- |
-| `ADMISSIBLE_CLAIM_REGISTER_v1.md` | What may be claimed about the repo and its primitives. |
-| `INVARIANTS.md` | What must remain true. |
+| `ADMISSIBLE_CLAIM_REGISTER_v1.md` | Superseded positioning record; not current claim authority. |
+| `INVARIANTS.md` | Wider architecture candidates; not established by this kernel. |
 | `BUILD_RECEIPTS.md` | What has changed and what claim boundary is held. |
 | `CHANGE_CONTROL.md` | When a change requires a receipt or claim-boundary review. |
 | `GOVERNANCE_CLASSES.md` | Which governance trigger classes are permitted. Changes without a Mechanism change trigger are governance violations. |

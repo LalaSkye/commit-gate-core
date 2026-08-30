@@ -1,9 +1,28 @@
 # ALVIANTECH — Admissible Claim Register v1.0
 
-**Status:** ACTIVE  
-**Class:** POSITIONING_CONTROL  
-**Scope:** Public claims, repository README files, papers, demos, standards submissions, and governance-facing writing  
-**Purpose:** Lock the defensible claim surface. Prevent overclaim. Prevent underclaim through excessive hedging.
+**Status:** HISTORICAL / SUPERSEDED
+
+**Class:** NON-CANONICAL POSITIONING RECORD
+
+**Scope:** Preserved history only
+
+**Purpose:** Record an earlier positioning proposal without granting it current claim authority.
+
+## Successor boundary — 2026-08-30
+
+This register does not govern the current public claim for
+`commit-gate-core`. It contains architecture and market-positioning proposals
+that are not established by the authorize-only kernel.
+
+The active repository claim is narrower:
+
+> The unreleased `0.2.0a1` kernel binds exact payload bytes to a
+> DecisionRecord and returns authorisation or refusal. It does not apply the
+> payload.
+
+No sentence below may be used as evidence that this repository prevents
+external execution, implements the wider AlvianTech architecture, is unique in
+the field, or has production standing. See the root `CLAIM_BOUNDARY.md`.
 
 ---
 
@@ -13,7 +32,8 @@ The field is not empty.
 
 Runtime governance, delegation, audit trails, deterministic gates, and admissibility language are active areas of work. ALVIANTECH public material must not claim that nobody is building runtime agent governance or execution gating.
 
-Permitted comparison shape:
+Historical proposed comparison shape — **not currently admissible from this
+repository**:
 
 > No current product or public artefact appears to combine delegated authority, scope monotonicity, closed typed exits, cross-surface contradiction testing, sealed receipts, and a fail-closed execution boundary as one commit-boundary primitive.
 
@@ -21,7 +41,7 @@ This is a bounded comparison claim, not an exclusivity claim.
 
 ---
 
-## Core invariant
+## Historical proposed core invariant
 
 > **No unresolved interpretive state may bind directly into execution.**
 
@@ -31,7 +51,7 @@ It is intended as an executable invariant, not a philosophical claim.
 
 ---
 
-## Positioning sentence
+## Historical proposed positioning sentence
 
 > ALVIANTECH builds runtime admissibility infrastructure for delegated AI systems, preventing unresolved interpretive states from binding into executable consequence.
 
@@ -96,7 +116,7 @@ Do not claim:
 
 ---
 
-## Safe claim territory
+## Historical proposed claim territory — not active
 
 The following phrases are admissible when used with appropriate scope boundaries:
 
@@ -113,7 +133,7 @@ The following phrases are admissible when used with appropriate scope boundaries
 
 ## Addendum A — Public Surface Rule v1.0
 
-**Status:** ACTIVE  
+**Status:** HISTORICAL / SUPERSEDED
 **Class:** POSITIONING_CONTROL  
 **Purpose:** Prevent conceptual overload by assigning one primary mechanism to each public surface.
 
