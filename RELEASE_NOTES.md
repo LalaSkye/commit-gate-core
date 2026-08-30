@@ -1,5 +1,10 @@
 # commit-gate-core v0.1.1
 
+> **Historical release object.** `v0.1.1` is still the latest tagged release
+> and its `CommitGate.execute` path can invoke a caller-supplied mutation
+> callback. Current `main` is the different, unreleased `0.2.0a1`
+> authorize-only successor. These notes do not describe `main`.
+
 Patch release widening default test discovery to the complete verified suite.
 
 ## Included

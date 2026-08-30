@@ -1,5 +1,10 @@
 # Proof Pack v0.1 — Authority-Before-Mutation
 
+> **Historical `v0.1.1` proof object.** This pack describes the tagged
+> mutation-callback predecessor. It is not evidence for the unreleased
+> authorize-only kernel on `main`, and its mutation claims must not be
+> inherited by that successor.
+
 Bounded public proof that, on the demonstrated CommitGate path, state
 mutation is refused unless the attached `DecisionRecord` is valid,
 scoped, unexpired, signed, and unreplayed — and that every refusal
@@ -10,6 +15,7 @@ produces an inspectable receipt.
 ```bash
 git clone https://github.com/LalaSkye/commit-gate-core.git
 cd commit-gate-core
+git checkout v0.1.1
 python3 scripts/run_proof_pack.py
 python3 scripts/verify_receipt.py
 ```
