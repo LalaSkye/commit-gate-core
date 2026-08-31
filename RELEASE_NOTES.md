@@ -1,37 +1,52 @@
-# commit-gate-core v0.1.1
+# commit-gate-core v0.2.0
 
-> **Historical release object.** `v0.1.1` is still the latest tagged release
-> and its `CommitGate.execute` path can invoke a caller-supplied mutation
-> callback. Current `main` is the different, unreleased `0.2.0a1`
-> authorize-only successor. These notes do not describe `main`.
+> **Unreleased prepare object on this branch.** These notes describe the
+> authorize-only kernel. They must not be published until a separate B2
+> ticket tags `v0.2.0` on the successor SHA. GitHub **Latest** remains
+> `v0.1.1`, whose `execute()` path can invoke `mutation_callback`.
 
-Patch release widening default test discovery to the complete verified suite.
+Authorize-only successor. The gate hashes caller-supplied `payload_bytes`
+inside `authorize`, checks the bound DecisionRecord, and returns
+authorisation or refusal. It does not apply the payload.
+`mutation_callback` is never invoked. `execute` is a deprecated wrapper
+that only calls `authorize` and requires `payload_bytes`.
 
 ## Included
 
-- bare `pytest` now discovers both the root and enterprise-shaped test surfaces
-- complete-suite result: 49 passed, 0 failed
-- package and tagged-release workflows run the same complete suite
-- package version and public `__version__` advanced to `0.1.1`
-- no change to `src/commit_gate_core/gate.py`
+- promoted public path: `authorize(record, payload_bytes, ...)`
+- payload hash bound inside the gate; hash-only calls refused
+- `execute` no longer invokes `mutation_callback`
+- package version and public `__version__` set to `0.2.0`
+- Package and Release workflow version asserts set to `0.2.0`
 
-## Install
+## Not included
+
+- no GitHub tag or release in this commit
+- Ed25519 (specified, not implemented)
+- durable nonce or audit storage
+- production readiness, compliance, or path-universal enforcement
+
+## Install (after B2 only)
+
+Until `/releases/latest` is `v0.2.0`, install the historical Latest tag:
 
 ```bash
 python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.1"
 ```
 
-## Verify
+That install is the mutation-callback object. Do not cite it as this kernel.
+
+## Verify (this tree, unreleased)
 
 ```bash
-python -c "from commit_gate_core import CommitGate, __version__; print(__version__)"
+PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
+python -c "from commit_gate_core import __version__; print(__version__)"
 ```
 
-Expected output: `0.1.1`.
+Expected version on this tree: `0.2.0`.
 
 ## Claim boundary
 
-This release makes the existing bounded code easier to install and inspect.
-It does not establish production readiness, enterprise deployment, compliance,
-certification, path-universal governance, external validation, or a managed
-commercial deliverable.
+These notes describe authorize-only behaviour on this tree. They do not
+establish that GitHub Latest is this tree until B2 verifies
+`/releases/latest` is `v0.2.0` and this file is the published body.

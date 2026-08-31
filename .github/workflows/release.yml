@@ -39,7 +39,7 @@ jobs:
           from commit_gate_core.scenario_runner import run_scenario_001
 
           assert CommitGate.__name__ == "CommitGate"
-          assert __version__ == "0.2.0a1"
+          assert __version__ == "0.2.0"
           assert run_scenario_001()["downstream_send"] is False
           print("Release package: PASS")
           PY

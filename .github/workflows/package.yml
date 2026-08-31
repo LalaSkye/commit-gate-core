@@ -41,7 +41,7 @@ jobs:
 
           assert CommitGate.__name__ == "CommitGate"
           assert GateResult.__name__ == "GateResult"
-          assert __version__ == "0.2.0a1"
+          assert __version__ == "0.2.0"
           assert run_scenario_001()["downstream_send"] is False
           print("Installed package: PASS")
           PY
