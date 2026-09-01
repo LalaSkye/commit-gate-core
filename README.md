@@ -1,18 +1,26 @@
 # Commit Gate Core
 
-`commit-gate-core` 0.2.0a1 is an unreleased authorize-only kernel on `main`. It hashes caller-supplied `payload_bytes` inside the gate and checks the bound DecisionRecord for verdict, scope, policy version, time window, verifier result and nonce freshness. It returns authorisation or refusal; it does not apply the payload or invoke `mutation_callback`.
+`commit-gate-core` on this branch is **unreleased v0.2.0 prepare**: an
+authorize-only kernel. It hashes caller-supplied `payload_bytes` inside the
+gate and checks the bound DecisionRecord for verdict, scope, policy version,
+time window, verifier result and nonce freshness. It returns authorisation or
+refusal; it does not apply the payload or invoke `mutation_callback`.
+
+GitHub **Latest** is still `v0.1.1`. That tag can invoke `mutation_callback`.
+This tree is not Latest until a separate B2 ticket tags `v0.2.0` and
+`/releases/latest` resolves to that tag.
 
 ## Release boundary
 
 | Object | Status | Behaviour |
 | --- | --- | --- |
 | `v0.1.1` | Latest tagged release | Historical predecessor. `CommitGate.execute` can invoke a caller-supplied mutation callback. It is not the authorize-only kernel described below. |
-| `main` / `0.2.0a1` | Unreleased successor | Binds exact payload bytes and returns authorisation or refusal. It never applies the payload. |
+| `main` / this branch / `0.2.0` | Unreleased prepare | Binds exact payload bytes and returns authorisation or refusal. It never applies the payload. Not Latest. |
 
 The authorize-only successor entered `main` in merge commit
 [`c0fbc5f`](https://github.com/LalaSkye/commit-gate-core/commit/c0fbc5fb425291a48bc2aed590dfbb66f0c77785).
 GitHub's **Latest** badge therefore identifies the latest release, not the
-function currently present on `main`.
+function currently present on this tree.
 
 Research map: https://lalaskye.github.io/inspection-surface/
 
@@ -56,7 +64,7 @@ Two-phase apply lives under `experimental/` and is not a public export.
 
 ## 3. One local command
 
-From a clone of `main`:
+From a clone of this tree:
 
 ```bash
 PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
@@ -67,6 +75,14 @@ refusal, payload binding inside `authorize`, and audit-failure rollback with
 the in-memory test ledger.
 
 Do not install or cite `v0.1.1` as evidence of the authorize-only kernel.
+
+Install-from-tag until B2:
+
+```bash
+python -m pip install "commit-gate-core @ git+https://github.com/LalaSkye/commit-gate-core.git@v0.1.1"
+```
+
+That command installs the historical Latest object, not this kernel.
 
 ## 4. What it does not claim
 
@@ -79,6 +95,7 @@ It does not claim that Ed25519 is implemented.
 It does not claim certificates or algorithm agility.
 It does not claim that the lab MAC is a signature.
 It does not claim that `start-here` is this kernel.
+It does not claim that GitHub Latest is this tree.
 
 Working paper (broader than this package):
 https://doi.org/10.5281/zenodo.19980275

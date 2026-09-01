@@ -17,7 +17,7 @@ from .gate import (
 )
 from .hmac_mac import HmacSha256Verifier
 
-__version__ = "0.2.0a1"
+__version__ = "0.2.0"
 
 __all__ = [
     "AuditSink",

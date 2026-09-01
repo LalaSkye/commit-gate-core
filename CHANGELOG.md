@@ -4,6 +4,30 @@ This changelog records human-readable evidence changes for `LalaSkye/commit-gate
 
 Git history remains the source of commit-level truth. This file provides a court-readable / buyer-readable summary layer.
 
+## 2026-08-31
+
+### 0.2.0 — unreleased prepare (B1, no tag)
+
+- Set package version and `__version__` to `0.2.0`.
+- Pointed Package and Release workflow version asserts at `0.2.0`.
+- Replaced `RELEASE_NOTES.md` with authorize-only v0.2.0 notes.
+- Left GitHub Latest at `v0.1.1`. No tag in this change.
+- Did not edit `release-v0.1.1.yml` or `bootstrap-v0.1.0.yml`.
+- Did not edit the GitHub repository description.
+
+Release boundary:
+
+- `v0.1.1` remains the latest tagged release and contains the earlier
+  mutation-callback object.
+- `0.2.0` on this branch is unreleased prepare. Installing `v0.1.1` does not
+  install this successor.
+
+Claim boundary:
+
+- This establishes version-pin alignment for a later B2 tag ticket.
+- It does not establish that Latest is authorize-only.
+- It does not establish production readiness, Ed25519, or external enforcement.
+
 ## 2026-08-28
 
 ### 0.2.0a1 — unreleased authorize-only successor on `main`
