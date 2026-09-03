@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - "v*"
+      - "v0.2.0"
 
 permissions:
   contents: write
@@ -20,6 +20,38 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
+
+      - name: Verify release identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_tag="v0.2.0"
+
+          if [[ "${GITHUB_REF_TYPE}" != "tag" || "${GITHUB_REF_NAME}" != "${expected_tag}" ]]; then
+            echo "Ref mismatch: expected tag ${expected_tag}, got ${GITHUB_REF_TYPE} ${GITHUB_REF_NAME}" >&2
+            exit 1
+          fi
+
+          package_version="$(python - <<'PY'
+          import pathlib
+          import tomllib
+
+          data = tomllib.loads(pathlib.Path("pyproject.toml").read_text(encoding="utf-8"))
+          print(data["project"]["version"])
+          PY
+          )"
+
+          if [[ "v${package_version}" != "${expected_tag}" ]]; then
+            echo "Package version mismatch: expected ${expected_tag}, got v${package_version}" >&2
+            exit 1
+          fi
+
+          first_line="$(head -n 1 RELEASE_NOTES.md)"
+          expected_heading="# commit-gate-core ${expected_tag}"
+          if [[ "${first_line}" != "${expected_heading}" ]]; then
+            echo "Release notes mismatch: expected '${expected_heading}', got '${first_line}'" >&2
+            exit 1
+          fi
 
       - name: Install build tools
         run: python -m pip install --upgrade build pytest
