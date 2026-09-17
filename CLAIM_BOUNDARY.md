@@ -4,7 +4,7 @@ Date: 2026-08-30
 
 Repository: `LalaSkye/commit-gate-core`
 
-Current object: unreleased `0.2.0a1` authorize-only successor on `main`
+Current object: unreleased `0.2.0` prepare; authorize-only successor on `main`
 
 ## One admissible sentence
 
