@@ -21,7 +21,8 @@ On the tested in-process path:
 - scope, verdict, policy version, time window, verifier result and nonce state
   are checked;
 - the demonstrated verifier is an HMAC-SHA256 lab MAC;
-- an accepted record returns an authorisation ticket;
+- an accepted record returns a read-only in-memory authorisation ticket that
+  carries the frozen signed scope and exact payload hash;
 - neither `authorize` nor the deprecated `execute` wrapper invokes
   `mutation_callback`;
 - the tested nonce and audit objects are in-memory implementations.
@@ -40,6 +41,7 @@ Do not claim that this repository:
 - applies payloads or physically prevents an external caller from bypassing it;
 - is a production gate or a non-bypassable enforcement boundary;
 - implements Ed25519, durable nonce storage or atomic cross-system commit;
+- makes an authorisation ticket an executor capability or proof of consequence;
 - proves safety, deployment, adoption, compliance, certification or
   path-universal coverage;
 - establishes category priority, copying or superiority over another project.
