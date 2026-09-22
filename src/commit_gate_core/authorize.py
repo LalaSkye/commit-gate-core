@@ -71,6 +71,8 @@ class Authorizer:
         if record is None:
             return self._refuse("DENY:NO_DECISION_RECORD", None, None, expected_hash, attempted)
 
+        record = dict(record)
+
         error = self._structural_error(record)
         if error:
             did = record.get("decision_id") if isinstance(record.get("decision_id"), str) else None
