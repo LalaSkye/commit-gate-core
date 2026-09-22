@@ -27,11 +27,12 @@ class InMemoryNonceLedger:
     def contains(self, nonce: str) -> bool:
         return nonce in self.used
 
-    def consume(self, nonce: str, decision_id: str) -> None:
+    def consume(self, nonce: str, decision_id: str) -> bool:
         self.consume_calls += 1
         if nonce in self.used:
-            raise RuntimeError("nonce already consumed")
+            return False
         self.used.add(nonce)
+        return True
 
     def rollback(self, nonce: str, decision_id: str) -> None:
         self.used.discard(nonce)

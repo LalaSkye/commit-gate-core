@@ -116,9 +116,15 @@ Invalid timestamp format is a structural failure.
 The nonce is consumed only after validation passes, on the authorise path.
 Consumption is not permission to apply a payload.
 
-If the authorised audit append fails, authorisation is refused and nonce rollback is attempted. Rollback failure has a separate error code.
+The authorisation decision does not use a separate `contains`-then-`consume`
+sequence. `NonceLedger.consume(nonce, decision_id)` is the one-use decision
+point and is required to be atomic: exactly one concurrent caller may receive
+`True` for a nonce; later callers receive `False`.
 
-A consumed nonce cannot authorise again on this in-memory ledger. The ledger is not durable.
+If the authorised audit append fails, authorisation is refused and nonce rollback is attempted. Rollback must release only the reservation still owned by that `decision_id`. Rollback failure has a separate error code.
+
+This contract requires atomicity from the injected nonce ledger; it does not
+itself provide crash-safe, durable, or distributed nonce storage.
 
 ---
 

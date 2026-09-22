@@ -30,8 +30,11 @@ class InMemoryNonceLedger:
     def contains(self, nonce: str) -> bool:
         return nonce in self.consumed
 
-    def consume(self, nonce: str, decision_id: str) -> None:
+    def consume(self, nonce: str, decision_id: str) -> bool:
+        if nonce in self.consumed:
+            return False
         self.consumed[nonce] = decision_id
+        return True
 
     def rollback(self, nonce: str, decision_id: str) -> None:
         if self.consumed.get(nonce) == decision_id:

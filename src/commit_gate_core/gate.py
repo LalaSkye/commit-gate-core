@@ -55,12 +55,19 @@ class SignatureVerifier(Protocol):
 
 class NonceLedger(Protocol):
     def contains(self, nonce: str) -> bool:
+        """Observational helper only; authorisation must not pre-check with it."""
         ...
 
-    def consume(self, nonce: str, decision_id: str) -> None:
+    def consume(self, nonce: str, decision_id: str) -> bool:
+        """Atomically reserve nonce for decision_id.
+
+        Return True only for the call that wins the one-use reservation.
+        Return False when the nonce is already reserved or consumed.
+        """
         ...
 
     def rollback(self, nonce: str, decision_id: str) -> None:
+        """Release only a reservation still owned by decision_id."""
         ...
 
 
