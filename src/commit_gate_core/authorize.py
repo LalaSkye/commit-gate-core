@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
 from datetime import datetime, timezone
+from types import MappingProxyType
 from typing import Any, Mapping, Optional
 
 from .canonical import SIGNED_FIELDS, signed_payload
@@ -204,12 +205,10 @@ class Authorizer:
                 already_refused_event=True,
             )
 
-        ticket = {
-            "decision_id": decision_id,
-            "nonce": nonce,
-            "payload_hash": expected_hash,
-            "phase": "AUTHORIZED",
-        }
+        ticket_data = dict(frozen)
+        ticket_data["payload_hash"] = expected_hash
+        ticket_data["phase"] = "AUTHORIZED"
+        ticket = MappingProxyType(ticket_data)
         return AuthorizationResult(
             authorized=True,
             phase="AUTHORIZED",

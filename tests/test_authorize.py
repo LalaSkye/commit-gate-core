@@ -5,7 +5,10 @@ from datetime import datetime, timezone
 from threading import Barrier, Lock
 from typing import Any, Mapping
 
+import pytest
+
 from src.commit_gate_core.authorize import payload_hash
+from src.commit_gate_core.canonical import SIGNED_FIELDS
 from src.commit_gate_core.gate import CommitGate
 from src.commit_gate_core.hmac_mac import HmacSha256Verifier
 
@@ -245,3 +248,30 @@ def test_verifier_cannot_widen_scope_after_authentication():
     assert result.authorized is False
     assert result.code == "DENY:VERIFIER_MUTATED_RECORD"
     assert ledger.used == set()
+
+
+def test_authorization_ticket_binds_frozen_scope_and_payload():
+    gate, ledger, audit, mutated, verifier = make_gate()
+    record = signed_record(verifier)
+
+    result = gate.authorize(record, PAYLOAD, **SCOPE)
+
+    assert result.authorized is True
+    assert result.ticket is not None
+    assert set(result.ticket) == set(SIGNED_FIELDS) | {"payload_hash", "phase"}
+    assert result.ticket["decision_id"] == "dr_001"
+    assert result.ticket["actor_id"] == "agent_17"
+    assert result.ticket["action"] == "approve_invoice"
+    assert result.ticket["object_id"] == "invoice_778"
+    assert result.ticket["environment"] == "prod"
+    assert result.ticket["policy_version"] == "2026-04-27.1"
+    assert result.ticket["commit_hash"] == payload_hash(PAYLOAD)
+    assert result.ticket["payload_hash"] == payload_hash(PAYLOAD)
+    assert result.ticket["nonce"] == "nonce_001"
+    assert result.ticket["phase"] == "AUTHORIZED"
+
+    record["object_id"] = "invoice_999"
+    assert result.ticket["object_id"] == "invoice_778"
+
+    with pytest.raises(TypeError):
+        result.ticket["object_id"] = "invoice_999"

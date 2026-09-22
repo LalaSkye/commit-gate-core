@@ -10,5 +10,8 @@ Successor cut:
 - `execute` no longer invokes `mutation_callback`.
 - `TwoPhaseCommit.apply` is not exported.
 - Version is `0.2.0a1`.
-- Tickets are still in-memory. Do not persist them until mutation is gone from every public path.
+- Tickets are still in-memory. The public authorisation ticket is read-only and
+  carries the frozen signed scope plus exact payload hash; it is not an executor
+  capability or proof of consequence.
+- Do not persist tickets until mutation is gone from every public path.
 - `COMMITTED` is reserved for an executor that can observe the world.
