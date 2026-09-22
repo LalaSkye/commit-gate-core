@@ -16,6 +16,15 @@ class FakeClock:
         return self._now
 
 
+class MutatingClock:
+    def __init__(self, record: dict[str, str]) -> None:
+        self._record = record
+
+    def now(self) -> datetime:
+        self._record["object_id"] = "invoice_999"
+        return datetime(2026, 4, 27, 5, 1, tzinfo=timezone.utc)
+
+
 class InMemoryNonceLedger:
     def __init__(self) -> None:
         self.used: set[str] = set()
@@ -130,3 +139,30 @@ def test_authorized_audit_failure_rolls_back_nonce():
     assert "AUTH_AUDIT_FAILED" in result.code
     assert ledger.used == set()
     assert mutated == []
+
+
+def test_authenticated_record_state_cannot_change_before_scope_check():
+    verifier = HmacSha256Verifier(KEY)
+    record = signed_record(verifier)
+    ledger = InMemoryNonceLedger()
+    audit = RecordingAuditSink()
+
+    gate = CommitGate(
+        verifier=verifier,
+        nonce_ledger=ledger,
+        audit=audit,
+        mutation_callback=lambda record: None,
+        accepted_policy_versions=("2026-04-27.1",),
+        clock=MutatingClock(record),
+    )
+
+    result = gate.authorize(
+        record,
+        PAYLOAD,
+        actor_id="agent_17",
+        action="approve_invoice",
+        object_id="invoice_999",
+        environment="prod",
+    )
+
+    assert result.authorized is False
