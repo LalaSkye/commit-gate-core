@@ -87,6 +87,13 @@ A missing field is a structural failure, not a defaultable value.
 
 The configured verifier decides accept/refuse. Tests use HMAC-SHA256. That is a lab MAC. Ed25519 is not implemented.
 
+Before verification, the kernel freezes the exact `SIGNED_FIELDS` values into a
+separate payload. The verifier receives a verifier-local record built from those
+frozen values plus the signature. After verification, the signed fields and
+signature are checked for mutation. All time and scope checks then use the same
+frozen signed values. A verifier cannot widen the scope by mutating the record
+after authentication.
+
 ---
 
 ## Verdict rule
