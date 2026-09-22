@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any, Mapping, Optional
 
-from .canonical import SIGNED_FIELDS
+from .canonical import SIGNED_FIELDS, signed_payload
 from .gate import AuditSink, Clock, NonceLedger, SignatureVerifier, SystemClock
 
 
@@ -78,36 +78,60 @@ class Authorizer:
             did = record.get("decision_id") if isinstance(record.get("decision_id"), str) else None
             return self._refuse(f"DENY:{error}", did, None, expected_hash, attempted)
 
-        decision_id = str(record["decision_id"])
-        nonce = str(record["nonce"])
+        frozen = signed_payload(record)
+        signature = str(record["signature"])
+        decision_id = frozen["decision_id"]
+        nonce = frozen["nonce"]
 
-        if record["commit_hash"] != expected_hash:
+        if frozen["commit_hash"] != expected_hash:
             return self._refuse(
                 "DENY:PAYLOAD_HASH_MISMATCH", decision_id, nonce, expected_hash, attempted
             )
-        if record["verdict"] != "ALLOW":
+        if frozen["verdict"] != "ALLOW":
             return self._refuse(
-                f"DENY:VERDICT_NOT_ALLOW:{record['verdict']}",
+                f"DENY:VERDICT_NOT_ALLOW:{frozen['verdict']}",
                 decision_id,
                 nonce,
                 expected_hash,
                 attempted,
             )
-        if record["policy_version"] not in self._accepted_policy_versions:
+        if frozen["policy_version"] not in self._accepted_policy_versions:
             return self._refuse(
-                f"DENY:POLICY_VERSION_REJECTED:{record['policy_version']}",
+                f"DENY:POLICY_VERSION_REJECTED:{frozen['policy_version']}",
                 decision_id,
                 nonce,
                 expected_hash,
                 attempted,
             )
-        if not self._verifier.verify(record):
+        verifier_record: dict[str, Any] = dict(frozen)
+        verifier_record["signature"] = signature
+        try:
+            verified = self._verifier.verify(verifier_record)
+        except Exception as exc:
+            return self._refuse(
+                f"DENY:VERIFIER_FAILED:{type(exc).__name__}",
+                decision_id,
+                nonce,
+                expected_hash,
+                attempted,
+            )
+        if not verified:
             return self._refuse(
                 "DENY:INVALID_SIGNATURE", decision_id, nonce, expected_hash, attempted
             )
+        try:
+            post_verify = signed_payload(verifier_record)
+        except ValueError:
+            return self._refuse(
+                "DENY:VERIFIER_MUTATED_RECORD", decision_id, nonce, expected_hash, attempted
+            )
+        if post_verify != frozen or verifier_record.get("signature") != signature:
+            return self._refuse(
+                "DENY:VERIFIER_MUTATED_RECORD", decision_id, nonce, expected_hash, attempted
+            )
 
         try:
-            issued_at, expires_at = self._parse_times(record)
+            issued_at, expires_at = self._parse_times(frozen)
         except ValueError as exc:
             return self._refuse(f"DENY:{exc}", decision_id, nonce, expected_hash, attempted)
 
@@ -122,7 +146,7 @@ class Authorizer:
             )
 
         for field, value in attempted.items():
-            if record[field] != value:
+            if frozen[field] != value:
                 return self._refuse(
                     f"DENY:SCOPE_MISMATCH:{field}", decision_id, nonce, expected_hash, attempted
                 )
@@ -151,7 +175,7 @@ class Authorizer:
             "payload_hash": expected_hash,
             "timestamp": self._ts(),
             "attempted": dict(attempted),
-            "record_scope": {k: record.get(k) for k in SIGNED_FIELDS},
+            "record_scope": dict(frozen),
         }
         try:
             self._audit.append(event)
