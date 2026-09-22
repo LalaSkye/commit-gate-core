@@ -24,7 +24,10 @@ class MemoryNonceLedger:
         return nonce in self.consumed
 
     def consume(self, nonce, decision_id):
+        if nonce in self.consumed:
+            return False
         self.consumed.add(nonce)
+        return True
 
     def rollback(self, nonce, decision_id):
         self.consumed.discard(nonce)
