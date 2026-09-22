@@ -127,12 +127,20 @@ class Authorizer:
                     f"DENY:SCOPE_MISMATCH:{field}", decision_id, nonce, expected_hash, attempted
                 )
 
-        if self._nonce_ledger.contains(nonce):
+        try:
+            consumed = self._nonce_ledger.consume(nonce, decision_id)
+        except Exception as exc:
+            return self._refuse(
+                f"DENY:NONCE_LEDGER_FAILED:{type(exc).__name__}",
+                decision_id,
+                nonce,
+                expected_hash,
+                attempted,
+            )
+        if not consumed:
             return self._refuse(
                 "DENY:NONCE_REPLAYED", decision_id, nonce, expected_hash, attempted
             )
-
-        self._nonce_ledger.consume(nonce, decision_id)
         event = {
             "event_type": "GATE_AUTHORIZED",
             "phase": "AUTHORIZED",
