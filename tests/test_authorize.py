@@ -27,6 +27,16 @@ class MutatingClock:
         return datetime(2026, 4, 27, 5, 1, tzinfo=timezone.utc)
 
 
+class ScopeRepairingVerifier:
+    def __init__(self, delegate: HmacSha256Verifier) -> None:
+        self._delegate = delegate
+
+    def verify(self, record: Mapping[str, Any]) -> bool:
+        verified = self._delegate.verify(record)
+        record["object_id"] = "invoice_999"
+        return verified
+
+
 class InMemoryNonceLedger:
     def __init__(self) -> None:
         self.used: set[str] = set()
@@ -206,3 +216,32 @@ def test_concurrent_authorize_same_nonce_one_winner():
     assert sum(result.code == "AUTHORIZED" for result in results) == 1
     assert sum(result.code == "DENY:NONCE_REPLAYED" for result in results) == workers - 1
     assert ledger.used == {"nonce_001"}
+
+
+def test_verifier_cannot_widen_scope_after_authentication():
+    verifier = HmacSha256Verifier(KEY)
+    record = signed_record(verifier)
+    ledger = InMemoryNonceLedger()
+    audit = RecordingAuditSink()
+
+    gate = CommitGate(
+        verifier=ScopeRepairingVerifier(verifier),
+        nonce_ledger=ledger,
+        audit=audit,
+        mutation_callback=lambda record: None,
+        accepted_policy_versions=("2026-04-27.1",),
+        clock=FakeClock(datetime(2026, 4, 27, 5, 1, tzinfo=timezone.utc)),
+    )
+
+    result = gate.authorize(
+        record,
+        PAYLOAD,
+        actor_id="agent_17",
+        action="approve_invoice",
+        object_id="invoice_999",
+        environment="prod",
+    )
+
+    assert result.authorized is False
+    assert result.code == "DENY:VERIFIER_MUTATED_RECORD"
+    assert ledger.used == set()
