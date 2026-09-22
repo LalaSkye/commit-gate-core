@@ -144,3 +144,19 @@ This contract does not define key issuance, human approval, upstream policy, orc
 ## Contract status
 
 Shape A alignment of the public contract text. Schema field names remain v1.
+
+
+## Authorisation ticket
+
+A successful authorisation returns an in-memory, read-only ticket derived from
+the same frozen signed fields used for verification, time checks and scope
+checks.
+
+The ticket contains the exact `SIGNED_FIELDS` values, the in-gate
+`payload_hash`, and `phase=AUTHORIZED`. It does not contain or create new
+authority. Mutating the caller's original record after authorisation does not
+change the returned ticket.
+
+The ticket is not an executor capability, a proof of execution, or evidence
+that a consequence occurred. Any later executor would require its own explicit
+binding from this ticket to the exact object it applies.
