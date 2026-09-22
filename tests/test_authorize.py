@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from threading import Barrier, Lock
 from typing import Any, Mapping
 
 from src.commit_gate_core.authorize import payload_hash
@@ -28,17 +30,26 @@ class MutatingClock:
 class InMemoryNonceLedger:
     def __init__(self) -> None:
         self.used: set[str] = set()
+        self._owners: dict[str, str] = {}
+        self._lock = Lock()
 
     def contains(self, nonce: str) -> bool:
-        return nonce in self.used
+        with self._lock:
+            return nonce in self.used
 
-    def consume(self, nonce: str, decision_id: str) -> None:
-        if nonce in self.used:
-            raise RuntimeError("nonce already consumed")
-        self.used.add(nonce)
+    def consume(self, nonce: str, decision_id: str) -> bool:
+        with self._lock:
+            if nonce in self.used:
+                return False
+            self.used.add(nonce)
+            self._owners[nonce] = decision_id
+            return True
 
     def rollback(self, nonce: str, decision_id: str) -> None:
-        self.used.discard(nonce)
+        with self._lock:
+            if self._owners.get(nonce) == decision_id:
+                self.used.discard(nonce)
+                self._owners.pop(nonce, None)
 
 
 class RecordingAuditSink:
@@ -166,3 +177,32 @@ def test_authenticated_record_state_cannot_change_before_scope_check():
     )
 
     assert result.authorized is False
+
+
+def test_concurrent_authorize_same_nonce_one_winner():
+    verifier = HmacSha256Verifier(KEY)
+    ledger = InMemoryNonceLedger()
+    audit = RecordingAuditSink()
+    gate = CommitGate(
+        verifier=verifier,
+        nonce_ledger=ledger,
+        audit=audit,
+        mutation_callback=lambda record: None,
+        accepted_policy_versions=("2026-04-27.1",),
+        clock=FakeClock(datetime(2026, 4, 27, 5, 1, tzinfo=timezone.utc)),
+    )
+    record = signed_record(verifier)
+    workers = 8
+    barrier = Barrier(workers)
+
+    def attempt(_: int):
+        barrier.wait()
+        return gate.authorize(dict(record), PAYLOAD, **SCOPE)
+
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        results = list(pool.map(attempt, range(workers)))
+
+    assert sum(result.authorized for result in results) == 1
+    assert sum(result.code == "AUTHORIZED" for result in results) == 1
+    assert sum(result.code == "DENY:NONCE_REPLAYED" for result in results) == workers - 1
+    assert ledger.used == {"nonce_001"}
