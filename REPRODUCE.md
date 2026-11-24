@@ -20,7 +20,7 @@ Keep the guide permalink open while you test the pinned commit in a separate che
 
 | Platform | Evidence |
 |---|---|
-| Linux | Reported run: 12 passed at `610d155`. |
+| Linux | [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. Independent reproduction is pending. |
 | macOS | Untested. |
 | Windows PowerShell | Untested. |
 
@@ -38,7 +38,9 @@ Skip the README’s [install-from-tag command](https://github.com/LalaSkye/commi
 
 ## 2a. Linux or macOS
 
-**Reported Linux run:** 12 passed at `610d155`. **macOS:** untested.
+**Linux:** [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. Independent reproduction is pending.
+
+**macOS:** untested.
 
 ```bash
 set -eu
