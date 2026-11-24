@@ -2,7 +2,10 @@ This guide tests commit 610d155232fbc3f590ed40656e48403ef4d20dcf (authorise-only
 
 # Reproduce the authorise-only tests
 
-The **guide revision** is the commit that adds this file (the PR head SHA).
+The **guide revision** is the commit SHA in the permalink of the `REPRODUCE.md`
+guide you actually used. Record that SHA from the guide permalink; it identifies
+the exact guide text you followed. Keep that permalink open while you run the
+pinned tested checkout in a separate terminal and a fresh temporary directory.
 The **tested revision** is the pinned SHA above. Record both; do not substitute
 the guide revision for the tested revision.
 
@@ -61,9 +64,8 @@ The first `git rev-parse HEAD` must print the pinned SHA. The status check must
 be empty. Keep the temporary path so you can report the run environment and
 versions.
 
-The Linux commands above were run for this guide. The same commands have not
-been run on macOS. The Windows PowerShell instructions below have not been run
-on Windows.
+Reported Linux run: 12 passed at 610d155. macOS and Windows instructions have
+not been tested.
 
 ## Windows PowerShell
 
@@ -113,6 +115,10 @@ The first `git rev-parse HEAD` must print the pinned SHA. The status check must
 be empty. Keep the temporary path so you can report the run environment and
 versions.
 
+Optional fallback for the virtual-environment creation step only: if the
+Windows Python launcher and Python 3.11 are installed, use
+`py -3.11 -m venv $venv` for that step. Keep the remaining commands unchanged.
+
 ## Claim boundary
 
 The README at the pinned revision states:
@@ -137,7 +143,7 @@ versions. Include the guide revision from the PR separately from the detached
 tested SHA.
 
 ```text
-Guide revision (PR head SHA):
+Guide revision (commit SHA from the guide permalink):
 Tested SHA:
 OS and version:
 Python version:
