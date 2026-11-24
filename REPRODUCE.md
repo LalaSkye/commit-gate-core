@@ -1,42 +1,44 @@
-This guide tests commit 610d155232fbc3f590ed40656e48403ef4d20dcf (authorise-only candidate). It does not apply to release v0.1.1.
-
 # Reproduce the authorise-only tests
 
-The **guide revision** is the commit that adds this file (the PR head SHA).
-The **tested revision** is the pinned SHA above. Record both; do not substitute
-the guide revision for the tested revision.
+**Tested commit:** `610d155232fbc3f590ed40656e48403ef4d20dcf`<br>
+**Scope:** Unreleased authorise-only candidate. Release `v0.1.1` is an earlier, callback-capable version and falls outside this guide.
 
-## Keep the guide open
+Record two SHAs in your receipt:
 
-Open `REPRODUCE.md` from the PR in a browser tab and leave it open. Use a
-separate terminal and a fresh temporary directory for the tested checkout.
-The checkout is detached at the tested SHA; it is not the PR branch.
+- **Tested SHA:** the commit above.
+- **Guide revision:** the commit SHA in the permalink of the guide you actually read.
 
-## Prerequisites and sources
+Keep the guide permalink open while you test the pinned commit in a separate checkout.
 
-Use Python 3.11 or later. `pyproject.toml` at the pinned revision declares
-`requires-python = ">=3.11"` and the `dev` extra `pytest>=8.0`
-([Python and test dependency](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/pyproject.toml#L10),
-[dev dependency](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/pyproject.toml#L29-L30)).
-`requirements-dev.txt` also specifies `pytest>=8.0`
-([lines 1-2](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/requirements-dev.txt#L1-L2)).
+## At a glance
 
-The pinned Package workflow uses Python 3.11, installs with
-`python -m pip install --upgrade build pytest`, then runs
-`python -m pytest -q`
-([CI lines 18-27](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/.github/workflows/package.yml#L18-L27)).
-This guide uses that install command and the narrower README authorise-only
-test command
-([README lines 65-75](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L65-L75)).
+| Step | What to do |
+|---|---|
+| 1 | Check the prerequisites. |
+| 2 | Run the commands for your platform. |
+| 3 | Fill in the receipt and send it back. |
 
-**Do not use the README's “Install-from-tag” line.** It installs `v0.1.1`,
-which the README itself says is not evidence for this kernel
-([README lines 77-85](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L77-L85)).
+| Platform | Evidence |
+|---|---|
+| Linux | Reported run: 12 passed at `610d155`. |
+| macOS | Untested. |
+| Windows PowerShell | Untested. |
 
-## macOS or Linux
+## 1. Prerequisites
 
-In a new terminal, set up a disposable checkout and virtual environment outside
-the PR worktree:
+- **Python 3.11 or later**, as specified in [`pyproject.toml`](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/pyproject.toml#L10).
+- **Git** and network access to GitHub and the package index used by pip.
+- The commands install the test dependencies. The project specifies **pytest 8.0 or later** in [`pyproject.toml`](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/pyproject.toml#L29-L30) and [`requirements-dev.txt`](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/requirements-dev.txt#L1-L2).
+
+The install step follows the pinned [Package workflow](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/.github/workflows/package.yml#L18-L27). Dependency versions may vary between runs. Record the versions installed in your receipt.
+
+Each block creates a fresh temporary checkout, verifies the full SHA and checks that the working tree is clean. It then runs the two authorise-only test files named in the [pinned README](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L65-L75).
+
+Skip the README’s [install-from-tag command](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L77-L85). It installs `v0.1.1`.
+
+## 2a. Linux or macOS
+
+**Reported Linux run:** 12 passed at `610d155`. **macOS:** untested.
 
 ```bash
 set -eu
@@ -57,18 +59,13 @@ cd "$test_root/repo"
 PYTHONPATH=src python -m pytest tests/test_authorize.py tests/test_beau_failure_classes.py -q
 ```
 
-The first `git rev-parse HEAD` must print the pinned SHA. The status check must
-be empty. Keep the temporary path so you can report the run environment and
-versions.
+If setup stops before pytest runs, record the step and its exact message.
 
-The Linux commands above were run for this guide. The same commands have not
-been run on macOS. The Windows PowerShell instructions below have not been run
-on Windows.
+## 2b. Windows PowerShell
 
-## Windows PowerShell
+**Windows:** untested.
 
-Run in a new PowerShell terminal. The test checkout and virtual environment
-are separate from the PR worktree:
+If `python` resolves to the wrong version and you have both the Windows Python launcher and Python 3.11 installed, use `py -3.11 -m venv $venv` for the virtual environment creation step. Record the exact command you used.
 
 ```powershell
 $ErrorActionPreference = "Stop"
@@ -109,35 +106,14 @@ Pop-Location
 if ($testExit -ne 0) { exit $testExit }
 ```
 
-The first `git rev-parse HEAD` must print the pinned SHA. The status check must
-be empty. Keep the temporary path so you can report the run environment and
-versions.
+If setup stops before pytest runs, record the step and its exact message.
 
-## Claim boundary
+## 3. Return receipt
 
-The README at the pinned revision states:
-
-> This object does not claim production readiness, enterprise deployment,  
-> compliance, certification, path-universal enforcement, crash-safe durable  
-> nonces, atomic PREPARED+nonce persistence, or that consequence cannot occur  
-> outside this process.
->
-> It does not claim that Ed25519 is implemented.  
-> It does not claim certificates or algorithm agility.  
-> It does not claim that the lab MAC is a signature.  
-> It does not claim that `start-here` is this kernel.  
-> It does not claim that GitHub Latest is this tree.
-
-Source: [README lines 87-99 at the tested revision](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L87-L99).
-
-## Return receipt
-
-Copy and complete this from the actual run. Do not infer totals or expected
-versions. Include the guide revision from the PR separately from the detached
-tested SHA.
+Copy this receipt and record what actually happened. Use “unknown” for any field you cannot establish.
 
 ```text
-Guide revision (PR head SHA):
+Guide revision (commit SHA from the guide permalink):
 Tested SHA:
 OS and version:
 Python version:
@@ -151,7 +127,13 @@ Other test totals / skipped:
 Mismatch or failure (quote exactly, or “none”):
 ```
 
-The run in the repository owner's environment is an internal repeat, not an
-independent reproduction. Independent reproduction requires an outside
-reviewer to run the same pinned revision in their own environment and return
-their own evidence.
+## What a pass shows
+
+A pass records the outcome of the two documented test files at the pinned commit on your platform. The [pinned README’s claim boundary](https://github.com/LalaSkye/commit-gate-core/blob/610d155232fbc3f590ed40656e48403ef4d20dcf/README.md#L87-L99) applies in full.
+
+## Who ran it matters
+
+- An **internal repeat** is a run by the repository owner or tools working for them.
+- An **independent reproduction** is a run of the same pinned commit by an outside reviewer in their own environment, with their own receipt.
+
+If that’s you, thank you. Your receipt is the evidence.
