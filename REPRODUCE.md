@@ -20,9 +20,15 @@ Keep the guide permalink open while you test the pinned commit in a separate che
 
 | Platform | Evidence |
 |---|---|
-| Linux | [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. Independent reproduction is pending. |
+| Linux | [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. See the [outside reviewer’s run](#independent-linux-run) below. |
 | macOS | Untested. |
 | Windows PowerShell | Untested. |
+
+## Independent Linux run
+
+On 28 November 2026, outside reviewer **Olusanya Timothy** followed guide revision `4e9e9a5` against tested commit `610d155`, using Claude in a fresh Ubuntu 24.04 environment without coaching from the maintainers. His published logs record 12 passed and 0 failed on each of [Python 3.11.18](https://github.com/Teamthy/ai-redteam-five-tests/blob/d93a2ec9b844793d1134e2387bdf3b7cb62cf459/independent-runs/2026-11-28_commit-gate-core/logs/run_B_python3.11.log) and [Python 3.13.18](https://github.com/Teamthy/ai-redteam-five-tests/blob/d93a2ec9b844793d1134e2387bdf3b7cb62cf459/independent-runs/2026-11-28_commit-gate-core/logs/run_A_python3.13.log), with pytest 9.2.0. See [his completed receipt](https://github.com/Teamthy/ai-redteam-five-tests/blob/d93a2ec9b844793d1134e2387bdf3b7cb62cf459/independent-runs/2026-11-28_commit-gate-core/RECEIPT.txt).
+
+Timothy found that the guide requested the pip version without printing it. He also reported that the documented invocation passed while alternative pytest invocations stopped during test collection. His [findings](https://github.com/Teamthy/ai-redteam-five-tests/blob/d93a2ec9b844793d1134e2387bdf3b7cb62cf459/independent-runs/2026-11-28_commit-gate-core/FINDINGS.md) also cover the two existing limitations tracked in [issue 33](https://github.com/LalaSkye/commit-gate-core/issues/33).
 
 ## 1. Prerequisites
 
@@ -38,7 +44,7 @@ Skip the README’s [install-from-tag command](https://github.com/LalaSkye/commi
 
 ## 2a. Linux or macOS
 
-**Linux:** [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. Independent reproduction is pending.
+**Linux:** [Builder-reported internal repeat](https://github.com/LalaSkye/commit-gate-core/pull/42#issuecomment-7129743859). 12 passed, 0 failed at tested commit `610d155`, using guide revision `4ad2fc8`. See the [outside reviewer’s run](#independent-linux-run) below.
 
 **macOS:** untested.
 
